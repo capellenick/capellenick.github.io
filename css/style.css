@@ -40,6 +40,8 @@
   --font-sans:    "balto", "Franklin Gothic", "Helvetica Neue", Arial, sans-serif;
   /* Cotton uses one family everywhere; --font-mono is kept as a hook only. */
   --font-mono:    var(--font-sans);
+  /* System font (no webfont download) — used only for the home hero line. */
+  --font-hero:    "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /* Colour — light theme (default) */
   --paper: #f2f3f4;
@@ -179,6 +181,7 @@ main { flex: 1 0 auto; }
   z-index: 9998;
   transform: translate3d(calc(var(--mx, -100) * 1px - 50%), calc(var(--my, -100) * 1px - 50%), 0);
   transition: width 0.25s var(--ease), height 0.25s var(--ease), opacity 0.25s var(--ease);
+  will-change: transform;   /* keeps the per-frame move on the compositor, not a repaint */
 }
 .cursor__label {
   position: absolute;
@@ -333,11 +336,11 @@ body.has-cursor button { cursor: none; }
   padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
 }
 .hero-statement p {
-  font-weight: 500;
+  font-family: var(--font-hero);
+  font-weight: 700;
   font-size: clamp(1.9rem, 1rem + 4.4vw, 4.5rem);
-  line-height: 0.98;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: -0.015em;
 }
 .hero-statement a {
   text-decoration: underline;

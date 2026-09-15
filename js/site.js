@@ -95,10 +95,12 @@
       cursor.classList.add("is-hidden");
     });
 
-    // Smooth trailing follow
+    // Smooth trailing follow. FOLLOW closer to 1 = tighter/snappier (less
+    // trailing lag), closer to 0 = looser/dreamier (more trailing lag).
+    var FOLLOW = 0.55;
     (function loop() {
-      cx += (x - cx) * 0.2;
-      cy += (y - cy) * 0.2;
+      cx += (x - cx) * FOLLOW;
+      cy += (y - cy) * FOLLOW;
       cursor.style.setProperty("--mx", cx.toFixed(1));
       cursor.style.setProperty("--my", cy.toFixed(1));
       requestAnimationFrame(loop);
