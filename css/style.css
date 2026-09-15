@@ -60,10 +60,12 @@
   --gutter: clamp(1.15rem, 4.5vw, 3.25rem);
   --header-h: 68px;
   --section-gap: clamp(4rem, 10vw, 8rem);
+  --radius-img: 20px;   /* every content-image frame uses this */
 
   /* Motion */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --dur: 0.55s;
+  --zoom: scale(1.06);  /* hover "enlarge in frame" amount — nouvelleidee-style */
 }
 
 /* Dark theme — set by the no-flash script + the toggle button */
@@ -410,7 +412,7 @@ body.has-cursor button { cursor: none; }
 
 .card-media {
   overflow: hidden;
-  border-radius: 2px;
+  border-radius: var(--radius-img);
   background: var(--media-bg);
   aspect-ratio: 3 / 2;
   margin-bottom: 1rem;
@@ -422,7 +424,7 @@ body.has-cursor button { cursor: none; }
   transition: transform 0.6s var(--ease);
 }
 .work-card a:hover .card-media img,
-.work-card a:hover .card-media video { transform: scale(1.03); }
+.work-card a:hover .card-media video { transform: var(--zoom); }
 
 .card-caption {
   font-size: clamp(0.95rem, 0.85rem + 0.3vw, 1.1rem);
@@ -517,7 +519,7 @@ body.has-cursor button { cursor: none; }
 .project-media img,
 .project-media video {
   width: 100%;
-  border-radius: 4px;
+  border-radius: var(--radius-img);
   background: color-mix(in srgb, var(--ink) 12%, var(--paper));
 }
 .project-media figcaption {
@@ -606,7 +608,7 @@ body.has-cursor button { cursor: none; }
 }
 .about-portrait {
   width: 100%;
-  border-radius: 4px;
+  border-radius: var(--radius-img);
   background: var(--media-bg);
   aspect-ratio: 4 / 5;
   object-fit: cover;
@@ -682,17 +684,17 @@ body.has-cursor button { cursor: none; }
 }
 .play-card {
   border: 1px solid var(--hairline);
-  border-radius: 4px;
+  border-radius: var(--radius-img);
   overflow: hidden;
-  transition: transform 0.3s var(--ease);
 }
-.play-card:hover { transform: translateY(-4px); }
 .play-card img {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   background: var(--media-bg);
+  transition: transform 0.6s var(--ease);
 }
+.play-card:hover img { transform: var(--zoom); }
 .play-card figcaption {
   padding: 0.8rem 0.95rem 1rem;
   font-family: var(--font-mono);
