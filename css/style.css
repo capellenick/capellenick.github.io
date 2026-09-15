@@ -342,11 +342,8 @@ body.has-cursor button { cursor: none; }
   line-height: 1;
   letter-spacing: -0.015em;
 }
-.hero-statement a {
-  text-decoration: underline;
-  text-decoration-thickness: 0.045em;
-  text-underline-offset: 0.08em;
-}
+/* No special link styling here — it falls back to the site-wide default
+   (no underline at rest, underline on hover), same as any other inline link. */
 
 /* Filter tabs — Featured / Role / Year / Type / All.
    Role, Year and Type open a small flyout of the values present in the
