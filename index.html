@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Nick Capelle — Product Designer</title>
+  <meta name="description" content="Nick Capelle is a product designer. Selected work in interface design, design systems, and end-to-end product." />
+
+  <meta property="og:title" content="Nick Capelle — Product Designer" />
+  <meta property="og:description" content="Selected product design work." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://capellenick.com/" />
+  <!-- <meta property="og:image" content="https://capellenick.com/assets/og-image.png" /> -->
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="https://use.typekit.net/wsb8ckc.css" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- No-flash theme: runs before paint. Keep this identical on every page. -->
+  <script>
+    document.documentElement.classList.add("js");
+    try {
+      var t = localStorage.getItem("theme");
+      if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ======================================================================
+       HEADER — canonical copy lives in partials/header.html
+       ====================================================================== -->
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="logo" href="index.html">Nick Capelle</a>
+
+      <nav class="nav" id="primary-nav" aria-label="Primary">
+        <a href="index.html" aria-current="page">Work</a>
+        <a href="playground.html">Playground</a>
+        <a href="about.html">About</a>
+      </nav>
+
+      <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark theme">
+        <span class="theme-toggle__icon" aria-hidden="true"></span>
+      </button>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Menu">
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ==================================================================
+         HERO STATEMENT — 2x4.org-style oversized headline. Text is the
+         Phase-1 intro copy; edit it here, nowhere else.
+         ================================================================== -->
+    <section class="wrap hero-statement">
+      <p>
+        I&rsquo;m Nick Capelle, a product designer working on
+        <a href="about.html">interfaces, systems, and the details in between</a>.
+      </p>
+    </section>
+
+    <!-- ==================================================================
+         WORK — filter tabs + a 2-column grid, 2x4.org-style.
+         To add a project: copy one <li class="work-card"> block, update its
+         data-featured / data-role / data-year / data-type, the image, and
+         the caption, then point the link at a new project-N.html. If you
+         add a new Role/Year/Type value, also add a matching <button> to the
+         relevant .filter-menu below.
+         ================================================================== -->
+    <section class="wrap work" aria-labelledby="work-heading">
+      <h2 id="work-heading" class="sr-only">Selected Work</h2>
+
+      <div class="work-filters" role="toolbar" aria-label="Filter projects">
+        <button class="filter-tab is-active" type="button" data-filter="featured" data-label="Featured">Featured</button>
+
+        <div class="filter-group" data-group="role">
+          <button class="filter-tab" type="button" aria-haspopup="true" aria-expanded="false" data-label="Role">Role</button>
+          <div class="filter-menu" hidden>
+            <button type="button" data-value="Product Design">Product Design</button>
+            <button type="button" data-value="Design Systems">Design Systems</button>
+          </div>
+        </div>
+
+        <div class="filter-group" data-group="year">
+          <button class="filter-tab" type="button" aria-haspopup="true" aria-expanded="false" data-label="Year">Year</button>
+          <div class="filter-menu" hidden>
+            <button type="button" data-value="2025">2025</button>
+            <button type="button" data-value="2024">2024</button>
+            <button type="button" data-value="2023">2023</button>
+          </div>
+        </div>
+
+        <div class="filter-group" data-group="type">
+          <button class="filter-tab" type="button" aria-haspopup="true" aria-expanded="false" data-label="Type">Type</button>
+          <div class="filter-menu" hidden>
+            <button type="button" data-value="Mobile">Mobile</button>
+            <button type="button" data-value="Web">Web</button>
+            <button type="button" data-value="System">System</button>
+          </div>
+        </div>
+
+        <button class="filter-tab" type="button" data-filter="all" data-label="All">All</button>
+      </div>
+
+      <ul class="work-grid">
+        <li class="work-card" data-featured="true" data-role="Product Design" data-year="2025" data-type="Mobile">
+          <a href="project-1.html" data-cursor="View">
+            <span class="card-media"><img src="assets/ph-01.svg" alt="" width="1200" height="800" loading="lazy" /></span>
+            <span class="card-caption">
+              <span class="prefix">Transit Wayfinding App</span><span class="suffix">Product Design</span>
+            </span>
+          </a>
+        </li>
+
+        <li class="work-card" data-featured="true" data-role="Product Design" data-year="2024" data-type="Web">
+          <a href="project-2.html" data-cursor="View">
+            <span class="card-media"><img src="assets/ph-02.svg" alt="" width="1200" height="800" loading="lazy" /></span>
+            <span class="card-caption">
+              <span class="prefix">Onboarding Redesign</span><span class="suffix">Product Design</span>
+            </span>
+          </a>
+        </li>
+
+        <li class="work-card" data-featured="false" data-role="Design Systems" data-year="2024" data-type="System">
+          <a href="project-3.html" data-cursor="View">
+            <span class="card-media"><img src="assets/ph-03.svg" alt="" width="1200" height="800" loading="lazy" /></span>
+            <span class="card-caption">
+              <span class="prefix">Design System Foundations</span><span class="suffix">Design Systems</span>
+            </span>
+          </a>
+        </li>
+
+        <li class="work-card" data-featured="false" data-role="Product Design" data-year="2023" data-type="Web">
+          <a href="project-4.html" data-cursor="View">
+            <span class="card-media"><img src="assets/ph-04.svg" alt="" width="1200" height="800" loading="lazy" /></span>
+            <span class="card-caption">
+              <span class="prefix">Checkout Flow Rework</span><span class="suffix">Product Design</span>
+            </span>
+          </a>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- ======================================================================
+       FOOTER — canonical copy lives in partials/footer.html
+       ====================================================================== -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <a class="footer-wordmark" href="index.html" data-cursor="Home">Think Different.</a>
+
+      <div class="footer-utility">
+        <span>&copy; <span id="year">2026</span> Nick Capelle. All rights reserved.</span>
+        <span class="footer-clock"><span aria-hidden="true">Your local time &mdash; </span><time id="local-time">--:--:--</time></span>
+        <nav class="footer-credit" aria-label="Contact">
+          <a href="mailto:capelledesign@gmail.com" data-cursor="Email">Email</a>
+          <a href="https://www.linkedin.com/in/nicholas-capelle-328a95231" target="_blank" rel="noopener" data-cursor="Open">LinkedIn</a>
+          <a href="https://www.instagram.com/capelledesign" target="_blank" rel="noopener" data-cursor="Open">Instagram</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/site.js" defer></script>
+</body>
+</html>

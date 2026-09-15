@@ -1,0 +1,30 @@
+<!-- ============================================================================
+     CANONICAL HEADER
+     This file is the source of truth. When you change the nav, the logo, or
+     the toggles, edit here first, then paste the <header> block into every
+     *.html page (they all carry an identical copy — that's the cost of "no
+     build step"). Set aria-current="page" on the link for the page you're on.
+
+     Also keep the no-flash <script> in each page's <head> identical — it's the
+     block right above </head>.
+     ========================================================================= -->
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="logo" href="index.html">Nick Capelle</a>
+
+    <nav class="nav" id="primary-nav" aria-label="Primary">
+      <a href="index.html">Work</a>
+      <a href="playground.html">Playground</a>
+      <a href="about.html">About</a>
+    </nav>
+
+    <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark theme">
+      <span class="theme-toggle__icon" aria-hidden="true"></span>
+    </button>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Menu">
+      <span></span>
+    </button>
+  </div>
+</header>

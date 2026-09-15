@@ -1,0 +1,26 @@
+<!-- ============================================================================
+     CANONICAL FOOTER  (used on index.html, about.html, playground.html)
+     nouvelleidee.work-style: a huge closing wordmark over a slim utility row.
+     Project pages use the slim .project-foot inside the copy column instead.
+
+     #local-time is filled in by js/site.js (the visitor's own local time,
+     ticking every second). The wordmark links home, like nouvelleidee's does.
+     ========================================================================= -->
+
+<footer class="site-footer">
+  <div class="wrap">
+    <a class="footer-wordmark" href="index.html" data-cursor="Home">Think Different.</a>
+
+    <div class="footer-utility">
+      <span>&copy; <span id="year">2026</span> Nick Capelle. All rights reserved.</span>
+      <span class="footer-clock"><span aria-hidden="true">Your local time &mdash; </span><time id="local-time">--:--:--</time></span>
+      <nav class="footer-credit" aria-label="Contact">
+        <a href="mailto:capelledesign@gmail.com" data-cursor="Email">Email</a>
+        <a href="https://www.linkedin.com/in/nicholas-capelle-328a95231" target="_blank" rel="noopener" data-cursor="Open">LinkedIn</a>
+        <a href="https://www.instagram.com/capelledesign" target="_blank" rel="noopener" data-cursor="Open">Instagram</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="js/site.js" defer></script>

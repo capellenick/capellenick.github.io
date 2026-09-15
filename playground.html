@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Playground — Nick Capelle</title>
+  <meta name="description" content="A shelf of experiments: posters, zines, publications, and collateral by Nick Capelle." />
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="https://use.typekit.net/wsb8ckc.css" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <script>
+    document.documentElement.classList.add("js");
+    try {
+      var t = localStorage.getItem("theme");
+      if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="logo" href="index.html">Nick Capelle</a>
+      <nav class="nav" id="primary-nav" aria-label="Primary">
+        <a href="index.html">Work</a>
+        <a href="playground.html" aria-current="page">Playground</a>
+        <a href="about.html">About</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark theme">
+        <span class="theme-toggle__icon" aria-hidden="true"></span>
+      </button>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Menu">
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="wrap playground-intro">
+      <p>A shelf for posters, zines, publications, and things that aren&rsquo;t finished.</p>
+    </section>
+
+    <!--
+      PHASE 2: this grid is the placeholder for the pan/zoom "mind-map" you
+      described (cursor-reactive, hold-and-drag to move around). For launch it
+      is a plain responsive grid. Swap the <ul> for the canvas layer later;
+      keep each item's image + caption.
+    -->
+    <section class="wrap">
+      <ul class="playground-grid">
+        <li class="play-card" data-reveal><figure>
+          <img src="assets/ph-square.svg" alt="Placeholder experiment" loading="lazy" />
+          <figcaption>Poster series &middot; 2025</figcaption>
+        </figure></li>
+        <li class="play-card" data-reveal><figure>
+          <img src="assets/ph-tall.svg" alt="Placeholder experiment" loading="lazy" />
+          <figcaption>Zine &middot; 2025</figcaption>
+        </figure></li>
+        <li class="play-card" data-reveal><figure>
+          <img src="assets/ph-square.svg" alt="Placeholder experiment" loading="lazy" />
+          <figcaption>Book layout &middot; 2024</figcaption>
+        </figure></li>
+        <li class="play-card" data-reveal><figure>
+          <img src="assets/ph-wide.svg" alt="Placeholder experiment" loading="lazy" />
+          <figcaption>Collateral &middot; 2024</figcaption>
+        </figure></li>
+        <li class="play-card" data-reveal><figure>
+          <img src="assets/ph-square.svg" alt="Placeholder experiment" loading="lazy" />
+          <figcaption>Type study &middot; 2024</figcaption>
+        </figure></li>
+        <li class="play-card" data-reveal><figure>
+          <img src="assets/ph-tall.svg" alt="Placeholder experiment" loading="lazy" />
+          <figcaption>Publication &middot; 2023</figcaption>
+        </figure></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <a class="footer-wordmark" href="index.html" data-cursor="Home">Think Different.</a>
+
+      <div class="footer-utility">
+        <span>&copy; <span id="year">2026</span> Nick Capelle. All rights reserved.</span>
+        <span class="footer-clock"><span aria-hidden="true">Your local time &mdash; </span><time id="local-time">--:--:--</time></span>
+        <nav class="footer-credit" aria-label="Contact">
+          <a href="mailto:capelledesign@gmail.com" data-cursor="Email">Email</a>
+          <a href="https://www.linkedin.com/in/nicholas-capelle-328a95231" target="_blank" rel="noopener" data-cursor="Open">LinkedIn</a>
+          <a href="https://www.instagram.com/capelledesign" target="_blank" rel="noopener" data-cursor="Open">Instagram</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/site.js" defer></script>
+</body>
+</html>

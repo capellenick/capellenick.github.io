@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>About — Nick Capelle</title>
+  <meta name="description" content="About Nick Capelle — product designer. Background, experience, and contact." />
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="https://use.typekit.net/wsb8ckc.css" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <script>
+    document.documentElement.classList.add("js");
+    try {
+      var t = localStorage.getItem("theme");
+      if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="logo" href="index.html">Nick Capelle</a>
+      <nav class="nav" id="primary-nav" aria-label="Primary">
+        <a href="index.html">Work</a>
+        <a href="playground.html">Playground</a>
+        <a href="about.html" aria-current="page">About</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark theme">
+        <span class="theme-toggle__icon" aria-hidden="true"></span>
+      </button>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Menu">
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="wrap about">
+      <img class="about-portrait" src="assets/portrait.svg" alt="Portrait of Nick Capelle" width="1000" height="1250" data-reveal />
+
+      <div class="about-text" data-reveal>
+        <h1>Hi, I&rsquo;m Nick.</h1>
+
+        <p>
+          Placeholder. I&rsquo;m a product designer focused on
+          &lt;the kind of problems you like&gt;. I care about
+          &lt;the thing you actually care about&gt; &mdash; clear systems,
+          honest interfaces, and the small decisions that add up.
+        </p>
+        <p>
+          Placeholder. Right now I&rsquo;m &lt;what you&rsquo;re doing&gt;.
+          Before that, &lt;where you were&gt;. I studied &lt;field&gt; at
+          &lt;school&gt;.
+        </p>
+        <p>
+          Placeholder. Away from the screen I&rsquo;m &lt;a sentence of
+          personality&gt; &mdash; posters, zines, and an unreasonable amount of
+          coffee.
+        </p>
+
+        <h2>Experience</h2>
+        <ul class="about-list">
+          <li><span>Product Designer &mdash; Company</span><span class="yr">2025&ndash;</span></li>
+          <li><span>Design Intern &mdash; Company</span><span class="yr">2024</span></li>
+          <li><span>Freelance &mdash; Various</span><span class="yr">2022&ndash;2024</span></li>
+        </ul>
+
+        <h2>Recognition</h2>
+        <ul class="about-list">
+          <li><span>Placeholder award or feature</span><span class="yr">2025</span></li>
+          <li><span>Placeholder award or feature</span><span class="yr">2024</span></li>
+        </ul>
+
+        <h2>Elsewhere</h2>
+        <p>
+          <a href="mailto:capelledesign@gmail.com">capelledesign@gmail.com</a><br />
+          <a href="https://www.linkedin.com/in/nicholas-capelle-328a95231" target="_blank" rel="noopener">LinkedIn</a> &nbsp;·&nbsp;
+          <a href="https://www.instagram.com/capelledesign" target="_blank" rel="noopener">Instagram</a> &nbsp;·&nbsp;
+          <a href="assets/resume.pdf" target="_blank" rel="noopener">R&eacute;sum&eacute;</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <a class="footer-wordmark" href="index.html" data-cursor="Home">Think Different.</a>
+
+      <div class="footer-utility">
+        <span>&copy; <span id="year">2026</span> Nick Capelle. All rights reserved.</span>
+        <span class="footer-clock"><span aria-hidden="true">Your local time &mdash; </span><time id="local-time">--:--:--</time></span>
+        <nav class="footer-credit" aria-label="Contact">
+          <a href="mailto:capelledesign@gmail.com" data-cursor="Email">Email</a>
+          <a href="https://www.linkedin.com/in/nicholas-capelle-328a95231" target="_blank" rel="noopener" data-cursor="Open">LinkedIn</a>
+          <a href="https://www.instagram.com/capelledesign" target="_blank" rel="noopener" data-cursor="Open">Instagram</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/site.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 1100" width="1100" height="1100" role="img" aria-label="SQUARE placeholder">
+  <rect x="0.5" y="0.5" width="1099" height="1099" fill="#8b8b8b" fill-opacity="0.10" stroke="#8b8b8b" stroke-opacity="0.55"/>
+  <line x1="0" y1="0" x2="1100" y2="1100" stroke="#8b8b8b" stroke-opacity="0.30"/>
+  <line x1="1100" y1="0" x2="0" y2="1100" stroke="#8b8b8b" stroke-opacity="0.30"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="68"
+        letter-spacing="2" fill="#8b8b8b">SQUARE  ·  1100×1100</text>
+</svg>

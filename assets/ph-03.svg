@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" role="img" aria-label="IMAGE 03 placeholder">
+  <rect x="0.5" y="0.5" width="1199" height="749" fill="#8b8b8b" fill-opacity="0.10" stroke="#8b8b8b" stroke-opacity="0.55"/>
+  <line x1="0" y1="0" x2="1200" y2="750" stroke="#8b8b8b" stroke-opacity="0.30"/>
+  <line x1="1200" y1="0" x2="0" y2="750" stroke="#8b8b8b" stroke-opacity="0.30"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="46"
+        letter-spacing="2" fill="#8b8b8b">IMAGE 03  ·  1200×750</text>
+</svg>
