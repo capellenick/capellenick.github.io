@@ -15,7 +15,7 @@
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="https://use.typekit.net/wsb8ckc.css" />
-  <link rel="stylesheet" href="css/style.css?v=4" />
+  <link rel="stylesheet" href="css/style.css?v=6" />
 
   <!-- No-flash theme: runs before paint. Keep this identical on every page. -->
   <script>
@@ -72,47 +72,14 @@
     </section>
 
     <!-- ==================================================================
-         WORK — filter tabs + a 2-column grid, 2x4.org-style.
-         To add a project: copy one <li class="work-card"> block, update its
-         data-featured / data-role / data-year / data-type, the image, and
-         the caption, then point the link at a new project-N.html. If you
-         add a new Role/Year/Type value, also add a matching <button> to the
-         relevant .filter-menu below.
+         WORK — a clean 2-column grid, nouvelleidee.work-style (no filter UI).
+         To add a project: copy one <li class="work-card"> block, update the
+         image and caption, then point the link at a new project-N.html.
+         The data-featured / data-role / data-year / data-type attributes are
+         inert leftovers from the old filter bar — harmless to keep or drop.
          ================================================================== -->
     <section class="wrap work" aria-labelledby="work-heading">
       <h2 id="work-heading" class="sr-only">Selected Work</h2>
-
-      <div class="work-filters" role="toolbar" aria-label="Filter projects">
-        <button class="filter-tab is-active" type="button" data-filter="featured" data-label="Featured">Featured</button>
-
-        <div class="filter-group" data-group="role">
-          <button class="filter-tab" type="button" aria-haspopup="true" aria-expanded="false" data-label="Role">Role</button>
-          <div class="filter-menu" hidden>
-            <button type="button" data-value="Product Design">Product Design</button>
-            <button type="button" data-value="Design Systems">Design Systems</button>
-          </div>
-        </div>
-
-        <div class="filter-group" data-group="year">
-          <button class="filter-tab" type="button" aria-haspopup="true" aria-expanded="false" data-label="Year">Year</button>
-          <div class="filter-menu" hidden>
-            <button type="button" data-value="2025">2025</button>
-            <button type="button" data-value="2024">2024</button>
-            <button type="button" data-value="2023">2023</button>
-          </div>
-        </div>
-
-        <div class="filter-group" data-group="type">
-          <button class="filter-tab" type="button" aria-haspopup="true" aria-expanded="false" data-label="Type">Type</button>
-          <div class="filter-menu" hidden>
-            <button type="button" data-value="Mobile">Mobile</button>
-            <button type="button" data-value="Web">Web</button>
-            <button type="button" data-value="System">System</button>
-          </div>
-        </div>
-
-        <button class="filter-tab" type="button" data-filter="all" data-label="All">All</button>
-      </div>
 
       <ul class="work-grid">
         <li class="work-card" data-featured="true" data-role="Product Design" data-year="2025" data-type="Mobile">
@@ -160,10 +127,36 @@
   <footer class="site-footer">
     <div class="wrap">
       <a class="footer-wordmark" href="index.html" data-cursor="Home">Think Different.</a>
+    </div>
 
-      <div class="footer-utility">
-        <span>&copy; <span id="year">2026</span> Nick Capelle. All rights reserved.</span>
-        <span class="footer-clock"><span aria-hidden="true">Your local time &mdash; </span><time id="local-time">--:--:--</time></span>
+    <div class="sky-band">
+      <div class="sky-icon" id="sky-icon" aria-hidden="true">
+        <svg class="sky-icon__sun" viewBox="0 0 8 8" fill="#ffb347">
+          <rect x="2" y="0" width="4" height="1"/>
+          <rect x="1" y="1" width="6" height="1"/>
+          <rect x="0" y="2" width="8" height="1"/>
+          <rect x="0" y="3" width="8" height="1"/>
+          <rect x="0" y="4" width="8" height="1"/>
+          <rect x="0" y="5" width="8" height="1"/>
+          <rect x="1" y="6" width="6" height="1"/>
+          <rect x="2" y="7" width="4" height="1"/>
+        </svg>
+        <svg class="sky-icon__moon" viewBox="0 0 8 8" fill="#f4f1e4">
+          <rect x="3" y="0" width="2" height="1"/>
+          <rect x="2" y="1" width="4" height="1"/>
+          <rect x="1" y="2" width="2" height="1"/>
+          <rect x="5" y="2" width="2" height="1"/>
+          <rect x="0" y="3" width="2" height="1"/>
+          <rect x="0" y="4" width="2" height="1"/>
+          <rect x="1" y="5" width="2" height="1"/>
+          <rect x="5" y="5" width="2" height="1"/>
+          <rect x="2" y="6" width="4" height="1"/>
+          <rect x="3" y="7" width="2" height="1"/>
+        </svg>
+      </div>
+
+      <div class="wrap footer-utility">
+        <span class="footer-clock">Local time &mdash; <time id="local-time">--:--:--</time></span>
         <nav class="footer-credit" aria-label="Contact">
           <a href="mailto:capelledesign@gmail.com" data-cursor="Email">Email</a>
           <a href="https://www.linkedin.com/in/nicholas-capelle-328a95231" target="_blank" rel="noopener" data-cursor="Open">LinkedIn</a>
@@ -173,6 +166,6 @@
     </div>
   </footer>
 
-  <script src="js/site.js?v=4" defer></script>
+  <script src="js/site.js?v=6" defer></script>
 </body>
 </html>

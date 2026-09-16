@@ -1,19 +1,44 @@
 <!-- ============================================================================
      CANONICAL FOOTER  (used on index.html, about.html, playground.html)
-     nouvelleidee.work-style: a huge closing wordmark over a slim utility row.
-     Project pages use the slim .project-foot inside the copy column instead.
-
-     #local-time is filled in by js/site.js (the visitor's own local time,
-     ticking every second). The wordmark links home, like nouvelleidee's does.
+     "Think Different." wordmark, then a full-bleed sky band whose gradient
+     and pixel-art sun/moon are driven entirely by js/site.js from the
+     visitor's own clock — see part 8 there. Project pages use the slim
+     .project-foot inside the copy column instead.
      ========================================================================= -->
 
 <footer class="site-footer">
   <div class="wrap">
     <a class="footer-wordmark" href="index.html" data-cursor="Home">Think Different.</a>
+  </div>
 
-    <div class="footer-utility">
-      <span>&copy; <span id="year">2026</span> Nick Capelle. All rights reserved.</span>
-      <span class="footer-clock"><span aria-hidden="true">Your local time &mdash; </span><time id="local-time">--:--:--</time></span>
+  <div class="sky-band">
+    <div class="sky-icon" id="sky-icon" aria-hidden="true">
+      <svg class="sky-icon__sun" viewBox="0 0 8 8" fill="#ffb347">
+        <rect x="2" y="0" width="4" height="1"/>
+        <rect x="1" y="1" width="6" height="1"/>
+        <rect x="0" y="2" width="8" height="1"/>
+        <rect x="0" y="3" width="8" height="1"/>
+        <rect x="0" y="4" width="8" height="1"/>
+        <rect x="0" y="5" width="8" height="1"/>
+        <rect x="1" y="6" width="6" height="1"/>
+        <rect x="2" y="7" width="4" height="1"/>
+      </svg>
+      <svg class="sky-icon__moon" viewBox="0 0 8 8" fill="#f4f1e4">
+        <rect x="3" y="0" width="2" height="1"/>
+        <rect x="2" y="1" width="4" height="1"/>
+        <rect x="1" y="2" width="2" height="1"/>
+        <rect x="5" y="2" width="2" height="1"/>
+        <rect x="0" y="3" width="2" height="1"/>
+        <rect x="0" y="4" width="2" height="1"/>
+        <rect x="1" y="5" width="2" height="1"/>
+        <rect x="5" y="5" width="2" height="1"/>
+        <rect x="2" y="6" width="4" height="1"/>
+        <rect x="3" y="7" width="2" height="1"/>
+      </svg>
+    </div>
+
+    <div class="wrap footer-utility">
+      <span class="footer-clock">Local time &mdash; <time id="local-time">--:--:--</time></span>
       <nav class="footer-credit" aria-label="Contact">
         <a href="mailto:capelledesign@gmail.com" data-cursor="Email">Email</a>
         <a href="https://www.linkedin.com/in/nicholas-capelle-328a95231" target="_blank" rel="noopener" data-cursor="Open">LinkedIn</a>
@@ -23,4 +48,4 @@
   </div>
 </footer>
 
-<script src="js/site.js?v=4" defer></script>
+<script src="js/site.js?v=6" defer></script>

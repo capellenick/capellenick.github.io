@@ -8,8 +8,7 @@
      5. Header hairline once scrolled
      6. Footer year
      7. Interactive ASCII garden (dormant unless a .garden element exists)
-     8. Footer live clock
-     9. Home page filter tabs (Featured / Role / Year / Type / All)
+     8. Footer live clock + time-of-day sky gradient with pixel sun/moon
    The no-flash theme is set by a tiny inline script in each page's <head>;
    this file only wires the button.
    ========================================================================== */
@@ -234,106 +233,86 @@
   }
 
 
-  /* ---- 8. FOOTER LIVE CLOCK ----------------------------------------------
-     Shows the visitor's own local time (not a fixed timezone), ticking
-     every second. Purely decorative — nouvelleidee.work-style footer detail.
+  /* ---- 8. FOOTER LIVE CLOCK + SKY BAND ------------------------------------
+     Shows the visitor's own local time, ticking every second, and drives
+     the footer's sky gradient + pixel-art sun/moon from that same clock.
+     Colors are continuously interpolated between hand-picked keyframes
+     (not snapped between buckets) so the sky actually evolves through the
+     day rather than jumping. Purely decorative, purely local — no network
+     calls, no location access, just the visitor's own system clock.
      --------------------------------------------------------------------- */
   var clockEl = document.getElementById("local-time");
-  if (clockEl) {
-    var tick = function () {
-      clockEl.textContent = new Date().toLocaleTimeString([], {
-        hour: "2-digit", minute: "2-digit", second: "2-digit"
+  var skyBand = document.querySelector(".sky-band");
+  var skyIcon = document.getElementById("sky-icon");
+
+  // Each keyframe: hour of day, sky colors (top/bottom of the band),
+  // whether footer text should be light or dark, and which icon is up.
+  var SKY_KEYFRAMES = [
+    { h: 0,    top: [5, 6, 15],    bottom: [19, 23, 53],   mode: "dark",  icon: "moon" },
+    { h: 4,    top: [7, 10, 26],   bottom: [26, 31, 69],   mode: "dark",  icon: "moon" },
+    { h: 5.5,  top: [22, 25, 58],  bottom: [58, 53, 100],  mode: "dark",  icon: "moon" },
+    { h: 6.5,  top: [70, 88, 150], bottom: [255, 179, 122],mode: "light", icon: "sun"  },
+    { h: 9,    top: [111, 177, 224], bottom: [255, 225, 173], mode: "light", icon: "sun" },
+    { h: 12,   top: [79, 163, 224],  bottom: [203, 233, 251], mode: "light", icon: "sun" },
+    { h: 15,   top: [90, 168, 221],  bottom: [255, 224, 176], mode: "light", icon: "sun" },
+    { h: 17.5, top: [74, 118, 176],  bottom: [255, 159, 107], mode: "light", icon: "sun" },
+    { h: 19,   top: [44, 37, 85],    bottom: [122, 74, 120],  mode: "dark",  icon: "moon" },
+    { h: 21,   top: [18, 20, 44],    bottom: [38, 42, 82],    mode: "dark",  icon: "moon" },
+    { h: 24,   top: [5, 6, 15],      bottom: [19, 23, 53],    mode: "dark",  icon: "moon" }
+  ];
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function lerpRGB(c1, c2, t) {
+    return "rgb(" + Math.round(lerp(c1[0], c2[0], t)) + "," +
+                     Math.round(lerp(c1[1], c2[1], t)) + "," +
+                     Math.round(lerp(c1[2], c2[2], t)) + ")";
+  }
+
+  function updateSky() {
+    var now = new Date();
+    var h = now.getHours() + now.getMinutes() / 60;
+
+    var frames = SKY_KEYFRAMES;
+    var a = frames[0], b = frames[frames.length - 1];
+    for (var i = 0; i < frames.length - 1; i++) {
+      if (h >= frames[i].h && h <= frames[i + 1].h) {
+        a = frames[i]; b = frames[i + 1];
+        break;
+      }
+    }
+    var t = (h - a.h) / (b.h - a.h);
+
+    if (skyBand) {
+      skyBand.style.setProperty("--sky-1", lerpRGB(a.top, b.top, t));
+      skyBand.style.setProperty("--sky-2", lerpRGB(a.bottom, b.bottom, t));
+      skyBand.setAttribute("data-sky-mode", t < 0.5 ? a.mode : b.mode);
+    }
+
+    if (skyIcon) {
+      var icon = t < 0.5 ? a.icon : b.icon;
+      // Position the icon along its own half of the day: sunrise->sunset
+      // for the sun, sunset->sunrise (next day) for the moon.
+      var span = icon === "sun" ? [6.5, 19] : [19, 30.5]; // 30.5 = 6.5 + 24
+      var hh = h < span[0] ? h + 24 : h;
+      var progress = (hh - span[0]) / (span[1] - span[0]);
+      progress = Math.max(0, Math.min(1, progress));
+      skyIcon.style.setProperty("--sky-icon-pos", (8 + progress * 84) + "%");
+      skyIcon.querySelectorAll(".sky-icon__sun, .sky-icon__moon").forEach(function (el) {
+        el.style.opacity = el.classList.contains("sky-icon__" + icon) ? "1" : "0";
       });
+    }
+  }
+
+  if (clockEl || skyBand) {
+    var tick = function () {
+      if (clockEl) {
+        clockEl.textContent = new Date().toLocaleTimeString([], {
+          hour: "2-digit", minute: "2-digit", second: "2-digit"
+        });
+      }
+      updateSky();
     };
     tick();
     setInterval(tick, 1000);
-  }
-
-
-  /* ---- 9. HOME PAGE FILTER TABS -------------------------------------------
-     Featured / All filter directly. Role, Year and Type open a flyout of the
-     values present on the cards below (read from data-value on each menu
-     button); picking one filters .work-card elements by the matching
-     data-role / data-year / data-type attribute.
-     --------------------------------------------------------------------- */
-  var filterBar = document.querySelector(".work-filters");
-  if (filterBar) {
-    var cards = document.querySelectorAll(".work-card");
-    var directTabs = filterBar.querySelectorAll(".filter-tab[data-filter]");
-    var groups = filterBar.querySelectorAll(".filter-group");
-
-    function closeMenus() {
-      groups.forEach(function (g) {
-        g.querySelector(".filter-menu").hidden = true;
-        g.querySelector(".filter-tab").setAttribute("aria-expanded", "false");
-      });
-    }
-
-    function clearActive() {
-      filterBar.querySelectorAll(".filter-tab").forEach(function (t) {
-        t.classList.remove("is-active");
-      });
-      groups.forEach(function (g) {
-        var tab = g.querySelector(".filter-tab");
-        tab.textContent = tab.dataset.label;
-        g.querySelectorAll(".filter-menu button").forEach(function (b) {
-          b.classList.remove("is-active");
-        });
-      });
-    }
-
-    function applyFilter(kind, value) {
-      cards.forEach(function (card) {
-        var show =
-          kind === "all" ? true :
-          kind === "featured" ? card.dataset.featured === "true" :
-          card.dataset[kind] === value;
-        card.hidden = !show;
-      });
-    }
-
-    directTabs.forEach(function (tab) {
-      tab.addEventListener("click", function () {
-        clearActive();
-        tab.classList.add("is-active");
-        closeMenus();
-        applyFilter(tab.dataset.filter, null);
-      });
-    });
-
-    groups.forEach(function (group) {
-      var tab = group.querySelector(".filter-tab");
-      var menu = group.querySelector(".filter-menu");
-
-      tab.addEventListener("click", function (e) {
-        e.stopPropagation();
-        var willOpen = menu.hidden;
-        closeMenus();
-        menu.hidden = !willOpen;
-        tab.setAttribute("aria-expanded", String(willOpen));
-      });
-
-      menu.querySelectorAll("button").forEach(function (item) {
-        item.addEventListener("click", function () {
-          clearActive();
-          tab.classList.add("is-active");
-          tab.textContent = item.textContent;
-          item.classList.add("is-active");
-          closeMenus();
-          applyFilter(group.dataset.group, item.dataset.value);
-        });
-      });
-    });
-
-    document.addEventListener("click", function (e) {
-      if (!filterBar.contains(e.target)) closeMenus();
-    });
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") closeMenus();
-    });
-
-    // Apply whichever tab starts marked .is-active in the HTML (Featured, by default)
-    var initialTab = filterBar.querySelector(".filter-tab.is-active[data-filter]");
-    if (initialTab) applyFilter(initialTab.dataset.filter, null);
   }
 })();
