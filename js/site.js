@@ -31,7 +31,7 @@
   function syncThemeButton() {
     if (!themeBtn) return;
     var dark = currentTheme() === "dark";
-    themeBtn.setAttribute("aria-pressed", String(dark));
+    themeBtn.setAttribute("aria-checked", String(dark));
     themeBtn.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
   }
   if (themeBtn) {

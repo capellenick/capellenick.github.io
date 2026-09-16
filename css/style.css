@@ -278,27 +278,51 @@ body.has-cursor button { cursor: none; }
   background: var(--ink);
 }
 
-/* Theme toggle */
+/* Theme toggle — a pill with both icons always visible and a thumb that
+   slides to whichever is active. Structure:
+     button.theme-toggle
+       span.theme-toggle__thumb          (slides left/right)
+       span.theme-toggle__icon --sun     (svg, currentColor)
+       span.theme-toggle__icon --moon    (svg, currentColor) */
 .theme-toggle {
-  width: 34px; height: 34px;
+  position: relative;
+  display: flex;
+  flex: none;
+  width: 68px;
+  height: 34px;
+  padding: 3px;
+  border: 1px solid var(--hairline-2);
+  border-radius: 999px;
+  background: var(--media-bg);
+  transition: background 0.3s var(--ease), border-color 0.2s var(--ease);
+}
+.theme-toggle__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  height: calc(100% - 6px);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 18%, var(--paper));
+  transition: transform 0.35s var(--ease);
+}
+:root[data-theme="dark"] .theme-toggle__thumb {
+  transform: translateX(100%);
+}
+.theme-toggle__icon {
+  position: relative;
+  z-index: 1;
+  flex: 1;
   display: grid;
   place-items: center;
-  border: 1px solid var(--hairline-2);
-  border-radius: 50%;
-  flex: none;
-  transition: border-color 0.2s var(--ease), transform 0.3s var(--ease);
+  color: var(--ink-30);
+  transition: color 0.3s var(--ease);
 }
-.theme-toggle:hover { transform: rotate(25deg); }
-.theme-toggle__icon {
-  width: 13px; height: 13px;
-  border-radius: 50%;
-  background: var(--ink);
-  box-shadow: inset -4px -4px 0 0 var(--paper);
-  transition: box-shadow 0.3s var(--ease), background 0.3s var(--ease);
-}
-:root[data-theme="dark"] .theme-toggle__icon {
-  box-shadow: inset 0 0 0 0 var(--paper);   /* full "moon" -> filled dot in dark */
-}
+.theme-toggle__icon svg { width: 15px; height: 15px; }
+/* Light mode: sun is active. Dark mode: moon is active. */
+.theme-toggle__icon--sun { color: var(--ink); }
+:root[data-theme="dark"] .theme-toggle__icon--sun { color: var(--ink-30); }
+:root[data-theme="dark"] .theme-toggle__icon--moon { color: var(--ink); }
 
 /* Hamburger (mobile only) */
 .nav-toggle {
