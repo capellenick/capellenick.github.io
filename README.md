@@ -17,6 +17,14 @@ python3 -m http.server 4599
 
 Then open <http://localhost:4599>. (Node users: `npx serve` also works.)
 
+**If a change doesn't seem to show up:** browsers cache `css/style.css` and
+`js/site.js` aggressively. Every page loads them as `css/style.css?v=2` /
+`js/site.js?v=2` specifically so this doesn't bite you — after any CSS or JS
+edit, bump that `v=` number in **every** HTML file (find-and-replace `v=2`
+for the next number across the project) and the new version is guaranteed to
+load. A plain refresh without bumping it can still show the old file; a hard
+refresh (⌘⇧R) forces a fresh load either way.
+
 ---
 
 ## Files

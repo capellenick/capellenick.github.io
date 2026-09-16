@@ -416,6 +416,9 @@ body.has-cursor button { cursor: none; }
   background: var(--media-bg);
   aspect-ratio: 3 / 2;
   margin-bottom: 1rem;
+  isolation: isolate;                                      /* own stacking context */
+  -webkit-mask-image: -webkit-radial-gradient(white, black); /* Safari fix: without
+    this, Safari sometimes fails to clip a scaled child to the rounded corners */
 }
 .card-media img,
 .card-media video {
@@ -426,16 +429,24 @@ body.has-cursor button { cursor: none; }
 .work-card a:hover .card-media img,
 .work-card a:hover .card-media video { transform: var(--zoom); }
 
+/* Stacked title + tag, nouvelleidee.work-style: title larger and dark,
+   tag smaller and grey, sentence case (no uppercase, no separator glyph). */
 .card-caption {
-  font-size: clamp(0.95rem, 0.85rem + 0.3vw, 1.1rem);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.005em;
-  line-height: 1.35;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
 }
-.card-caption .prefix { color: var(--ink); }
-.card-caption .suffix { color: var(--ink-50); }
-.card-caption .suffix::before { content: "\2014"; margin-inline: 0.4em; }
+.card-title {
+  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.card-tag {
+  font-size: 0.85rem;
+  line-height: 1.25;
+  color: var(--ink-50);
+}
 
 @media (max-width: 700px) {
   .work-grid { grid-template-columns: 1fr; }
@@ -686,6 +697,8 @@ body.has-cursor button { cursor: none; }
   border: 1px solid var(--hairline);
   border-radius: var(--radius-img);
   overflow: hidden;
+  isolation: isolate;
+  -webkit-mask-image: -webkit-radial-gradient(white, black); /* Safari clip fix, see .card-media */
 }
 .play-card img {
   width: 100%;
