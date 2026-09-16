@@ -1,40 +1,80 @@
 <!-- ============================================================================
      CANONICAL FOOTER  (used on index.html, about.html, playground.html)
-     "Think Different." wordmark, then a full-bleed sky band whose gradient
-     and pixel-art sun/moon are driven entirely by js/site.js from the
-     visitor's own clock — see part 8 there. Project pages use the slim
-     .project-foot inside the copy column instead.
+     The whole footer is one full-bleed "sky band" — gradient, pixel clouds,
+     pixel stars (hidden in peak daylight), and a pixel sun/moon that swaps
+     and travels across it — all driven by js/site.js part 8 from the
+     visitor's own clock. "Think Different." and the utility row both sit
+     inside it and recolor (light/dark) to stay legible against any sky.
+     Project pages use the slim .project-foot inside the copy column instead.
+
+     To reposition a star or cloud: edit its inline left/top/width/height —
+     no CSS classes to hunt down.
      ========================================================================= -->
 
 <footer class="site-footer">
-  <div class="wrap">
-    <a class="footer-wordmark" href="index.html" data-cursor="Home">Think Different.</a>
-  </div>
-
   <div class="sky-band">
+    <!-- All top offsets below are small fixed pixels, not percentages —
+         they anchor into the band's guaranteed top padding (min 40px) so
+         nothing ever drifts behind the wordmark text at any screen size. -->
+    <div class="sky-clouds" aria-hidden="true">
+      <svg class="cloud" viewBox="0 0 16 4" style="left:8%; top:20px; width:78px; height:19.5px;">
+        <rect x="3" y="0" width="3" height="1"/><rect x="9" y="0" width="3" height="1"/>
+        <rect x="1" y="1" width="13" height="1"/><rect x="0" y="2" width="16" height="1"/>
+        <rect x="1" y="3" width="14" height="1"/>
+      </svg>
+      <svg class="cloud" viewBox="0 0 16 4" style="left:64%; top:4px; width:58px; height:14.5px;">
+        <rect x="3" y="0" width="3" height="1"/><rect x="9" y="0" width="3" height="1"/>
+        <rect x="1" y="1" width="13" height="1"/><rect x="0" y="2" width="16" height="1"/>
+        <rect x="1" y="3" width="14" height="1"/>
+      </svg>
+    </div>
+
+    <div class="sky-stars" aria-hidden="true">
+      <svg class="star" viewBox="0 0 5 5" style="left:6%;  top:2px;  width:8px; height:8px;">
+        <rect x="2" y="0" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/>
+        <rect x="0" y="2" width="5" height="1"/><rect x="2" y="3" width="1" height="1"/><rect x="2" y="4" width="1" height="1"/>
+      </svg>
+      <svg class="star" viewBox="0 0 5 5" style="left:23%; top:26px; width:6px; height:6px;">
+        <rect x="2" y="0" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/>
+        <rect x="0" y="2" width="5" height="1"/><rect x="2" y="3" width="1" height="1"/><rect x="2" y="4" width="1" height="1"/>
+      </svg>
+      <svg class="star" viewBox="0 0 5 5" style="left:39%; top:6px;  width:7px; height:7px;">
+        <rect x="2" y="0" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/>
+        <rect x="0" y="2" width="5" height="1"/><rect x="2" y="3" width="1" height="1"/><rect x="2" y="4" width="1" height="1"/>
+      </svg>
+      <svg class="star" viewBox="0 0 5 5" style="left:61%; top:28px; width:5px; height:5px;">
+        <rect x="2" y="0" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/>
+        <rect x="0" y="2" width="5" height="1"/><rect x="2" y="3" width="1" height="1"/><rect x="2" y="4" width="1" height="1"/>
+      </svg>
+      <svg class="star" viewBox="0 0 5 5" style="left:82%; top:8px;  width:8px; height:8px;">
+        <rect x="2" y="0" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/>
+        <rect x="0" y="2" width="5" height="1"/><rect x="2" y="3" width="1" height="1"/><rect x="2" y="4" width="1" height="1"/>
+      </svg>
+      <svg class="star" viewBox="0 0 5 5" style="left:93%; top:24px; width:6px; height:6px;">
+        <rect x="2" y="0" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/>
+        <rect x="0" y="2" width="5" height="1"/><rect x="2" y="3" width="1" height="1"/><rect x="2" y="4" width="1" height="1"/>
+      </svg>
+    </div>
+
     <div class="sky-icon" id="sky-icon" aria-hidden="true">
-      <svg class="sky-icon__sun" viewBox="0 0 8 8" fill="#ffb347">
-        <rect x="2" y="0" width="4" height="1"/>
-        <rect x="1" y="1" width="6" height="1"/>
-        <rect x="0" y="2" width="8" height="1"/>
-        <rect x="0" y="3" width="8" height="1"/>
-        <rect x="0" y="4" width="8" height="1"/>
-        <rect x="0" y="5" width="8" height="1"/>
-        <rect x="1" y="6" width="6" height="1"/>
-        <rect x="2" y="7" width="4" height="1"/>
+      <svg class="sky-icon__sun" viewBox="0 0 10 10" fill="#ffb347">
+        <rect x="2" y="0" width="5" height="1"/><rect x="1" y="1" width="7" height="1"/>
+        <rect x="0" y="2" width="9" height="1"/><rect x="0" y="3" width="9" height="1"/>
+        <rect x="0" y="4" width="9" height="1"/><rect x="0" y="5" width="9" height="1"/>
+        <rect x="0" y="6" width="9" height="1"/><rect x="1" y="7" width="7" height="1"/>
+        <rect x="2" y="8" width="5" height="1"/>
       </svg>
-      <svg class="sky-icon__moon" viewBox="0 0 8 8" fill="#f4f1e4">
-        <rect x="3" y="0" width="2" height="1"/>
-        <rect x="2" y="1" width="4" height="1"/>
-        <rect x="1" y="2" width="2" height="1"/>
-        <rect x="5" y="2" width="2" height="1"/>
-        <rect x="0" y="3" width="2" height="1"/>
-        <rect x="0" y="4" width="2" height="1"/>
-        <rect x="1" y="5" width="2" height="1"/>
-        <rect x="5" y="5" width="2" height="1"/>
-        <rect x="2" y="6" width="4" height="1"/>
-        <rect x="3" y="7" width="2" height="1"/>
+      <svg class="sky-icon__moon" viewBox="0 0 10 10" fill="#f4f1e4">
+        <rect x="2" y="0" width="5" height="1"/><rect x="1" y="1" width="3" height="1"/>
+        <rect x="0" y="2" width="3" height="1"/><rect x="0" y="3" width="3" height="1"/>
+        <rect x="0" y="4" width="3" height="1"/><rect x="0" y="5" width="3" height="1"/>
+        <rect x="0" y="6" width="3" height="1"/><rect x="1" y="7" width="3" height="1"/>
+        <rect x="2" y="8" width="5" height="1"/>
       </svg>
+    </div>
+
+    <div class="wrap">
+      <a class="footer-wordmark" href="index.html" data-cursor="Home">Think Different.</a>
     </div>
 
     <div class="wrap footer-utility">
@@ -48,4 +88,4 @@
   </div>
 </footer>
 
-<script src="js/site.js?v=6" defer></script>
+<script src="js/site.js?v=7" defer></script>

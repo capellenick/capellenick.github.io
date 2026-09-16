@@ -286,6 +286,8 @@
       skyBand.style.setProperty("--sky-1", lerpRGB(a.top, b.top, t));
       skyBand.style.setProperty("--sky-2", lerpRGB(a.bottom, b.bottom, t));
       skyBand.setAttribute("data-sky-mode", t < 0.5 ? a.mode : b.mode);
+      // Stars hidden during peak daylight (7am-6pm); visible dusk through dawn.
+      skyBand.setAttribute("data-stars", (h >= 7 && h < 18) ? "hidden" : "visible");
     }
 
     if (skyIcon) {
