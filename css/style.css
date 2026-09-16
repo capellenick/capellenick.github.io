@@ -60,7 +60,7 @@
   --gutter: clamp(1.15rem, 4.5vw, 3.25rem);
   --header-h: 68px;
   --section-gap: clamp(4rem, 10vw, 8rem);
-  --radius-img: 20px;   /* every content-image frame uses this */
+  --radius-img: 15px;   /* every content-image frame uses this — matches nouvelleidee.work */
 
   /* Motion */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -440,9 +440,7 @@ body.has-cursor button { cursor: none; }
   background: var(--media-bg);
   aspect-ratio: 3 / 2;
   margin-bottom: 1rem;
-  isolation: isolate;                                      /* own stacking context */
-  -webkit-mask-image: -webkit-radial-gradient(white, black); /* Safari fix: without
-    this, Safari sometimes fails to clip a scaled child to the rounded corners */
+  isolation: isolate;   /* own stacking context — keeps clipping predictable */
 }
 .card-media img,
 .card-media video {
@@ -722,7 +720,6 @@ body.has-cursor button { cursor: none; }
   border-radius: var(--radius-img);
   overflow: hidden;
   isolation: isolate;
-  -webkit-mask-image: -webkit-radial-gradient(white, black); /* Safari clip fix, see .card-media */
 }
 .play-card img {
   width: 100%;
