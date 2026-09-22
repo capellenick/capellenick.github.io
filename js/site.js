@@ -11,6 +11,7 @@
      8. Footer live clock + time-of-day sky (gradient, clouds, stars,
         birds/plane, sun/moon)
      9. Footer frog easter egg — click the sky, a frog falls
+    10. Boone, NC weather next to the local-time clock (the only network call)
    The no-flash theme is set by a tiny inline script in each page's <head>;
    this file only wires the button.
    ========================================================================== */
@@ -249,18 +250,19 @@
 
   // Each keyframe: hour of day, sky colors (top/bottom of the band),
   // whether footer text should be light or dark, and which icon is up.
+  // Flat color through the day and through the night (top === bottom, so
+  // the gradient collapses to a solid fill) — an actual top-to-bottom
+  // gradient only forms during the sunrise (5-7) and sunset (17-19)
+  // windows, where top and bottom diverge into real sunrise/sunset colors.
   var SKY_KEYFRAMES = [
-    { h: 0,    top: [5, 6, 15],    bottom: [19, 23, 53],   mode: "dark",  icon: "moon" },
-    { h: 4,    top: [7, 10, 26],   bottom: [26, 31, 69],   mode: "dark",  icon: "moon" },
-    { h: 5.5,  top: [22, 25, 58],  bottom: [58, 53, 100],  mode: "dark",  icon: "moon" },
-    { h: 6.5,  top: [70, 88, 150], bottom: [255, 179, 122],mode: "light", icon: "sun"  },
-    { h: 9,    top: [111, 177, 224], bottom: [255, 225, 173], mode: "light", icon: "sun" },
-    { h: 12,   top: [79, 163, 224],  bottom: [203, 233, 251], mode: "light", icon: "sun" },
-    { h: 15,   top: [90, 168, 221],  bottom: [255, 224, 176], mode: "light", icon: "sun" },
-    { h: 17.5, top: [74, 118, 176],  bottom: [255, 159, 107], mode: "light", icon: "sun" },
-    { h: 19,   top: [44, 37, 85],    bottom: [122, 74, 120],  mode: "dark",  icon: "moon" },
-    { h: 21,   top: [18, 20, 44],    bottom: [38, 42, 82],    mode: "dark",  icon: "moon" },
-    { h: 24,   top: [5, 6, 15],      bottom: [19, 23, 53],    mode: "dark",  icon: "moon" }
+    { h: 0,  top: [9, 11, 26],    bottom: [9, 11, 26],     mode: "dark",  icon: "moon" },
+    { h: 5,  top: [9, 11, 26],    bottom: [9, 11, 26],     mode: "dark",  icon: "moon" },
+    { h: 6,  top: [72, 92, 152],  bottom: [255, 178, 120], mode: "light", icon: "sun"  },
+    { h: 7,  top: [92, 168, 227], bottom: [92, 168, 227],  mode: "light", icon: "sun"  },
+    { h: 17, top: [92, 168, 227], bottom: [92, 168, 227],  mode: "light", icon: "sun"  },
+    { h: 18, top: [68, 86, 148],  bottom: [255, 142, 96],  mode: "light", icon: "sun"  },
+    { h: 19, top: [9, 11, 26],    bottom: [9, 11, 26],     mode: "dark",  icon: "moon" },
+    { h: 24, top: [9, 11, 26],    bottom: [9, 11, 26],     mode: "dark",  icon: "moon" }
   ];
 
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -333,25 +335,38 @@
      motion on someone who asked not to see it.
      --------------------------------------------------------------------- */
   if (skyBand && !reduceMotion) {
+    // A climbing/reaching pose (splayed hand up top-left, round head with
+    // red eyes upper-right, diagonal body, bent trailing leg) instead of
+    // the old symmetric squat frog.
     var FROG_SVG =
-      '<svg viewBox="0 0 10 9" xmlns="http://www.w3.org/2000/svg">' +
+      '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">' +
       '<g fill="#4caf6b">' +
-      '<rect x="1" y="0" width="2" height="1"/><rect x="7" y="0" width="2" height="1"/>' +
-      '<rect x="0" y="1" width="4" height="1"/><rect x="6" y="1" width="4" height="1"/>' +
-      '<rect x="0" y="2" width="10" height="1"/><rect x="0" y="3" width="10" height="1"/>' +
-      '<rect x="0" y="4" width="10" height="1"/><rect x="0" y="5" width="10" height="1"/>' +
-      '<rect x="1" y="6" width="8" height="1"/>' +
-      '<rect x="0" y="7" width="2" height="1"/><rect x="3" y="7" width="4" height="1"/><rect x="8" y="7" width="2" height="1"/>' +
-      '<rect x="0" y="8" width="2" height="1"/><rect x="8" y="8" width="2" height="1"/>' +
+      '<rect x="3" y="0" width="1" height="1"/>' +
+      '<rect x="1" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/>' +
+      '<rect x="0" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/>' +
+      '<rect x="7" y="3" width="1" height="1"/>' +
+      '<rect x="3" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/>' +
+      '<rect x="4" y="5" width="1" height="1"/><rect x="9" y="5" width="2" height="1"/>' +
+      '<rect x="5" y="6" width="1" height="1"/><rect x="8" y="6" width="1" height="1"/><rect x="11" y="6" width="1" height="1"/>' +
+      '<rect x="6" y="7" width="3" height="1"/><rect x="11" y="7" width="1" height="1"/>' +
+      '<rect x="7" y="8" width="5" height="1"/>' +
+      '<rect x="8" y="9" width="3" height="1"/>' +
+      '<rect x="7" y="10" width="3" height="1"/>' +
+      '<rect x="6" y="11" width="3" height="1"/>' +
+      '<rect x="5" y="12" width="3" height="1"/>' +
+      '<rect x="5" y="13" width="2" height="1"/>' +
+      '<rect x="4" y="14" width="2" height="1"/>' +
+      '<rect x="3" y="15" width="1" height="1"/><rect x="5" y="15" width="1" height="1"/>' +
       '</g>' +
-      '<rect x="1" y="0" width="1" height="1" fill="#0d1a12"/>' +
-      '<rect x="8" y="0" width="1" height="1" fill="#0d1a12"/>' +
+      '<g fill="#e63946">' +
+      '<rect x="9" y="6" width="2" height="1"/><rect x="9" y="7" width="2" height="1"/>' +
+      '</g>' +
       '</svg>';
 
     skyBand.addEventListener("click", function (e) {
       if (e.target.closest("a")) return; // real links keep working
 
-      var startX = e.clientX - 15, startY = e.clientY - 13;
+      var startX = e.clientX - 19, startY = e.clientY - 19;
       var frog = document.createElement("div");
       frog.className = "frog";
       frog.innerHTML = FROG_SVG;
@@ -379,5 +394,48 @@
         }
       })();
     });
+  }
+
+
+  /* ---- 10. BOONE, NC WEATHER ----------------------------------------------
+     The one part of this site that talks to the network. Fetches current
+     conditions for Boone, NC (fixed location, not the visitor's — see the
+     conversation this was built from) from Open-Meteo: free, no API key,
+     no sign-up, and its rate limits (generous, ~10k calls/day) are a
+     non-issue for one lightweight poll per open tab every 10 minutes.
+     Shown next to the local-time clock. Fails quietly — on a network error
+     or if the API is ever down, the weather text just stays blank rather
+     than breaking anything else on the page.
+     --------------------------------------------------------------------- */
+  var weatherEl = document.getElementById("footer-weather");
+  if (weatherEl) {
+    var WEATHER_CODES = {
+      0: "Clear", 1: "Mostly Clear", 2: "Partly Cloudy", 3: "Overcast",
+      45: "Foggy", 48: "Foggy",
+      51: "Drizzle", 53: "Drizzle", 55: "Drizzle", 56: "Freezing Drizzle", 57: "Freezing Drizzle",
+      61: "Light Rain", 63: "Rain", 65: "Heavy Rain", 66: "Freezing Rain", 67: "Freezing Rain",
+      71: "Light Snow", 73: "Snow", 75: "Heavy Snow", 77: "Snow",
+      80: "Rain Showers", 81: "Rain Showers", 82: "Heavy Showers",
+      85: "Snow Showers", 86: "Snow Showers",
+      95: "Thunderstorm", 96: "Thunderstorm", 99: "Thunderstorm"
+    };
+    var WEATHER_URL =
+      "https://api.open-meteo.com/v1/forecast?latitude=36.2168&longitude=-81.6746" +
+      "&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=America%2FNew_York";
+
+    var fetchWeather = function () {
+      fetch(WEATHER_URL)
+        .then(function (res) { return res.ok ? res.json() : null; })
+        .then(function (data) {
+          if (!data || !data.current) return;
+          var temp = Math.round(data.current.temperature_2m);
+          var label = WEATHER_CODES[data.current.weather_code] || "";
+          weatherEl.textContent = " · " + temp + "°F" + (label ? ", " + label : "");
+        })
+        .catch(function () { /* offline, blocked, or the API's down — stay blank */ });
+    };
+
+    fetchWeather();
+    setInterval(fetchWeather, 10 * 60 * 1000);
   }
 })();

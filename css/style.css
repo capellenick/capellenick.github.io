@@ -849,8 +849,8 @@ body.has-cursor button { cursor: none; }
    bounds, relative to the real viewport. */
 .frog {
   position: fixed;
-  width: 30px;
-  height: 27px;
+  width: 38px;
+  height: 38px;
   z-index: 500;
   pointer-events: none;
   will-change: transform;
