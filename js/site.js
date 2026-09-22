@@ -5,13 +5,12 @@
      2. Mobile nav toggle
      3. Circle cursor with hover-state + labels
      4. Scroll-reveal
-     5. Header hairline once scrolled
-     6. Footer year
-     7. Interactive ASCII garden (dormant unless a .garden element exists)
-     8. Footer live clock + time-of-day sky (gradient, clouds, stars,
+     5. Footer year
+     6. Interactive ASCII garden (dormant unless a .garden element exists)
+     7. Footer live clock + time-of-day sky (gradient, clouds, stars,
         birds/plane, sun/moon)
-     9. Footer frog easter egg — click the sky, a frog falls
-    10. Boone, NC weather next to the local-time clock (the only network call)
+     8. Footer frog easter egg — click the sky, a frog falls
+     9. Boone, NC weather next to the local-time clock (the only network call)
    The no-flash theme is set by a tiny inline script in each page's <head>;
    this file only wires the button.
    ========================================================================== */
@@ -150,23 +149,13 @@
   }
 
 
-  /* ---- 5. HEADER HAIRLINE --------------------------------------------- */
-  var header = document.querySelector(".site-header");
-  if (header) {
-    var onScroll = function () {
-      header.classList.toggle("is-stuck", window.scrollY > 6);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-  }
 
-
-  /* ---- 6. FOOTER YEAR ----------------------------------------------------- */
+  /* ---- 5. FOOTER YEAR ----------------------------------------------------- */
   var yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
 
-  /* ---- 7. INTERACTIVE GARDEN -------------------------------------------
+  /* ---- 6. INTERACTIVE GARDEN -------------------------------------------
      Each .garden gets a set of plants. "Watering" (hover / click / Enter)
      advances the plant one growth stage. Plants lean toward the pointer.
      --------------------------------------------------------------------- */
@@ -236,7 +225,7 @@
   }
 
 
-  /* ---- 8. FOOTER LIVE CLOCK + SKY BAND ------------------------------------
+  /* ---- 7. FOOTER LIVE CLOCK + SKY BAND ------------------------------------
      Shows the visitor's own local time, ticking every second, and drives
      the footer's sky gradient + pixel-art sun/moon from that same clock.
      Colors are continuously interpolated between hand-picked keyframes
@@ -326,7 +315,7 @@
   }
 
 
-  /* ---- 9. FOOTER FROG EASTER EGG ------------------------------------------
+  /* ---- 8. FOOTER FROG EASTER EGG ------------------------------------------
      Click anywhere in the sky band that isn't a real link (Email/LinkedIn/
      Instagram still work normally) and a small pixel tree frog appears at
      the click point and free-falls off the bottom of the screen under
@@ -344,7 +333,7 @@
     // matches it closely. Only change from the source: red eyes, not brown.
     var FROG_SVG =
       '<svg viewBox="0 0 23 21" xmlns="http://www.w3.org/2000/svg">' +
-      '<g fill="#78b464">' +
+      '<g fill="#5a9646">' +
       '<rect x="12" y="1" width="1" height="1"/><rect x="11" y="2" width="3" height="1"/><rect x="18" y="2" width="2" height="1"/>' +
       '<rect x="2" y="3" width="1" height="1"/><rect x="5" y="3" width="1" height="1"/><rect x="12" y="3" width="1" height="1"/><rect x="15" y="3" width="1" height="1"/><rect x="17" y="3" width="3" height="1"/>' +
       '<rect x="2" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="8" y="4" width="3" height="1"/><rect x="12" y="4" width="5" height="1"/><rect x="18" y="4" width="1" height="1"/>' +
@@ -422,7 +411,7 @@
   }
 
 
-  /* ---- 10. BOONE, NC WEATHER ----------------------------------------------
+  /* ---- 9. BOONE, NC WEATHER ----------------------------------------------
      The one part of this site that talks to the network. Fetches current
      conditions for Boone, NC (fixed location, not the visitor's — see the
      conversation this was built from) from Open-Meteo: free, no API key,

@@ -219,6 +219,11 @@ body.has-cursor button { cursor: none; }
    5. SITE HEADER
    --------------------------------------------------------------------------- */
 
+/* Fully transparent, nouvelleidee.work-style: no background, no blur, no
+   border — the page scrolls underneath it and the header text is content
+   sitting on top, overlap and all. Sticky (not fixed) so it needs no
+   compensating top padding elsewhere; visually identical to fixed here
+   since nothing sits above it in the document. */
 .site-header {
   position: sticky;
   top: 0;
@@ -226,13 +231,7 @@ body.has-cursor button { cursor: none; }
   height: var(--header-h);
   display: flex;
   align-items: center;
-  background: color-mix(in srgb, var(--paper) 85%, transparent);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.3s var(--ease), background 0.4s var(--ease);
 }
-.site-header.is-stuck { border-bottom-color: var(--hairline); }
 
 .site-header__inner {
   width: 100%;
