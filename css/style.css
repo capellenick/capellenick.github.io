@@ -727,7 +727,7 @@ body.has-cursor button { cursor: none; }
   flex-direction: column;
   justify-content: flex-end;   /* utility row rests at the bottom of the sky */
   padding-top: clamp(3.5rem, 9vw, 6rem);
-  padding-bottom: clamp(2.5rem, 6vw, 4rem);
+  padding-bottom: var(--gutter);   /* same token as the side gutters — guaranteed equal, not just close */
   background: linear-gradient(180deg, var(--sky-1, #bfe0f7), var(--sky-2, #eef6fb));
   transition: background 1.5s ease;
   cursor: pointer;   /* hints the sky is clickable, for the frog */
@@ -839,7 +839,9 @@ body.has-cursor button { cursor: none; }
 }
 :root[data-theme="dark"] .footer-utility,
 .sky-band[data-sky-mode="dark"] .footer-utility { color: rgba(255, 255, 255, 0.9); }
+.footer-meta { display: flex; flex-direction: column; gap: 0.4em; }
 .footer-clock { font-variant-numeric: tabular-nums; }
+.footer-weather:empty { display: none; }   /* no gap while the fetch hasn't landed yet */
 .footer-credit { display: flex; gap: 1.15rem; }
 .footer-utility a { position: relative; z-index: 1; cursor: pointer; }
 .footer-utility a:hover { opacity: 0.7; }
@@ -849,8 +851,8 @@ body.has-cursor button { cursor: none; }
    bounds, relative to the real viewport. */
 .frog {
   position: fixed;
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 38px;   /* sprite is 23x21 — keep its real aspect ratio */
   z-index: 500;
   pointer-events: none;
   will-change: transform;

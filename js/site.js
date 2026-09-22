@@ -338,35 +338,60 @@
     // A climbing/reaching pose (splayed hand up top-left, round head with
     // red eyes upper-right, diagonal body, bent trailing leg) instead of
     // the old symmetric squat frog.
+    // Traced cell-by-cell from the reference photo (23x21 grid, sampled
+    // programmatically from the actual pixel art rather than hand-guessed)
+    // so the pose — reaching hand, head, diagonal body, trailing leg —
+    // matches it closely. Only change from the source: red eyes, not brown.
     var FROG_SVG =
-      '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">' +
-      '<g fill="#4caf6b">' +
-      '<rect x="3" y="0" width="1" height="1"/>' +
-      '<rect x="1" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/>' +
-      '<rect x="0" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/>' +
-      '<rect x="7" y="3" width="1" height="1"/>' +
-      '<rect x="3" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/>' +
-      '<rect x="4" y="5" width="1" height="1"/><rect x="9" y="5" width="2" height="1"/>' +
-      '<rect x="5" y="6" width="1" height="1"/><rect x="8" y="6" width="1" height="1"/><rect x="11" y="6" width="1" height="1"/>' +
-      '<rect x="6" y="7" width="3" height="1"/><rect x="11" y="7" width="1" height="1"/>' +
-      '<rect x="7" y="8" width="5" height="1"/>' +
-      '<rect x="8" y="9" width="3" height="1"/>' +
-      '<rect x="7" y="10" width="3" height="1"/>' +
-      '<rect x="6" y="11" width="3" height="1"/>' +
-      '<rect x="5" y="12" width="3" height="1"/>' +
-      '<rect x="5" y="13" width="2" height="1"/>' +
-      '<rect x="4" y="14" width="2" height="1"/>' +
-      '<rect x="3" y="15" width="1" height="1"/><rect x="5" y="15" width="1" height="1"/>' +
+      '<svg viewBox="0 0 23 21" xmlns="http://www.w3.org/2000/svg">' +
+      '<g fill="#78b464">' +
+      '<rect x="12" y="1" width="1" height="1"/><rect x="11" y="2" width="3" height="1"/><rect x="18" y="2" width="2" height="1"/>' +
+      '<rect x="2" y="3" width="1" height="1"/><rect x="5" y="3" width="1" height="1"/><rect x="12" y="3" width="1" height="1"/><rect x="15" y="3" width="1" height="1"/><rect x="17" y="3" width="3" height="1"/>' +
+      '<rect x="2" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="8" y="4" width="3" height="1"/><rect x="12" y="4" width="5" height="1"/><rect x="18" y="4" width="1" height="1"/>' +
+      '<rect x="0" y="5" width="5" height="1"/><rect x="7" y="5" width="4" height="1"/><rect x="13" y="5" width="3" height="1"/><rect x="17" y="5" width="1" height="1"/>' +
+      '<rect x="2" y="6" width="2" height="1"/><rect x="6" y="6" width="3" height="1"/><rect x="10" y="6" width="1" height="1"/><rect x="12" y="6" width="3" height="1"/><rect x="16" y="6" width="3" height="1"/>' +
+      '<rect x="2" y="7" width="2" height="1"/><rect x="5" y="7" width="3" height="1"/><rect x="10" y="7" width="4" height="1"/><rect x="15" y="7" width="3" height="1"/><rect x="20" y="7" width="1" height="1"/>' +
+      '<rect x="3" y="8" width="3" height="1"/><rect x="10" y="8" width="3" height="1"/><rect x="14" y="8" width="8" height="1"/>' +
+      '<rect x="10" y="9" width="2" height="1"/><rect x="13" y="9" width="4" height="1"/><rect x="20" y="9" width="1" height="1"/>' +
+      '<rect x="10" y="10" width="1" height="1"/><rect x="12" y="10" width="4" height="1"/>' +
+      '<rect x="10" y="11" width="6" height="1"/>' +
+      '<rect x="14" y="12" width="3" height="1"/>' +
+      '<rect x="15" y="13" width="2" height="1"/>' +
+      '<rect x="16" y="14" width="2" height="1"/>' +
+      '<rect x="17" y="15" width="1" height="1"/>' +
+      '<rect x="12" y="16" width="6" height="1"/>' +
+      '<rect x="11" y="17" width="2" height="1"/>' +
+      '<rect x="12" y="18" width="4" height="1"/>' +
+      '<rect x="12" y="19" width="3" height="1"/>' +
+      '</g>' +
+      '<g fill="#287814">' +
+      '<rect x="12" y="0" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="10" y="2" width="1" height="1"/><rect x="14" y="2" width="1" height="1"/>' +
+      '<rect x="0" y="4" width="1" height="1"/><rect x="17" y="4" width="1" height="1"/>' +
+      '<rect x="16" y="5" width="1" height="1"/>' +
+      '<rect x="9" y="6" width="1" height="1"/><rect x="15" y="6" width="1" height="1"/><rect x="20" y="6" width="1" height="1"/>' +
+      '<rect x="9" y="7" width="1" height="1"/><rect x="14" y="7" width="1" height="1"/>' +
+      '<rect x="1" y="8" width="1" height="1"/><rect x="9" y="8" width="1" height="1"/><rect x="13" y="8" width="1" height="1"/><rect x="22" y="8" width="1" height="1"/>' +
+      '<rect x="9" y="9" width="1" height="1"/><rect x="12" y="9" width="1" height="1"/>' +
+      '<rect x="11" y="10" width="1" height="1"/><rect x="20" y="10" width="1" height="1"/>' +
+      '<rect x="13" y="12" width="1" height="1"/>' +
+      '<rect x="14" y="13" width="1" height="1"/>' +
+      '<rect x="15" y="14" width="1" height="1"/>' +
+      '<rect x="16" y="15" width="1" height="1"/>' +
+      '<rect x="10" y="18" width="1" height="1"/><rect x="16" y="19" width="1" height="1"/>' +
+      '<rect x="12" y="20" width="1" height="1"/><rect x="14" y="20" width="1" height="1"/>' +
       '</g>' +
       '<g fill="#e63946">' +
-      '<rect x="9" y="6" width="2" height="1"/><rect x="9" y="7" width="2" height="1"/>' +
+      '<rect x="17" y="2" width="1" height="1"/><rect x="16" y="3" width="1" height="1"/><rect x="19" y="4" width="1" height="1"/><rect x="18" y="5" width="1" height="1"/>' +
+      '</g>' +
+      '<g fill="#000000">' +
+      '<rect x="16" y="2" width="1" height="1"/><rect x="19" y="5" width="1" height="1"/>' +
       '</g>' +
       '</svg>';
 
     skyBand.addEventListener("click", function (e) {
       if (e.target.closest("a")) return; // real links keep working
 
-      var startX = e.clientX - 19, startY = e.clientY - 19;
+      var startX = e.clientX - 21, startY = e.clientY - 19;
       var frog = document.createElement("div");
       frog.className = "frog";
       frog.innerHTML = FROG_SVG;
@@ -430,7 +455,7 @@
           if (!data || !data.current) return;
           var temp = Math.round(data.current.temperature_2m);
           var label = WEATHER_CODES[data.current.weather_code] || "";
-          weatherEl.textContent = " · " + temp + "°F" + (label ? ", " + label : "");
+          weatherEl.textContent = temp + "°F" + (label ? ", " + label : "");
         })
         .catch(function () { /* offline, blocked, or the API's down — stay blank */ });
     };

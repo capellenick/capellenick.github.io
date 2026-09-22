@@ -15,7 +15,7 @@
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="https://use.typekit.net/wsb8ckc.css" />
-  <link rel="stylesheet" href="css/style.css?v=10" />
+  <link rel="stylesheet" href="css/style.css?v=11" />
 
   <!-- No-flash theme: runs before paint. Keep this identical on every page. -->
   <script>
@@ -199,10 +199,12 @@
 
       <!-- Birds + plane fly left -> right on a loop (animation-duration/-delay
            below control speed and stagger so they don't move together).
-           Each bird is two stacked frames (up/down wingbeat) that flip via
-           CSS steps() — see .bird-frame / @keyframes flap. -->
+           Birds fly at a noticeably lower altitude (top ~38-62%) than the
+           plane (top ~8%), like real ones do. Each bird is two stacked
+           frames (up/down wingbeat) that flip via CSS steps() — see
+           .bird-frame / @keyframes flap. -->
       <div class="sky-day-deco" aria-hidden="true">
-        <div class="bird" style="top:24%; width:22px; height:9.4px; animation-duration:26s; animation-delay:-4s;">
+        <div class="bird" style="top:40%; width:20px; height:8.6px; animation-duration:24s; animation-delay:-4s;">
           <svg class="bird-frame bird-frame--up" viewBox="0 0 7 3">
             <rect x="1" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/>
             <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
@@ -214,7 +216,7 @@
             <rect x="1" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/>
           </svg>
         </div>
-        <div class="bird" style="top:12%; width:26px; height:11.1px; animation-duration:31s; animation-delay:-14s;">
+        <div class="bird" style="top:52%; width:24px; height:10.3px; animation-duration:29s; animation-delay:-12s;">
           <svg class="bird-frame bird-frame--up" viewBox="0 0 7 3">
             <rect x="1" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/>
             <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
@@ -226,7 +228,43 @@
             <rect x="1" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/>
           </svg>
         </div>
-        <div class="bird" style="top:34%; width:20px; height:8.6px; animation-duration:22s; animation-delay:-9s;">
+        <div class="bird" style="top:46%; width:18px; height:7.7px; animation-duration:20s; animation-delay:-8s;">
+          <svg class="bird-frame bird-frame--up" viewBox="0 0 7 3">
+            <rect x="1" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/>
+            <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
+            <rect x="3" y="2" width="1" height="1"/>
+          </svg>
+          <svg class="bird-frame bird-frame--down" viewBox="0 0 7 3">
+            <rect x="3" y="0" width="1" height="1"/>
+            <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
+            <rect x="1" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/>
+          </svg>
+        </div>
+        <div class="bird" style="top:60%; width:22px; height:9.4px; animation-duration:27s; animation-delay:-19s;">
+          <svg class="bird-frame bird-frame--up" viewBox="0 0 7 3">
+            <rect x="1" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/>
+            <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
+            <rect x="3" y="2" width="1" height="1"/>
+          </svg>
+          <svg class="bird-frame bird-frame--down" viewBox="0 0 7 3">
+            <rect x="3" y="0" width="1" height="1"/>
+            <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
+            <rect x="1" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/>
+          </svg>
+        </div>
+        <div class="bird" style="top:36%; width:16px; height:6.9px; animation-duration:18s; animation-delay:-2s;">
+          <svg class="bird-frame bird-frame--up" viewBox="0 0 7 3">
+            <rect x="1" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/>
+            <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
+            <rect x="3" y="2" width="1" height="1"/>
+          </svg>
+          <svg class="bird-frame bird-frame--down" viewBox="0 0 7 3">
+            <rect x="3" y="0" width="1" height="1"/>
+            <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
+            <rect x="1" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/>
+          </svg>
+        </div>
+        <div class="bird" style="top:57%; width:20px; height:8.6px; animation-duration:23s; animation-delay:-15s;">
           <svg class="bird-frame bird-frame--up" viewBox="0 0 7 3">
             <rect x="1" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/>
             <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
@@ -239,7 +277,7 @@
           </svg>
         </div>
 
-        <svg class="plane" viewBox="0 0 16 6" style="top:16%; width:64px; height:24px; animation-duration:75s; animation-delay:-20s;">
+        <svg class="plane" viewBox="0 0 16 6" style="top:8%; width:64px; height:24px; animation-duration:75s; animation-delay:-20s;">
           <rect x="1" y="1" width="2" height="1"/><rect x="0" y="2" width="15" height="1"/>
           <rect x="5" y="3" width="4" height="1"/><rect x="6" y="4" width="2" height="1"/>
         </svg>
@@ -263,7 +301,10 @@
       </div>
 
       <div class="wrap footer-utility">
-        <span class="footer-clock">Local time &mdash; <time id="local-time">--:--:--</time><span id="footer-weather"></span></span>
+        <span class="footer-meta">
+          <span class="footer-clock">Boone, NC Local time &mdash; <time id="local-time">--:--:--</time></span>
+          <span class="footer-weather" id="footer-weather"></span>
+        </span>
         <nav class="footer-credit" aria-label="Contact">
           <a href="mailto:capelledesign@gmail.com" data-cursor="Email">Email</a>
           <a href="https://www.linkedin.com/in/nicholas-capelle-328a95231" target="_blank" rel="noopener" data-cursor="Open">LinkedIn</a>
@@ -273,6 +314,6 @@
     </div>
   </footer>
 
-  <script src="js/site.js?v=10" defer></script>
+  <script src="js/site.js?v=11" defer></script>
 </body>
 </html>
