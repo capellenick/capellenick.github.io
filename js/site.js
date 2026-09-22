@@ -8,7 +8,9 @@
      5. Header hairline once scrolled
      6. Footer year
      7. Interactive ASCII garden (dormant unless a .garden element exists)
-     8. Footer live clock + time-of-day sky gradient with pixel sun/moon
+     8. Footer live clock + time-of-day sky (gradient, clouds, stars,
+        birds/plane, sun/moon)
+     9. Footer frog easter egg — click the sky, a frog falls
    The no-flash theme is set by a tiny inline script in each page's <head>;
    this file only wires the button.
    ========================================================================== */
@@ -287,7 +289,10 @@
       skyBand.style.setProperty("--sky-2", lerpRGB(a.bottom, b.bottom, t));
       skyBand.setAttribute("data-sky-mode", t < 0.5 ? a.mode : b.mode);
       // Stars hidden during peak daylight (7am-6pm); visible dusk through dawn.
-      skyBand.setAttribute("data-stars", (h >= 7 && h < 18) ? "hidden" : "visible");
+      // Birds/plane are the inverse: daytime only.
+      var isDaylight = h >= 7 && h < 18;
+      skyBand.setAttribute("data-stars", isDaylight ? "hidden" : "visible");
+      skyBand.setAttribute("data-daytime", isDaylight ? "day" : "night");
     }
 
     if (skyIcon) {
@@ -316,5 +321,63 @@
     };
     tick();
     setInterval(tick, 1000);
+  }
+
+
+  /* ---- 9. FOOTER FROG EASTER EGG ------------------------------------------
+     Click anywhere in the sky band that isn't a real link (Email/LinkedIn/
+     Instagram still work normally) and a small pixel tree frog appears at
+     the click point and free-falls off the bottom of the screen under
+     gravity, tumbling a little, then removes itself. Skipped entirely for
+     reduced-motion visitors — clicking does nothing rather than force
+     motion on someone who asked not to see it.
+     --------------------------------------------------------------------- */
+  if (skyBand && !reduceMotion) {
+    var FROG_SVG =
+      '<svg viewBox="0 0 10 9" xmlns="http://www.w3.org/2000/svg">' +
+      '<g fill="#4caf6b">' +
+      '<rect x="1" y="0" width="2" height="1"/><rect x="7" y="0" width="2" height="1"/>' +
+      '<rect x="0" y="1" width="4" height="1"/><rect x="6" y="1" width="4" height="1"/>' +
+      '<rect x="0" y="2" width="10" height="1"/><rect x="0" y="3" width="10" height="1"/>' +
+      '<rect x="0" y="4" width="10" height="1"/><rect x="0" y="5" width="10" height="1"/>' +
+      '<rect x="1" y="6" width="8" height="1"/>' +
+      '<rect x="0" y="7" width="2" height="1"/><rect x="3" y="7" width="4" height="1"/><rect x="8" y="7" width="2" height="1"/>' +
+      '<rect x="0" y="8" width="2" height="1"/><rect x="8" y="8" width="2" height="1"/>' +
+      '</g>' +
+      '<rect x="1" y="0" width="1" height="1" fill="#0d1a12"/>' +
+      '<rect x="8" y="0" width="1" height="1" fill="#0d1a12"/>' +
+      '</svg>';
+
+    skyBand.addEventListener("click", function (e) {
+      if (e.target.closest("a")) return; // real links keep working
+
+      var startX = e.clientX - 15, startY = e.clientY - 13;
+      var frog = document.createElement("div");
+      frog.className = "frog";
+      frog.innerHTML = FROG_SVG;
+      frog.style.left = startX + "px";
+      frog.style.top = startY + "px";
+      document.body.appendChild(frog);
+
+      var vy = 0;
+      var vx = (Math.random() - 0.5) * 3;
+      var rot = 0;
+      var spin = (Math.random() - 0.5) * 16;
+      var dx = 0, dy = 0;
+      var gravity = 0.55;
+
+      (function fall() {
+        vy += gravity;
+        dx += vx;
+        dy += vy;
+        rot += spin;
+        frog.style.transform = "translate(" + dx + "px," + dy + "px) rotate(" + rot + "deg)";
+        if (startY + dy < window.innerHeight + 80) {
+          requestAnimationFrame(fall);
+        } else {
+          frog.remove();
+        }
+      })();
+    });
   }
 })();

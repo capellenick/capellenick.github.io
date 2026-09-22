@@ -698,54 +698,41 @@ body.has-cursor button { cursor: none; }
 
 
 /* ---------------------------------------------------------------------------
-   10. FOOTER — the whole thing is a full-bleed sky band, gradient + pixel
-   clouds/stars/sun/moon all driven by the visitor's actual time of day.
-   "Think Different." and the utility row sit inside it, so their color
-   adapts (light/dark) to whatever sky is currently showing. The line above
-   the footer (.site-footer's top border) is the fixed boundary — the sky
-   never goes above it. See js/site.js part 8.
+   10. FOOTER — the whole thing is a full-bleed sky band: gradient, pixel
+   clouds, pixel stars (night only), pixel birds + a plane (day only), and
+   a pixel sun/moon — all driven by the visitor's actual time of day (see
+   js/site.js part 8). The utility row sits inside it, recoloring
+   light/dark to stay legible. The line above the footer (.site-footer's
+   top border) is the fixed boundary — the sky never goes above it.
+   Click anywhere in the sky that isn't a link to drop a frog (part 9).
    --------------------------------------------------------------------------- */
 
 .site-footer {
-  border-top: 1px solid var(--hairline);   /* the line above "Think Different" — stays */
+  border-top: 1px solid var(--hairline);   /* the line at the top of the footer — stays */
   margin-top: auto;
 }
 
 /* Full-bleed band — breaks out of .wrap to run edge to edge. Colors come in
-   as --sky-1 / --sky-2 custom properties, set by JS from the current hour. */
+   as --sky-1 / --sky-2 custom properties, set by JS from the current hour.
+   Generous padding now that it's the only content (no more wordmark) — it
+   reads as a proper sky scene, not just a thin strip. */
 .sky-band {
   position: relative;
   overflow: hidden;
   width: 100vw;
   margin-left: calc(50% - 50vw);
-  padding-top: clamp(2.5rem, 6vw, 4rem);
+  padding-top: clamp(3.5rem, 9vw, 6rem);
   padding-bottom: clamp(2.5rem, 6vw, 4rem);
   background: linear-gradient(180deg, var(--sky-1, #bfe0f7), var(--sky-2, #eef6fb));
   transition: background 1.5s ease;
+  cursor: pointer;   /* hints the sky is clickable, for the frog */
 }
-
-.footer-wordmark {
-  position: relative;
-  z-index: 1;
-  display: block;
-  font-family: var(--font-display);
-  font-size: clamp(3rem, 14vw, 9.5rem);
-  line-height: 0.9;
-  letter-spacing: 0.005em;
-  padding-bottom: clamp(2rem, 6vw, 4rem);
-  color: rgba(20, 22, 30, 0.92);
-  transition: opacity 0.2s var(--ease), color 0.6s ease;
-}
-.footer-wordmark:hover { opacity: 0.68; }
-:root[data-theme="dark"] .footer-wordmark,
-.sky-band[data-sky-mode="dark"] .footer-wordmark { color: rgba(255, 255, 255, 0.95); }
 
 /* Decorative pixel clouds — always present, any time of day. */
 .sky-clouds { position: absolute; inset: 0; pointer-events: none; }
-.cloud { position: absolute; fill: rgba(255, 255, 255, 0.6); shape-rendering: crispEdges; }
+.cloud { position: absolute; fill: rgba(255, 255, 255, 0.65); shape-rendering: crispEdges; }
 
-/* Pixel stars — hidden during peak daylight, shown from dusk through dawn.
-   data-stars is set by JS. */
+/* Pixel stars — hidden during peak daylight, shown dusk through dawn. */
 .sky-stars {
   position: absolute;
   inset: 0;
@@ -755,16 +742,29 @@ body.has-cursor button { cursor: none; }
 .sky-band[data-stars="hidden"] .sky-stars { opacity: 0; }
 .star { position: absolute; fill: #fff; shape-rendering: crispEdges; }
 
+/* Pixel birds + plane — daytime only, the inverse of the stars. */
+.sky-day-deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+}
+.sky-band[data-daytime="night"] .sky-day-deco { opacity: 0; }
+.bird { position: absolute; fill: rgba(30, 32, 40, 0.55); shape-rendering: crispEdges; }
+.sky-band[data-sky-mode="dark"] .bird { fill: rgba(255, 255, 255, 0.55); }
+.plane { position: absolute; fill: rgba(30, 32, 40, 0.7); shape-rendering: crispEdges; }
+.sky-band[data-sky-mode="dark"] .plane { fill: rgba(255, 255, 255, 0.75); }
+
+/* Sun / moon — position updates apply instantly (no transition on left),
+   so it never "drags" into place on load or refresh. Only the crossfade
+   between the two icons is animated. */
 .sky-icon {
   position: absolute;
-  top: 10px;   /* fixed, not %: sits in the band's guaranteed top padding
-                  (min 2.5rem/40px) so it never overlaps the wordmark text
-                  no matter how tall that text renders at a given width */
+  top: 18px;
   left: var(--sky-icon-pos, 50%);
   width: clamp(22px, 3vw, 30px);
   height: clamp(22px, 3vw, 30px);
   transform: translateX(-50%);
-  transition: left 2s linear, opacity 0.8s ease;
   pointer-events: none;
 }
 .sky-icon svg {
@@ -796,7 +796,21 @@ body.has-cursor button { cursor: none; }
 .sky-band[data-sky-mode="dark"] .footer-utility { color: rgba(255, 255, 255, 0.9); }
 .footer-clock { font-variant-numeric: tabular-nums; }
 .footer-credit { display: flex; gap: 1.15rem; }
+.footer-utility a { position: relative; z-index: 1; cursor: pointer; }
 .footer-utility a:hover { opacity: 0.7; }
+
+/* The frog — spawned by JS on click, falls off the bottom of the screen
+   and removes itself. position:fixed so it falls past the footer's own
+   bounds, relative to the real viewport. */
+.frog {
+  position: fixed;
+  width: 30px;
+  height: 27px;
+  z-index: 500;
+  pointer-events: none;
+  will-change: transform;
+}
+.frog svg { width: 100%; height: 100%; shape-rendering: crispEdges; }
 
 /* ---- Dormant: the emmiwu-style interactive garden footer -----------------
    Not used on any page right now (superseded by the wordmark footer above),
