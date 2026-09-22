@@ -364,7 +364,7 @@
       var rot = 0;
       var spin = (Math.random() - 0.5) * 16;
       var dx = 0, dy = 0;
-      var gravity = 0.55;
+      var gravity = 0.3;   /* lower = slower, more floaty fall */
 
       (function fall() {
         vy += gravity;

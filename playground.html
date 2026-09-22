@@ -9,7 +9,7 @@
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="https://use.typekit.net/wsb8ckc.css" />
-  <link rel="stylesheet" href="css/style.css?v=8" />
+  <link rel="stylesheet" href="css/style.css?v=9" />
 
   <script>
     document.documentElement.classList.add("js");
@@ -160,26 +160,51 @@
         </svg>
       </div>
 
+      <!-- Birds + plane fly left -> right on a loop (animation-duration/-delay
+           below control speed and stagger so they don't move together).
+           Each bird is two stacked frames (up/down wingbeat) that flip via
+           CSS steps() — see .bird-frame / @keyframes flap. -->
       <div class="sky-day-deco" aria-hidden="true">
-        <svg class="bird" viewBox="0 0 7 3" style="left:16%; top:30%; width:22px; height:9.4px;">
-          <rect x="1" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/>
-          <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
-          <rect x="3" y="2" width="1" height="1"/>
-        </svg>
-        <svg class="bird" viewBox="0 0 7 3" style="left:50%; top:16%; width:26px; height:11.1px;">
-          <rect x="1" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/>
-          <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
-          <rect x="3" y="2" width="1" height="1"/>
-        </svg>
-        <svg class="bird" viewBox="0 0 7 3" style="left:74%; top:38%; width:20px; height:8.6px;">
-          <rect x="1" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/>
-          <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
-          <rect x="3" y="2" width="1" height="1"/>
-        </svg>
-        <svg class="plane" viewBox="0 0 13 6" style="left:32%; top:10%; width:44px; height:20.3px;">
-          <rect x="6" y="0" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/>
-          <rect x="3" y="2" width="7" height="1"/><rect x="6" y="3" width="1" height="1"/>
-          <rect x="5" y="4" width="3" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/>
+        <div class="bird" style="top:24%; width:22px; height:9.4px; animation-duration:26s; animation-delay:-4s;">
+          <svg class="bird-frame bird-frame--up" viewBox="0 0 7 3">
+            <rect x="1" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/>
+            <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
+            <rect x="3" y="2" width="1" height="1"/>
+          </svg>
+          <svg class="bird-frame bird-frame--down" viewBox="0 0 7 3">
+            <rect x="3" y="0" width="1" height="1"/>
+            <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
+            <rect x="1" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/>
+          </svg>
+        </div>
+        <div class="bird" style="top:12%; width:26px; height:11.1px; animation-duration:31s; animation-delay:-14s;">
+          <svg class="bird-frame bird-frame--up" viewBox="0 0 7 3">
+            <rect x="1" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/>
+            <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
+            <rect x="3" y="2" width="1" height="1"/>
+          </svg>
+          <svg class="bird-frame bird-frame--down" viewBox="0 0 7 3">
+            <rect x="3" y="0" width="1" height="1"/>
+            <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
+            <rect x="1" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/>
+          </svg>
+        </div>
+        <div class="bird" style="top:34%; width:20px; height:8.6px; animation-duration:22s; animation-delay:-9s;">
+          <svg class="bird-frame bird-frame--up" viewBox="0 0 7 3">
+            <rect x="1" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/>
+            <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
+            <rect x="3" y="2" width="1" height="1"/>
+          </svg>
+          <svg class="bird-frame bird-frame--down" viewBox="0 0 7 3">
+            <rect x="3" y="0" width="1" height="1"/>
+            <rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/>
+            <rect x="1" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/>
+          </svg>
+        </div>
+
+        <svg class="plane" viewBox="0 0 16 6" style="top:16%; width:64px; height:24px; animation-duration:75s; animation-delay:-20s;">
+          <rect x="1" y="1" width="2" height="1"/><rect x="0" y="2" width="15" height="1"/>
+          <rect x="5" y="3" width="4" height="1"/><rect x="6" y="4" width="2" height="1"/>
         </svg>
       </div>
 
@@ -211,6 +236,6 @@
     </div>
   </footer>
 
-  <script src="js/site.js?v=8" defer></script>
+  <script src="js/site.js?v=9" defer></script>
 </body>
 </html>

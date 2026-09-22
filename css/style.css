@@ -721,6 +721,11 @@ body.has-cursor button { cursor: none; }
   overflow: hidden;
   width: 100vw;
   margin-left: calc(50% - 50vw);
+  min-height: 100vh;
+  min-height: 100svh;   /* accounts for mobile browser chrome; overrides above where supported */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;   /* utility row rests at the bottom of the sky */
   padding-top: clamp(3.5rem, 9vw, 6rem);
   padding-bottom: clamp(2.5rem, 6vw, 4rem);
   background: linear-gradient(180deg, var(--sky-1, #bfe0f7), var(--sky-2, #eef6fb));
@@ -750,17 +755,57 @@ body.has-cursor button { cursor: none; }
   transition: opacity 1s ease;
 }
 .sky-band[data-daytime="night"] .sky-day-deco { opacity: 0; }
-.bird { position: absolute; fill: rgba(30, 32, 40, 0.55); shape-rendering: crispEdges; }
-.sky-band[data-sky-mode="dark"] .bird { fill: rgba(255, 255, 255, 0.55); }
-.plane { position: absolute; fill: rgba(30, 32, 40, 0.7); shape-rendering: crispEdges; }
+
+/* Both slide left -> right on a loop. Each instance sets its own
+   animation-duration/-delay inline so a group doesn't move in lockstep. */
+@keyframes fly-across {
+  from { left: -12%; }
+  to   { left: 112%; }
+}
+
+/* Bird = two stacked frames (wings up / wings down) that swap via a
+   stepped (not eased) opacity flip, so it reads as a 2-frame flap instead
+   of a smooth fade. animation-delay: -[half the flap duration] on the
+   "down" frame puts it in the opposite phase of "up" using one keyframe. */
+.bird {
+  position: absolute;
+  pointer-events: none;
+  animation-name: fly-across;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.bird-frame {
+  position: absolute;
+  inset: 0;
+  fill: rgba(30, 32, 40, 0.55);
+  shape-rendering: crispEdges;
+  animation: flap 0.7s steps(1) infinite;
+}
+.sky-band[data-sky-mode="dark"] .bird-frame { fill: rgba(255, 255, 255, 0.55); }
+.bird-frame--down { animation-delay: -0.35s; }
+@keyframes flap {
+  0%, 49.9%  { opacity: 1; }
+  50%, 100%  { opacity: 0; }
+}
+
+.plane {
+  position: absolute;
+  fill: rgba(30, 32, 40, 0.7);
+  shape-rendering: crispEdges;
+  animation-name: fly-across;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
 .sky-band[data-sky-mode="dark"] .plane { fill: rgba(255, 255, 255, 0.75); }
 
 /* Sun / moon — position updates apply instantly (no transition on left),
    so it never "drags" into place on load or refresh. Only the crossfade
-   between the two icons is animated. */
+   between the two icons is animated. Vertical position is a % now (no
+   wordmark text to steer clear of any more), so it scales with the
+   now-full-height sky instead of sitting at a tiny fixed offset. */
 .sky-icon {
   position: absolute;
-  top: 18px;
+  top: 12%;
   left: var(--sky-icon-pos, 50%);
   width: clamp(22px, 3vw, 30px);
   height: clamp(22px, 3vw, 30px);
