@@ -18,11 +18,11 @@ python3 -m http.server 4599
 Then open <http://localhost:4599>. (Node users: `npx serve` also works.)
 
 **If a change doesn't seem to show up:** browsers cache `css/style.css` and
-`js/site.js` aggressively. Every page loads them as `css/style.css?v=2` /
-`js/site.js?v=2` specifically so this doesn't bite you — after any CSS or JS
-edit, bump that `v=` number in **every** HTML file (find-and-replace `v=2`
-for the next number across the project) and the new version is guaranteed to
-load. A plain refresh without bumping it can still show the old file; a hard
+`js/site.js` aggressively. Every page loads them with a `?v=N` query string
+specifically so this doesn't bite you — after any CSS or JS edit, bump that
+`N` up by one in **every** HTML file (find-and-replace, e.g. `v=12` →
+`v=13`, across the project) and the new version is guaranteed to load. A
+plain refresh without bumping it can still show the old file; a hard
 refresh (⌘⇧R) forces a fresh load either way.
 
 ---
@@ -30,12 +30,14 @@ refresh (⌘⇧R) forces a fresh load either way.
 ## Files
 
 ```
-index.html          Home — 2x4.org-style hero + filter tabs + 2-col work grid
+index.html          Home — 2x4.org-style hero + 2-col work grid (no filters)
 about.html          About — portrait, bio, experience
 playground.html     Playground — grid of experiments (Phase-2 mind-map goes here)
 project-1..4.html   Case studies — split-screen: images left, copy right
 css/style.css       All styles. Design tokens are at the very top.
-js/site.js          Theme toggle, mobile nav, cursor, filters, clock, reveals
+js/site.js          Theme toggle, mobile nav, cursor, reveals, the footer sky
+                    (gradient/clouds/stars/birds/plane/sun-moon), the frog
+                    easter egg, and the Boone weather fetch
 assets/             Placeholder SVGs + favicon. Replace with real media.
 partials/           Canonical header + footer markup (see "No build step" below)
 ```
@@ -55,18 +57,18 @@ partials/           Canonical header + footer markup (see "No build step" below)
 
 ## Editing content
 
-### Home page: hero, filter tabs, work grid
+### Home page: hero + work grid
 `index.html` is built like [2x4.org](https://2x4.org) — a massive statement
-headline, a filter-tab bar (`Featured` / `Role` / `Year` / `Type` / `All`), and
-a 2-column grid of project cards.
+headline straight into a 2-column grid of project cards, nouvelleidee.work
+spacing (16px grid gap). There used to be a Featured/Role/Year/Type/All
+filter bar between them; it was removed — all cards just show. The
+`data-featured` / `data-role` / `data-year` / `data-type` attributes are
+still on each `.work-card` (inert leftovers, harmless to keep or strip) in
+case you want filtering back later.
 
 - **The headline** is the sentence from Phase 1 — edit it in `.hero-statement`.
-  It's plain text at a huge size; there's no rotating-word-pairs mechanic.
-- **Filter tabs are functional.** Each `.work-card` carries
-  `data-featured` / `data-role` / `data-year` / `data-type`. Clicking `Role`,
-  `Year`, or `Type` opens a flyout listing whatever values are hard-coded into
-  that tab's `.filter-menu` in the HTML — add a `<button data-value="…">` there
-  if you introduce a new value. `Featured` and `All` filter directly.
+  It's plain text at a huge size (Helvetica Bold now, not the site's Balto);
+  there's no rotating-word-pairs mechanic.
 - **Add a project to the grid:** copy one `<li class="work-card">` block, set
   its four `data-*` attributes, swap the image and caption, and point the link
   at a new `project-N.html`.
@@ -151,18 +153,51 @@ They'll pick up automatically once they're in the kit.
 - **Circle cursor** — follows the mouse, grows over links, shows a label for
   anything with a `data-cursor="…"` attribute. Off on touch devices and when
   the OS "reduce motion" setting is on.
-- **Theme toggle** and **mobile nav toggle**.
-- **Work filters** — the Featured / Role / Year / Type / All tabs on the home
-  page (see "Home page" above).
-- **Footer clock** — `#local-time` ticks the visitor's own local time every
-  second.
+- **Theme toggle** (pill, sun/moon) and **mobile nav toggle**.
+- **Header** — sticky, but fully transparent (no background/blur/border) so
+  content scrolls directly underneath it, nouvelleidee.work-style.
 - **Reveal on scroll** — elements with `data-reveal` fade up as they enter view.
   If JS fails, everything just shows normally (nothing stays hidden).
-- **Garden footer (dormant)** — not used on any page right now; the footer was
-  rebuilt nouvelleidee.work-style (a huge "Think Different." wordmark over a
-  slim utility row). The ASCII-plant code in `site.js` still works — give any
-  element `class="garden"` and it activates again. Good candidate for an
-  Easter egg on the About page later.
+- **Garden footer (dormant)** — not used on any page; superseded by the sky
+  band below. The ASCII-plant code in `site.js` still works — give any
+  element `class="garden"` and it activates again.
+
+### The footer sky (index/about/playground only — see `partials/footer.html`)
+The whole footer is one full-bleed, full-viewport-height "sky band," driven
+entirely by the visitor's own clock:
+
+- **Color** is mostly flat (solid day blue, solid night navy) with a real
+  top-to-bottom gradient forming only during the sunrise (~5-7am) and sunset
+  (~5-7pm) windows. Keyframes + the interpolation logic are in `site.js`
+  (`SKY_KEYFRAMES`) — hand-tune colors or the hour boundaries there.
+- **Sun/moon** swap and travel left→right across their half of the day (sun
+  6:30am→7pm, moon 7pm→6:30am), position updates instantly (no "drag" on
+  load).
+- **Clouds** — always visible, 5 instances, positioned via inline
+  `left`/`top`/`width` on each `<svg class="cloud">` in the footer HTML.
+- **Stars** — 10 instances, hidden 7am-6pm ("peak daylight"), visible
+  dusk-through-dawn.
+- **Birds** (6) + **a plane** (1) — daytime only, the inverse of stars. Birds
+  fly at a lower altitude (top ~36-60%) than the plane (top ~8%); each is a
+  looping `fly-across` CSS animation with its own duration/delay so they
+  don't move in lockstep. Birds are two stacked frames (wingbeat up/down)
+  that flip via a stepped `flap` animation for a real 2-frame flap, not a
+  fade.
+- **Frog easter egg** — click anywhere in the sky that isn't a real link and
+  a pixel tree frog (traced from a reference photo — see the git log for
+  how) spawns at the click point and free-falls off the bottom of the
+  screen under gravity, tumbling a little, then removes itself. Skipped for
+  `prefers-reduced-motion`.
+- **Boone, NC weather** — the one part of the site that calls the network.
+  Fetches current conditions for a fixed location (Boone, NC — not the
+  visitor's) from [Open-Meteo](https://open-meteo.com) (free, no API key)
+  every 10 minutes, shown as its own line under the local-time clock. Fails
+  silently to blank text if the request errors, so it can never break the
+  page. To point it at a different city, change the `latitude`/`longitude`
+  in `WEATHER_URL` in `site.js`.
+- Not built (discussed, not requested yet): the sky's color/clouds don't
+  react to the fetched weather condition (e.g. going grey when it's
+  overcast) — currently the two systems are independent.
 
 ---
 
@@ -198,5 +233,10 @@ Structure is already in place for:
 - **Pan/zoom mind-map** on the Playground page (replace `.playground-grid`).
 - **Scroll-warp imagery** (WebGL) on project heroes.
 - **Spinning type wheel** in a page corner.
+- **Weather-reactive sky** — tie the footer's colors/cloud density to the
+  Boone weather fetch that already runs (e.g. more/darker clouds when
+  overcast, a rain effect). Offered, not yet requested.
+- **Real project content** — swap every placeholder image/text/résumé (see
+  "The 3 things to do before launch").
 
 None of these need a build step — they're extra `<script>` files.
