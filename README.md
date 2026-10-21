@@ -12,7 +12,7 @@ Any of these work. The site needs to be served over `http://` (not opened as a
 
 ```bash
 # from inside this folder
-python3 -m http.server 4599
+python3 serve.py          # no-cache server; plain refresh shows latest
 ```
 
 Then open <http://localhost:4599>. (Node users: `npx serve` also works.)
@@ -33,12 +33,15 @@ refresh (⌘⇧R) forces a fresh load either way.
 index.html          Home — 2x4.org-style hero + 2-col work grid (no filters)
 about.html          About — portrait, bio, experience
 playground.html     Playground — grid of experiments (Phase-2 mind-map goes here)
-project-1..4.html   Case studies — split-screen: images left, copy right
+project-1..4.html   Case studies — split-screen: images left, copy right.
+                    1 GD50 posters · 2 True Root · 3 Blackbox · 4 Type Guide
 css/style.css       All styles. Design tokens are at the very top.
 js/site.js          Theme toggle, mobile nav, cursor, reveals, the footer sky
                     (gradient/clouds/stars/birds/plane/sun-moon), the frog
                     easter egg, and the Boone weather fetch
-assets/             Placeholder SVGs + favicon. Replace with real media.
+assets/projects/    Real project images, one folder per project (web JPEGs,
+                    2000px max). Copy came from the old capellenick.com site.
+assets/             Favicon + remaining placeholder SVGs (About, Playground).
 partials/           Canonical header + footer markup (see "No build step" below)
 ```
 
@@ -48,10 +51,10 @@ partials/           Canonical header + footer markup (see "No build step" below)
 
 1. **Add your résumé.** Drop `resume.pdf` into `assets/` — it's linked from the
    About page's "Elsewhere" section and currently 404s.
-2. **Replace placeholder text.** Search the project files for `Placeholder` and
-   the `&lt;angle brackets&gt;` in `about.html`.
-3. **Replace placeholder images.** Everything in `assets/` starting with `ph-`
-   and `portrait.svg`. Keep the filenames or update the `src` attributes.
+2. **Replace placeholder text** in `about.html` (search `Placeholder` and the
+   `&lt;angle brackets&gt;`). The four project pages are done.
+3. **Replace placeholder images** on About (`portrait.svg`) and Playground
+   (`ph-*` files). Project images are real as of 2026-10-20.
 
 ---
 
@@ -236,7 +239,8 @@ Structure is already in place for:
 - **Weather-reactive sky** — tie the footer's colors/cloud density to the
   Boone weather fetch that already runs (e.g. more/darker clouds when
   overcast, a rain effect). Offered, not yet requested.
-- **Real project content** — swap every placeholder image/text/résumé (see
-  "The 3 things to do before launch").
+- **Real About/Playground content + résumé** — the four homepage projects are
+  real now (GD50, True Root, Blackbox, Type Guide); About and Playground are
+  still placeholders (see "The 3 things to do before launch").
 
 None of these need a build step — they're extra `<script>` files.

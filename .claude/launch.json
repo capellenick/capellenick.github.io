@@ -4,8 +4,14 @@
     {
       "name": "portfolio",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "4599"],
+      "runtimeArgs": ["serve.py", "4599"],
       "port": 4599
+    },
+    {
+      "name": "m1-listen",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "4600", "--directory", "../m1-listen"],
+      "port": 4600
     }
   ]
 }

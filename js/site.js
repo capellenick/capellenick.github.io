@@ -3,7 +3,7 @@
    One small script, no dependencies. Jobs:
      1. Theme toggle (light / dark, remembered)
      2. Mobile nav toggle
-     3. Circle cursor with hover-state + labels
+     3. Dot cursor (switch only; js/hue.js draws it)
      4. Scroll-reveal
      5. Footer year
      6. Interactive ASCII garden (dormant unless a .garden element exists)
@@ -46,6 +46,55 @@
   }
 
 
+  /* Homepage sentence entrance — lines slide in from the right, top line
+     first. Each word is wrapped in a span (text inside the link too), then
+     words are grouped into visual lines by their offsetTop once the font has
+     loaded, and each line gets a delay. Replays on back/forward restores. */
+  var heroLine = document.querySelector(".hero-statement p");
+  if (heroLine) {
+    var HERO_STAGGER = 90;   // ms between lines
+
+    (function splitWords(node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (child) {
+        if (child.nodeType === 1) { splitWords(child); return; }
+        if (child.nodeType !== 3 || !child.textContent.trim()) return;
+        var frag = document.createDocumentFragment();
+        child.textContent.split(/(\s+)/).forEach(function (part) {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(" ")); return; }
+          var w = document.createElement("span");
+          w.className = "hero-word";
+          w.textContent = part;
+          frag.appendChild(w);
+        });
+        node.replaceChild(frag, child);
+      });
+    })(heroLine);
+    heroLine.classList.add("is-split");
+
+    var playHero = function () {
+      var words = heroLine.querySelectorAll(".hero-word");
+      var lineTops = [];
+      Array.prototype.forEach.call(words, function (w) {
+        var top = w.offsetTop, line = -1;
+        for (var i = 0; i < lineTops.length; i++) {
+          if (Math.abs(lineTops[i] - top) < 4) { line = i; break; }
+        }
+        if (line < 0) { lineTops.push(top); line = lineTops.length - 1; }
+        w.style.animationDelay = line * HERO_STAGGER + "ms";
+      });
+      heroLine.classList.remove("is-playing");
+      void heroLine.offsetWidth;            // flush, so a replay restarts
+      heroLine.classList.add("is-playing");
+    };
+
+    // Line breaks depend on the webfont, so wait for it (but not forever).
+    var fontsReady = (document.fonts && document.fonts.ready) || Promise.resolve();
+    Promise.race([fontsReady, new Promise(function (r) { setTimeout(r, 800); })]).then(playHero);
+    window.addEventListener("pageshow", function (e) { if (e.persisted) playHero(); });
+  }
+
+
   /* ---- 2. MOBILE NAV --------------------------------------------------- */
   var navToggle = document.querySelector(".nav-toggle");
   var nav = document.querySelector(".site-header .nav");
@@ -71,65 +120,13 @@
   }
 
 
-  /* ---- 3. CIRCLE CURSOR --------------------------------------------------
-     Skipped entirely on touch / coarse pointers and reduced-motion.
-     Add data-cursor="Some text" to any element to show a label on hover.
+  /* ---- 3. DOT CURSOR -----------------------------------------------------
+     The dot is the real system cursor (an image set by js/hue.js), so it
+     never lags. This just switches it on: fine pointers only, and not for
+     reduced motion (those keep the normal arrow).
      --------------------------------------------------------------------- */
   var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-
-  if (finePointer && !reduceMotion) {
-    var cursor = document.createElement("div");
-    cursor.className = "cursor";
-    cursor.innerHTML = '<span class="cursor__label"></span>';
-    var label = cursor.firstChild;
-    document.body.appendChild(cursor);
-    document.body.classList.add("has-cursor");
-
-    var x = -100, y = -100, cx = -100, cy = -100;
-
-    window.addEventListener("mousemove", function (e) {
-      x = e.clientX; y = e.clientY;
-      cursor.classList.remove("is-hidden");
-    }, { passive: true });
-
-    document.addEventListener("mouseleave", function () {
-      cursor.classList.add("is-hidden");
-    });
-
-    // Smooth trailing follow. FOLLOW closer to 1 = tighter/snappier (less
-    // trailing lag), closer to 0 = looser/dreamier (more trailing lag).
-    var FOLLOW = 0.55;
-    (function loop() {
-      cx += (x - cx) * FOLLOW;
-      cy += (y - cy) * FOLLOW;
-      cursor.style.setProperty("--mx", cx.toFixed(1));
-      cursor.style.setProperty("--my", cy.toFixed(1));
-      requestAnimationFrame(loop);
-    })();
-
-    var hoverSel = 'a, button, [role="button"], input, textarea, select, summary, .plant';
-
-    document.addEventListener("mouseover", function (e) {
-      var hit = e.target.closest(hoverSel);
-      if (!hit) return;
-      var text = hit.getAttribute("data-cursor");
-      if (text) {
-        cursor.classList.add("is-label");
-        cursor.classList.remove("is-hover");
-        label.textContent = text;
-      } else {
-        cursor.classList.add("is-hover");
-      }
-    });
-    document.addEventListener("mouseout", function (e) {
-      if (!e.target.closest(hoverSel)) return;
-      var to = e.relatedTarget && e.relatedTarget.closest ? e.relatedTarget.closest(hoverSel) : null;
-      if (!to) {
-        cursor.classList.remove("is-hover", "is-label");
-        label.textContent = "";
-      }
-    });
-  }
+  if (finePointer && !reduceMotion) document.body.classList.add("has-cursor");
 
 
   /* ---- 4. SCROLL-REVEAL --------------------------------------------------- */
@@ -236,6 +233,26 @@
   var clockEl = document.getElementById("local-time");
   var skyBand = document.querySelector(".sky-band");
   var skyIcon = document.getElementById("sky-icon");
+  var siteHeader = document.querySelector(".site-header");
+
+  // Header over the sky: the transparent sticky header scrolls over the
+  // footer's sky band, where the grey nav washes out. Flag it so the CSS can
+  // recolour logo + nav (see .is-over-sky in style.css). Switches once the
+  // sky reaches the middle of the header, i.e. the text line.
+  if (skyBand && siteHeader) {
+    var skyTicking = false;
+    var checkHeaderOverSky = function () {
+      skyTicking = false;
+      var mid = siteHeader.getBoundingClientRect().height / 2;
+      siteHeader.classList.toggle("is-over-sky", skyBand.getBoundingClientRect().top <= mid);
+    };
+    var queueSkyCheck = function () {
+      if (!skyTicking) { skyTicking = true; requestAnimationFrame(checkHeaderOverSky); }
+    };
+    window.addEventListener("scroll", queueSkyCheck, { passive: true });
+    window.addEventListener("resize", queueSkyCheck);
+    checkHeaderOverSky();
+  }
 
   // Each keyframe: hour of day, sky colors (top/bottom of the band),
   // whether footer text should be light or dark, and which icon is up.
@@ -247,8 +264,8 @@
     { h: 0,  top: [9, 11, 26],    bottom: [9, 11, 26],     mode: "dark",  icon: "moon" },
     { h: 5,  top: [9, 11, 26],    bottom: [9, 11, 26],     mode: "dark",  icon: "moon" },
     { h: 6,  top: [72, 92, 152],  bottom: [255, 178, 120], mode: "light", icon: "sun"  },
-    { h: 7,  top: [92, 168, 227], bottom: [92, 168, 227],  mode: "light", icon: "sun"  },
-    { h: 17, top: [92, 168, 227], bottom: [92, 168, 227],  mode: "light", icon: "sun"  },
+    { h: 7,  top: [133, 149, 229], bottom: [133, 149, 229], mode: "light", icon: "sun"  },
+    { h: 17, top: [133, 149, 229], bottom: [133, 149, 229], mode: "light", icon: "sun"  },
     { h: 18, top: [68, 86, 148],  bottom: [255, 142, 96],  mode: "light", icon: "sun"  },
     { h: 19, top: [9, 11, 26],    bottom: [9, 11, 26],     mode: "dark",  icon: "moon" },
     { h: 24, top: [9, 11, 26],    bottom: [9, 11, 26],     mode: "dark",  icon: "moon" }
@@ -279,6 +296,7 @@
       skyBand.style.setProperty("--sky-1", lerpRGB(a.top, b.top, t));
       skyBand.style.setProperty("--sky-2", lerpRGB(a.bottom, b.bottom, t));
       skyBand.setAttribute("data-sky-mode", t < 0.5 ? a.mode : b.mode);
+      if (siteHeader) siteHeader.classList.toggle("is-sky-dark", (t < 0.5 ? a.mode : b.mode) === "dark");
       // Stars hidden during peak daylight (7am-6pm); visible dusk through dawn.
       // Birds/plane are the inverse: daytime only.
       var isDaylight = h >= 7 && h < 18;
@@ -395,11 +413,19 @@
       var dx = 0, dy = 0;
       var gravity = 0.3;   /* lower = slower, more floaty fall */
 
-      (function fall() {
-        vy += gravity;
-        dx += vx;
-        dy += vy;
-        rot += spin;
+      // Time-based, not per-frame: the numbers above are "per 60fps frame",
+      // and each step is scaled by how much real time passed. Otherwise a
+      // 120Hz display (Chrome runs rAF at 120 on ProMotion Macs when the page
+      // is animating — e.g. the colour-cycling header) doubles the fall speed.
+      var last = performance.now();
+      (function fall(now) {
+        now = now || last;
+        var step = Math.min((now - last) / (1000 / 60), 3);  // in 60fps frames; capped after a stall
+        last = now;
+        vy += gravity * step;
+        dx += vx * step;
+        dy += vy * step;
+        rot += spin * step;
         frog.style.transform = "translate(" + dx + "px," + dy + "px) rotate(" + rot + "deg)";
         if (startY + dy < window.innerHeight + 80) {
           requestAnimationFrame(fall);

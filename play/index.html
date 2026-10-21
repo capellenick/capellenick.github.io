@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>m1 — Nick Capelle</title>
+  <meta name="description" content="A six-key synth that drives a simulated Chladni plate: sand settles on the nodal lines of whatever you play, shown on an LED matrix." />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="https://use.typekit.net/wsb8ckc.css" />
+  <!-- No-flash theme: runs before paint. Keep this identical on every page. -->
+  <script>
+    document.documentElement.classList.add("js");
+    try {
+      var t = localStorage.getItem("theme");
+      if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  </script>
+  <!-- shared site stylesheet: gives this page the same header as every other page -->
+  <link rel="stylesheet" href="../css/style.css?v=53" />
+  <!--
+    m1 — the portfolio's Play page, in its own folder (play/). The synth's
+    styles and code are all inline here; the only shared pieces are the site
+    header (markup below + ../css/style.css, so keep its ?v= in step with the
+    other pages) and the Adobe Fonts kit. It follows the site theme switch:
+    in light mode only the page around the device goes light (site paper,
+    dark header text, darker labels); the device itself — panel, knobs,
+    keys, listen bar — stays dark hardware in both themes.
+
+    listen: an audio input (e.g. a Bastl Kastle Drum through a USB audio
+    interface) can drive the plate as well as the keys. It feeds the
+    analyser only, so it's never played back through the computer.
+
+    Physics (cymatics / Chladni plate):
+      • Square plate with free edges. Mode shapes use the standard Chladni
+        approximation  φ = cos(nπx)cos(mπy) ± cos(mπx)cos(nπy).
+      • Mode frequencies follow thin-plate (Kirchhoff) bending waves, where
+        f ∝ k² ∝ (n² + m²); the ± pair is split slightly, as on real plates.
+      • The plate is driven by the *actual* output spectrum (FFT of what you
+        hear). Each mode responds as a damped resonator: |H|² = 1 / ((1−r²)² + (r/Q)²).
+      • Time-averaged vibration energy E(x,y) = Σ wₘ φₘ². Sand grains only hop
+        when local plate acceleration beats gravity (a threshold), hop size
+        grows with amplitude, so they random-walk off the antinodes and come
+        to rest on the nodal lines — which is how real Chladni figures form.
+  -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+    :root {
+      --page: #ebebe8; --body: #1a1a1c; --cell: #222225; --m1-ink: #111;
+      --label: #c9c9cc; --mute: #77777c;
+      --ink-hi: #ededeb;   /* almost-white: knob ticks, key numbers, focus ring */
+      --ink-dots: #cfcfcd; /* scatter dots, a shade darker */
+      --sans: "Helvetica Neue", Helvetica, Inter, -apple-system, Arial, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+      /* full-window layout: square panel on top, controls underneath at the same width */
+      --pad: clamp(16px, 4vmin, 48px);
+      --gap: clamp(18px, 3vmin, 32px);
+      --fill: .95; /* how much of the available space the LED panel takes (keeps it ~470px on a 1440×900 window now that the listen bar is below) */
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: var(--body); color: var(--label); font-family: var(--sans); }
+    body { min-height: 0; }
+    .site-header { flex: none; color: var(--ink); } /* site text colour, as on every other page */
+    /* light theme: the page goes light around the (still dark) device */
+    :root[data-theme="light"] { --body: var(--paper); --label: #4a4a4f; --mute: #66666b; }
+
+    /* --panel is the LED panel's side length. Below it the controls take about
+       90px plus one row of square keys (panel width / 6) plus the listen bar
+       (68px), so the panel is capped at (window height − header − padding −
+       gap − 158px) × 6/7 to fit without scrolling */
+    .device { --panel: calc(var(--fill) * min(100vw - 2 * var(--pad), (100vh - var(--header-h) - 2 * var(--pad) - var(--gap) - 158px) * 6 / 7));
+      flex: 1 1 auto; min-height: 0; padding: var(--pad); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--gap); }
+    @supports (height: 100dvh) {
+      .device { --panel: calc(var(--fill) * min(100vw - 2 * var(--pad), (100dvh - var(--header-h) - 2 * var(--pad) - var(--gap) - 158px) * 6 / 7)); }
+    }
+    .screen { flex: none; width: var(--panel); }
+    .controls { flex: none; width: var(--panel); display: flex; flex-direction: column; gap: 22px; }
+
+    #panel { display: block; width: 100%; aspect-ratio: 1; cursor: pointer; touch-action: none; }
+
+    .knobs, .keys { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+    .knobs { align-items: start; }
+    .ctl { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .ctl.scatter { grid-column: 6; }
+    .ctl span { font-family: var(--sans); font-size: 12px; color: var(--label); }
+    /* knob: same dark cap and soft shadow as the number buttons, white tick pointer */
+    .knob { --s: 40px; position: relative; width: var(--s); height: var(--s); border-radius: 50%;
+      cursor: ns-resize; touch-action: none;
+      background: #121214; box-shadow: inset 0 1px 0 #ffffff1a, 0 3px 6px #0008; }
+    .knob::after { content: ""; position: absolute; left: calc(50% - 1.5px); top: 4px;
+      width: 3px; height: calc(var(--s) * .34); border-radius: 2px; background: var(--ink-hi);
+      transform-origin: 1.5px calc(var(--s) / 2 - 4px);
+      transform: rotate(calc(-135deg + var(--pos, .5) * 270deg)); }
+    /* scatter: a plain dark circle like the number buttons, dots in the number colour */
+    .round { width: 40px; height: 40px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; background: #121214;
+      box-shadow: inset 0 1px 0 #ffffff1a, 0 3px 6px #0008; display: grid; place-items: center;
+      transition: transform .06s, background .12s; }
+    .round svg { width: 46%; height: 46%; fill: var(--ink-dots); stroke: none; }
+    .round:active { transform: scale(.92); background: #2a2a2e; }
+
+    .keys { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+    .key { position: relative; aspect-ratio: 1; border: 0; padding: 0; border-radius: 10px; background: var(--cell);
+      cursor: pointer; display: grid; place-items: center; box-shadow: inset 0 1px 0 #ffffff0d; }
+    .key .cap { width: 74%; aspect-ratio: 1; border-radius: 50%; background: #121214; color: var(--ink-hi);
+      font-family: var(--mono); font-size: 15px; font-weight: 500; line-height: 1;
+      display: grid; place-items: center; box-shadow: inset 0 1px 0 #ffffff1a, 0 3px 6px #0008;
+      transition: transform .06s, background .12s; }
+    .key .dot { position: absolute; top: 7px; right: 7px; width: 5px; height: 5px; border-radius: 50%;
+      background: var(--c); opacity: .55; }
+    .key.on .dot { opacity: 1; box-shadow: 0 0 8px var(--c); }
+    .key.hit .cap { transform: scale(.92); background: #2a2a2e; }
+
+    /* listen bar: use an audio input (e.g. a drum machine) to drive the plate too */
+    .bar { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+    .listen, .input { height: 46px; border: 0; border-radius: 10px; background: var(--cell); color: var(--ink-hi);
+      box-shadow: inset 0 1px 0 #ffffff0d; font-family: var(--mono); font-size: 13px; }
+    .listen { grid-column: span 3; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: background .12s; }
+    .listen:active { background: #2a2a2e; }
+    .listen .dot { width: 8px; height: 8px; border-radius: 50%; background: #3a3a3f; transition: background .2s; }
+    .listen[aria-pressed="true"] .dot { background: var(--c, #ededeb); box-shadow: 0 0 calc(4px + var(--lvl, 0) * 14px) var(--c, #ededeb); }
+    .input { grid-column: span 3; padding: 0 34px 0 14px; appearance: none; -webkit-appearance: none; cursor: pointer; min-width: 0;
+      text-overflow: ellipsis;
+      background: var(--cell) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23c9c9cc' stroke-width='1.4'/%3E%3C/svg%3E") no-repeat right 14px center / 10px 6px; }
+    .input:disabled { color: var(--mute); cursor: default; }
+    .note { grid-column: 1 / -1; margin: 0; font-size: 12px; color: var(--mute); }
+    .note:empty { display: none; }
+
+    .key:focus-visible, .knob:focus-visible, .round:focus-visible, .listen:focus-visible, .input:focus-visible { outline: 2px solid var(--ink-hi); outline-offset: 3px; }
+
+    @media (max-width: 420px) {
+      .knob { --s: 38px; }
+      .round { width: 38px; height: 38px; }
+      .keys, .knobs, .bar { gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="logo" href="../index.html">Nick Capelle</a>
+
+      <nav class="nav" id="primary-nav" aria-label="Primary">
+        <a href="./" aria-current="page">Play</a>
+        <a href="../about.html">About</a>
+      </nav>
+
+      <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Switch to dark theme">
+        <span class="theme-toggle__thumb" aria-hidden="true"></span>
+        <span class="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="6.34" y2="6.34"></line><line x1="17.66" y1="17.66" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="6.34" y2="17.66"></line><line x1="17.66" y1="6.34" x2="19.07" y2="4.93"></line></svg>
+        </span>
+        <span class="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </span>
+      </button>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Menu">
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main class="device">
+    <div class="screen">
+      <canvas id="panel" aria-label="Sand on a vibrating plate, shown as an LED matrix. Tap for a random sound."></canvas>
+    </div>
+
+    <div class="controls">
+      <div class="knobs" id="knobs"></div>
+      <div class="keys" id="keys"></div>
+      <div class="bar">
+        <button class="listen" id="listen" type="button" aria-pressed="false" aria-label="Listen to an audio input, such as a drum machine"><span class="dot"></span><span id="listen-label">listen</span></button>
+        <select class="input" id="input" aria-label="Audio input" disabled><option>input</option></select>
+        <p class="note" id="note" role="status"></p>
+      </div>
+    </div>
+  </main>
+
+<script>
+(() => {
+'use strict';
+
+const $ = s => document.querySelector(s);
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const rand = (a, b) => a + Math.random() * (b - a);
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const lerp = (a, b, f) => a + (b - a) * f;
+const mtof = m => 440 * Math.pow(2, (m - 69) / 12);
+const hexRGB = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+
+/* ───────────── knobs (5) ───────────── */
+const KNOBS = [
+  // key, label, min, max, default, log, cap colour, indicator colour
+  ['warble', 'warble', 0, 80, 18, false, '#2a2a2d', '#fff'],
+  ['tone',   'tone',   300, 12000, 4000, true, '#56565b', '#fff'],
+  ['echo',   'echo',   0, 1, .25, false, '#a0a0a5', '#111'],
+  ['length', 'length', .4, 2.5, 1, true, '#dcdcde', '#111'],
+  ['ring',   'ring',   0, 1, 0],   // ring modulation: amount + carrier pitch on one knob
+];
+const K = {};
+KNOBS.forEach(k => K[k[0]] = k[4]);
+
+/* ───────────── six keys: a sound + a book-cover colour pair each ───────────── */
+const ICONS = {
+  scatter: [[0,0],[2,0],[4,0],[1,1],[2,1],[3,1],[0,2],[1,2],[2,2],[3,2],[4,2],[1,3],[2,3],[3,3],[0,4],[2,4],[4,4]]
+    .map(([c, r]) => `<circle cx="${3 + c * 4.5}" cy="${3 + r * 4.5}" r="1.9"/>`).join(''),
+};
+const THEMES = [
+  { key: 'sine',   plate: '#3a6eaf', sand: '#40a288' }, // blue / green
+  { key: 'tri',    plate: '#42a389', sand: '#d88faa' }, // green / pink
+  { key: 'warble', plate: '#d4645f', sand: '#3b6db0' }, // red / blue
+  { key: 'chord',  plate: '#e7b35f', sand: '#bf5353' }, // ochre / red
+  { key: 'sweep',  plate: '#88b1da', sand: '#d55e57' }, // sky / red
+  { key: 'buzz',   plate: '#6b6aa5', sand: '#ef9f6b' }, // violet / peach
+];
+
+/* ───────────── audio ───────────── */
+let ctx = null;
+const A = {};
+const live = new Set();
+const SCALE = [0, 2, 3, 5, 7, 9, 10];
+const ROOT = pick([45, 48, 50, 52]);
+// nearest plate resonance to a frequency (moves a note by under ~half a semitone)
+const nearestMode = f => { let b = null, d = Infinity; for (const m of MODES) { const x = Math.abs(Math.log(m.f / f)); if (x < d) { d = x; b = m; } } return b; };
+const tune = f => nearestMode(f).f;
+// random pitch, tuned to a resonance whose shape (n,m) wasn't one of the last
+// few figures, so consecutive presses show clearly different patterns
+const recent = [];
+const fresh = (lo, hi) => {
+  let md;
+  for (let i = 0; i < 12; i++) {
+    md = nearestMode(mtof(note(lo, hi)));
+    if (!recent.some(r => r.n === md.n && r.m === md.m)) break;
+  }
+  recent.push(md); if (recent.length > 5) recent.shift();
+  return md.f;
+};
+const note = (lo, hi) => { const d = Math.floor(rand(lo, hi)); return ROOT + 12 * Math.floor(d / 7) + SCALE[((d % 7) + 7) % 7]; };
+
+function initAudio() {
+  if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const g = v => { const n = ctx.createGain(); n.gain.value = v; return n; };
+  A.in = g(.8);
+  A.tone = ctx.createBiquadFilter(); A.tone.type = 'lowpass'; A.tone.Q.value = .7;
+  A.comp = ctx.createDynamicsCompressor(); A.comp.threshold.value = -16; A.comp.ratio.value = 4;
+  A.master = g(1);
+  // automatic level balancing: eases everything down a little as sounds pile up
+  A.level = g(1);
+  // brick-wall-ish limiter as the very last stage, so overlapping sounds can't clip
+  A.limit = ctx.createDynamicsCompressor();
+  A.limit.threshold.value = -3; A.limit.knee.value = 0; A.limit.ratio.value = 20;
+  A.limit.attack.value = .002; A.limit.release.value = .08;
+  A.an = ctx.createAnalyser(); A.an.fftSize = 4096; A.an.smoothingTimeConstant = .5;
+  // ring modulator: the signal multiplied by a sine carrier. Produces sum and
+  // difference tones (f ± carrier) that aren't harmonics of the note, so the
+  // plate is driven at several unrelated frequencies and the figures overlap.
+  A.dry = g(1); A.ringVCA = g(0); A.ringWet = g(0);
+  A.ringOsc = ctx.createOscillator(); A.ringOsc.frequency.value = 40;
+  A.ringOsc.connect(A.ringVCA.gain); A.ringOsc.start();
+  A.in.connect(A.dry).connect(A.tone);
+  A.in.connect(A.ringVCA).connect(A.ringWet).connect(A.tone);
+  A.tone.connect(A.level).connect(A.comp).connect(A.master).connect(A.limit).connect(ctx.destination);
+  // analysis: the synth plus (when listening) an audio input. The input only
+  // feeds the analyser, so it's never played back through the computer.
+  A.limit.connect(A.an);
+  A.sink = g(0); A.an.connect(A.sink).connect(ctx.destination);   // keeps the analyser running, silently
+  A.inLevel = g(1);                                                  // auto-adjusted input level
+  A.inMeter = ctx.createAnalyser(); A.inMeter.fftSize = 1024;
+  A.inLevel.connect(A.an); A.inLevel.connect(A.inMeter);
+
+  A.delay = ctx.createDelay(2); A.delay.delayTime.value = .34;
+  A.dTone = ctx.createBiquadFilter(); A.dTone.type = 'lowpass'; A.dTone.frequency.value = 2600;
+  A.fb = g(0); A.wet = g(0);
+  A.tone.connect(A.delay).connect(A.dTone).connect(A.fb).connect(A.delay);
+  A.dTone.connect(A.wet).connect(A.comp);
+
+  A.pitchMod = g(1);
+  A.lfo = ctx.createOscillator(); A.lfo.frequency.value = 5.2;
+  A.wow = ctx.createOscillator(); A.wow.frequency.value = .4;
+  A.lfoG = g(0); A.wowG = g(0);
+  A.lfo.connect(A.lfoG).connect(A.pitchMod);
+  A.wow.connect(A.wowG).connect(A.pitchMod);
+  A.lfo.start(); A.wow.start();
+
+  KNOBS.forEach(k => applyKnob(k[0]));
+}
+
+function applyKnob(k) {
+  if (!ctx) return;
+  const now = ctx.currentTime, set = (p, v) => p.setTargetAtTime(v, now, .03);
+  if (k === 'warble') { set(A.lfoG.gain, K.warble); set(A.wowG.gain, K.warble * .8); }
+  if (k === 'tone') set(A.tone.frequency, K.tone);
+  if (k === 'echo') { set(A.wet.gain, K.echo * .7); set(A.fb.gain, .12 + K.echo * .6); }
+  // ring: more wet signal and a higher carrier as it turns (40 Hz → 1.6 kHz)
+  if (k === 'ring') { set(A.dry.gain, 1 - .8 * K.ring); set(A.ringWet.gain, K.ring * 1.1); set(A.ringOsc.frequency, 40 * Math.pow(40, K.ring)); }
+}
+
+function osc(type, freq, t, end) {
+  const o = ctx.createOscillator(); o.type = type; o.frequency.setValueAtTime(freq, t);
+  A.pitchMod.connect(o.detune);
+  o.start(t); o.stop(end);
+  live.add(o);
+  o.onended = () => { live.delete(o); try { A.pitchMod.disconnect(o.detune); } catch (e) {} o.disconnect(); };
+  return o;
+}
+function env(t, a, len, peak) {
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(peak, t + a);
+  g.gain.setTargetAtTime(peak * .7, t + a, len * .4);
+  g.gain.setTargetAtTime(0, t + len, .25);
+  g.connect(A.in);
+  return g;
+}
+
+// tones are held long enough for the sand to find its pattern
+const SOUNDS = {
+  sine(t, L)   { const len = 2.6 * L; osc('sine', fresh(5, 26), t, t + len + 1.5).connect(env(t, .04, len, .5)); },
+  tri(t, L)    { const len = 2.6 * L; osc('triangle', fresh(5, 22), t, t + len + 1.5).connect(env(t, .04, len, .5)); },
+  warble(t, L) {
+    const len = 2.8 * L, end = t + len + 1.5, o = osc('sine', fresh(5, 22), t, end);
+    const v = ctx.createOscillator(); v.frequency.value = rand(3, 7);
+    const vg = ctx.createGain(); vg.gain.value = rand(40, 120);
+    v.connect(vg).connect(o.detune); v.start(t); v.stop(end);
+    o.connect(env(t, .06, len, .5));
+  },
+  chord(t, L)  {
+    const len = 2.8 * L, base = Math.floor(rand(4, 14)), g = env(t, .08, len, .22);
+    [0, 2, 4].forEach(s => { const d = base + s; osc('sine', tune(mtof(ROOT + 12 * Math.floor(d / 7) + SCALE[d % 7])), t, t + len + 1.5).connect(g); });
+  },
+  sweep(t, L)  {
+    const len = 3.4 * L, up = Math.random() < .5, f0 = rand(90, 160), f1 = rand(700, 1400);
+    const o = osc('sine', up ? f0 : f1, t, t + len + 1.5);
+    o.frequency.exponentialRampToValueAtTime(up ? f1 : f0, t + len);
+    o.connect(env(t, .05, len, .4));
+  },
+  buzz(t, L)   {
+    const len = 2.4 * L, end = t + len + 1.5, f = mtof(note(-7, 1)); // low: roughly 55–150 Hz
+    const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = rand(900, 2200); lp.Q.value = 2;
+    lp.connect(env(t, .03, len, .35));
+    osc('sawtooth', f, t, end).connect(lp);
+    osc('square', f * 1.005, t, end).connect(lp);
+  },
+};
+
+
+/* ───────────── plate physics ───────────── */
+const G = 96;            // field resolution
+const MAXN = 14;
+const C = 40;            // Hz per unit of (n² + m²) — a smallish, stiff plate, so the simple figures sit at pitches speakers can play
+const Q = 80;            // modal quality factor (thin metal plates ring sharply)
+const cosT = [];
+for (let n = 0; n <= MAXN; n++) { cosT[n] = new Float32Array(G); for (let i = 0; i < G; i++) cosT[n][i] = Math.cos(n * Math.PI * (i + .5) / G); }
+const MODES = [];
+for (let n = 0; n <= MAXN; n++) for (let m = 0; m <= n; m++) {
+  const k = n * n + m * m; if (k < 2) continue; // skip rigid-body motion
+  (n === m ? [1] : [1, -1]).forEach(s => MODES.push({ n, m, s, f: C * k * (s > 0 ? 1.03 : 1), w: 0 }));
+}
+const E = new Float32Array(G * G);
+
+const GRAINS = 12000;
+const gx = new Float32Array(GRAINS), gy = new Float32Array(GRAINS);
+function scatter() { for (let i = 0; i < GRAINS; i++) { gx[i] = Math.random(); gy[i] = Math.random(); } }
+scatter();
+
+/* scatter button = gentle reset: each grain drifts (with its own small delay)
+   to a fresh random spot and anything still ringing fades out. Knobs and the
+   current colours are left alone; stray flecks from other sounds blend back
+   into the current sand colour. */
+const RESET_MS = 2700;
+const sx = new Float32Array(GRAINS), sy = new Float32Array(GRAINS);
+const tx = new Float32Array(GRAINS), ty = new Float32Array(GRAINS), dl = new Float32Array(GRAINS);
+let reset = null;
+const ease = p => p < .5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2;
+
+function startReset() {
+  for (let k = 0; k < GRAINS; k++) {
+    sx[k] = gx[k]; sy[k] = gy[k]; tx[k] = Math.random(); ty[k] = Math.random(); dl[k] = Math.random() * .3;
+  }
+  until.fill(0);
+  if (ctx) {
+    const t = ctx.currentTime, g = A.in.gain;
+    g.cancelScheduledValues(t); g.setValueAtTime(g.value, t);
+    g.setTargetAtTime(0, t, .4); g.setValueAtTime(.8, t + 1.8);
+    live.forEach(o => { try { o.stop(t + 1.75); } catch (e) {} });
+  }
+  reset = { t0: performance.now() };
+}
+
+function stepReset(now) {
+  const p = Math.min(1, (now - reset.t0) / RESET_MS);
+  // the sand keeps dancing on the fading plate for the first ~1.4s, so the
+  // stop is a wind-down, not a freeze; the drift starts underneath it
+  const still = 1 - ease(clamp(p / .53, 0, 1));
+  if (still > 0) { moveSand(sx, sy, still); moveSand(sx, sy, still); }
+  for (let k = 0; k < GRAINS; k++) {
+    const e = ease(clamp((p - .08 - dl[k]) / .6, 0, 1));
+    gx[k] = lerp(sx[k], tx[k], e); gy[k] = lerp(sy[k], ty[k], e);
+    if (owner[k] !== theme && Math.random() < e * .08) owner[k] = theme;
+  }
+  if (p >= 1) { owner.fill(theme); reset = null; }
+}
+
+let spec, td, binHz, rms = 0, peakHz = 0, dominant = null;
+
+function updatePlate() {
+  if (!ctx) return;
+  A.an.getFloatFrequencyData(spec);
+  A.an.getFloatTimeDomainData(td);
+  let s = 0; for (let i = 0; i < td.length; i += 4) s += td[i] * td[i];
+  rms = lerp(rms, Math.sqrt(s / (td.length / 4)), .3);
+
+  // the sound's actual partials: spectral peaks, with parabolic interpolation
+  // for sub-bin frequency accuracy (raw FFT bins smear one tone over several)
+  const bf = [], bp = [];
+  const maxBin = Math.min(spec.length - 1, Math.ceil(9000 / binHz));
+  let best = -Infinity, bestB = 0;
+  for (let b = 2; b < maxBin; b++) if (spec[b] > best) { best = spec[b]; bestB = b; }
+  for (let b = 2; b < maxBin; b++) {
+    const a = spec[b - 1], c = spec[b], e = spec[b + 1];
+    if (c < a || c < e || c < -75 || c < best - 45) continue;
+    const den = a - 2 * c + e, off = den ? .5 * (a - e) / den : 0;
+    bf.push((b + off) * binHz); bp.push(Math.pow(10, (c - .25 * (a - e) * off) / 10));
+    if (b === bestB) peakHz = (b + off) * binHz;
+  }
+  if (best < -70) peakHz = 0;
+
+  // each mode responds as a damped resonator to the spectrum
+  let wMax = 0;
+  for (const md of MODES) {
+    let w = 0;
+    for (let i = 0; i < bf.length; i++) {
+      const r = bf[i] / md.f; if (r < .7 || r > 1.4) continue;
+      const d = 1 - r * r; w += bp[i] / (d * d + (r / Q) * (r / Q));
+    }
+    md.w = lerp(md.w, w, .2); // plates ring up and down, they don't switch instantly
+    if (md.w > wMax) wMax = md.w;
+  }
+  if (wMax < 1e-9) return;
+
+  const act = MODES.filter(md => md.w > wMax * .12).sort((a, b) => b.w - a.w).slice(0, 6);
+  dominant = act[0];
+  E.fill(0);
+  for (const md of act) {
+    const w = md.w / wMax, cn = cosT[md.n], cm = cosT[md.m];
+    for (let j = 0; j < G; j++) for (let i = 0; i < G; i++) {
+      const phi = cn[i] * cm[j] + md.s * cm[i] * cn[j];
+      E[j * G + i] += w * phi * phi;
+    }
+  }
+  let eMax = 0; for (let i = 0; i < E.length; i++) if (E[i] > eMax) eMax = E[i];
+  if (eMax > 0) for (let i = 0; i < E.length; i++) E[i] /= eMax;
+}
+
+function moveSand(X = gx, Y = gy, scale = 1) {
+  const drive = clamp(rms * 9, 0, 1.6) * scale;
+  if (drive < .02) return;
+  const TH = .18; // grains only leave the plate when its acceleration beats gravity
+  for (let k = 0; k < GRAINS; k++) {
+    const i = Math.min(G - 1, X[k] * G | 0), j = Math.min(G - 1, Y[k] * G | 0), c = j * G + i;
+    const acc = Math.sqrt(E[c]) * drive;
+    if (acc < TH) continue;
+    const hop = (acc - TH) * .018;
+    const dx = E[j * G + Math.min(G - 1, i + 1)] - E[j * G + Math.max(0, i - 1)];
+    const dy = E[Math.min(G - 1, j + 1) * G + i] - E[Math.max(0, j - 1) * G + i];
+    let x = X[k] + (Math.random() * 2 - 1) * hop - dx * hop * 1.6;
+    let y = Y[k] + (Math.random() * 2 - 1) * hop - dy * hop * 1.6;
+    if (x < 0) x = -x; else if (x > 1) x = 2 - x;
+    if (y < 0) y = -y; else if (y > 1) y = 2 - y;
+    X[k] = clamp(x, 0, .9999); Y[k] = clamp(y, 0, .9999);
+    // knocked-loose sand takes the current colour, but holds an earlier
+    // sound's colour while that sound is still ringing
+    const o = owner[k];
+    if (o !== theme && Math.random() < .15 * (1 - .92 * act[o])) owner[k] = theme;
+  }
+}
+
+/* ───────────── LED panel ───────────── */
+const N = 64;
+const cv = $('#panel'), cx = cv.getContext('2d');
+const off = document.createElement('canvas'); off.width = off.height = N;
+const ox = off.getContext('2d'), img = ox.createImageData(N, N);
+const mask = document.createElement('canvas');
+const cnt = new Uint16Array(N * N);
+
+function resize() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = Math.round(cv.getBoundingClientRect().width * dpr);
+  cv.width = cv.height = mask.width = mask.height = w;
+  const m = mask.getContext('2d'), cell = w / N;
+  m.fillStyle = '#1a1a1c'; m.fillRect(0, 0, w, w); // device-body colour: LEDs sit straight on the case
+  m.globalCompositeOperation = 'destination-out';
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    m.beginPath(); m.arc((x + .5) * cell, (y + .5) * cell, cell * .4, 0, Math.PI * 2); m.fill();
+  }
+}
+new ResizeObserver(resize).observe(cv);
+
+/* colour: the last key pressed owns the palette. Sand still sitting in an
+   earlier sound's figure keeps that sound's sand colour while it rings, then
+   turns over grain by grain as it fades — no blended colours, just the old
+   figure lingering a moment. */
+let theme = 0;
+const RGB = THEMES.map(t => ({ plate: hexRGB(t.plate), sand: hexRGB(t.sand) }));
+const act = new Float32Array(THEMES.length), until = new Float64Array(THEMES.length);
+const plate = [...RGB[0].plate];
+const owner = new Uint8Array(GRAINS); // which sound's sand colour each grain carries
+const votes = new Uint16Array(N * N * THEMES.length);
+
+function updateColour(now) {
+  for (let i = 0; i < THEMES.length; i++) act[i] = lerp(act[i], now < until[i] ? 1 : 0, .05);
+  const tp = RGB[theme].plate;
+  for (let c = 0; c < 3; c++) plate[c] = lerp(plate[c], tp[c], .06);
+  // an earlier sound's sand lingers while that sound rings, then hands over
+  for (let k = 0; k < GRAINS; k++) {
+    const o = owner[k];
+    if (o !== theme && Math.random() < .002 + (1 - act[o]) * .04) owner[k] = theme;
+  }
+}
+
+function draw() {
+  const T = THEMES.length;
+  cnt.fill(0); votes.fill(0);
+  for (let k = 0; k < GRAINS; k++) {
+    const c = (gy[k] * N | 0) * N + (gx[k] * N | 0);
+    cnt[c]++; votes[c * T + owner[k]]++;
+  }
+  const d = img.data;
+  for (let i = 0, j = 0; i < N * N; i++, j += 4) {
+    const n = cnt[i], f = clamp((n - 2) / 5, 0, 1);
+    // each LED shows the sand colour most of its grains carry: crisp flecks, never a muddy average
+    let best = 0; for (let t = 1; t < T; t++) if (votes[i * T + t] > votes[i * T + best]) best = t;
+    const sd = RGB[best].sand;
+    for (let c = 0; c < 3; c++) d[j + c] = lerp(plate[c], sd[c], f);
+    d[j + 3] = 255;
+  }
+  ox.putImageData(img, 0, 0);
+  cx.imageSmoothingEnabled = false;
+  cx.drawImage(off, 0, 0, cv.width, cv.height);
+  cx.drawImage(mask, 0, 0);
+}
+
+
+function frame(now) {
+  if (ctx && !spec) { spec = new Float32Array(A.an.frequencyBinCount); td = new Float32Array(A.an.fftSize); binHz = ctx.sampleRate / A.an.fftSize; }
+  updatePlate();
+  updateColour(now);
+  balanceLevel(now);
+  watchInput(now);
+  if (reset) stepReset(now); else { moveSand(); moveSand(); } // two settling steps per frame: figures form within a note's length
+  draw();
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* ───────────── controls ───────────── */
+const keyEls = THEMES.map((th, i) => {
+  const b = document.createElement('button');
+  b.className = 'key' + (i === 0 ? ' on' : ''); b.style.setProperty('--c', th.plate);
+  b.setAttribute('aria-label', `Sound ${i + 1}`);
+  b.innerHTML = `<span class="dot"></span><span class="cap">${i + 1}</span>`;
+  b.addEventListener('pointerdown', e => { e.preventDefault(); hit(i); });
+  b.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) { e.preventDefault(); hit(i); } });
+  $('#keys').append(b);
+  return b;
+});
+
+/* listen: an audio input (a drum machine such as a Bastl Kastle via a USB
+   audio interface, or a mic) drives the plate alongside the keys. The input's
+   level is adjusted automatically, a strong hit moves to another palette, and
+   the browser's voice processing is switched off so instruments arrive unaltered. */
+let inStream = null, inSource = null, inRms = 0, inSlow = 0, lastSwitch = 0, lastKey = 0;
+const inTd = new Float32Array(1024);
+const status = t => { $('#note').textContent = t; };
+
+async function startListening(deviceId) {
+  initAudio();
+  stopListening(true);
+  status('');
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { status('Audio input needs a secure page (https or localhost).'); return; }
+  try {
+    inStream = await navigator.mediaDevices.getUserMedia({ audio: {
+      deviceId: deviceId ? { exact: deviceId } : undefined,
+      echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
+  } catch (e) {
+    status(e.name === 'NotAllowedError' ? 'Input blocked. Allow microphone access for this page in the browser, then try again.'
+                                      : 'Couldn\'t open that input (' + e.name + ').');
+    setListening(false); return;
+  }
+  inSource = ctx.createMediaStreamSource(inStream);
+  inSource.connect(A.inLevel);
+  setListening(true);
+  const cur = inStream.getAudioTracks()[0]?.getSettings().deviceId;
+  const sel = $('#input');
+  const devices = (await navigator.mediaDevices.enumerateDevices()).filter(d => d.kind === 'audioinput');
+  sel.innerHTML = '';
+  devices.forEach((d, i) => { const o = document.createElement('option'); o.value = d.deviceId; o.textContent = d.label || ('Input ' + (i + 1)); o.selected = d.deviceId === cur; sel.append(o); });
+  sel.disabled = devices.length === 0;
+}
+function stopListening(quiet) {
+  if (inSource) { inSource.disconnect(); inSource = null; }
+  if (inStream) { inStream.getTracks().forEach(t => t.stop()); inStream = null; }
+  inRms = 0;
+  if (!quiet) setListening(false);
+}
+function setListening(on) {
+  $('#listen').setAttribute('aria-pressed', String(on));
+  $('#listen-label').textContent = on ? 'listening' : 'listen';
+}
+function watchInput(now) {
+  if (!inSource) { $('#listen').style.setProperty('--lvl', 0); return; }
+  A.inMeter.getFloatTimeDomainData(inTd);
+  let s = 0; for (let i = 0; i < inTd.length; i++) s += inTd[i] * inTd[i];
+  inRms = lerp(inRms, Math.sqrt(s / inTd.length), .3);
+  // auto level: nudge the input toward a steady working level (ignore near-silence)
+  if (inRms > .004) {
+    const g = clamp(A.inLevel.gain.value * Math.pow(.12 / inRms, .04), .25, 16);
+    A.inLevel.gain.setTargetAtTime(g, ctx.currentTime, .05);
+  }
+  // strong hit → another palette (not while someone's playing the keys)
+  if (inRms > .03 && inRms > inSlow * 2.2 && now - lastSwitch > 2500 && now - lastKey > 3000) {
+    lastSwitch = now;
+    let n; do { n = Math.floor(Math.random() * THEMES.length); } while (n === theme);
+    until[theme] = now + 1500;   // the old sand colour lingers a moment
+    selectTheme(n);
+  }
+  inSlow = lerp(inSlow, inRms, .02);
+  $('#listen').style.setProperty('--lvl', clamp(inRms * 6, 0, 1).toFixed(2));
+}
+$('#listen').addEventListener('click', () => { inSource ? stopListening() : startListening($('#input').value || undefined); });
+$('#input').addEventListener('change', e => startListening(e.target.value));
+
+// level balancing: overall gain eases to 1/√(sounds playing), so a pile-up
+// sums to roughly the loudness of one sound instead of clipping
+const soundEnds = [];
+let levelTarget = 1;
+function balanceLevel(now) {
+  if (!ctx) return;
+  for (let i = soundEnds.length - 1; i >= 0; i--) if (soundEnds[i] < now) soundEnds.splice(i, 1);
+  const t = 1 / Math.sqrt(Math.max(1, soundEnds.length));
+  if (Math.abs(t - levelTarget) > .01) { levelTarget = t; A.level.gain.setTargetAtTime(t, ctx.currentTime, .12); }
+}
+
+function selectTheme(i) {
+  theme = i;
+  keyEls.forEach((b, j) => b.classList.toggle('on', j === i));
+  $('#listen').style.setProperty('--c', THEMES[i].sand);
+}
+$('#listen').style.setProperty('--c', THEMES[0].sand);
+
+function hit(i) {
+  initAudio();
+  SOUNDS[THEMES[i].key](ctx.currentTime + .01, K.length);
+  if (reset && ctx) { const g = A.in.gain; g.cancelScheduledValues(ctx.currentTime); g.setValueAtTime(.8, ctx.currentTime); }
+  reset = null;
+  selectTheme(i);
+  lastKey = performance.now();
+  until[i] = performance.now() + 2.8 * K.length * 1000;
+  soundEnds.push(performance.now() + (2.8 * K.length + .6) * 1000);
+  const b = keyEls[i]; b.classList.add('hit'); clearTimeout(b._t); b._t = setTimeout(() => b.classList.remove('hit'), 140);
+}
+
+window.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey || e.repeat) return;
+  const i = '123456'.indexOf(e.key);
+  if (i >= 0) hit(i);
+});
+cv.addEventListener('pointerdown', () => hit(Math.floor(Math.random() * THEMES.length)));
+
+KNOBS.forEach(([key, label, min, max, def, log, cap, dot]) => {
+  const ctl = document.createElement('div'); ctl.className = 'ctl';
+  const k = document.createElement('div'); k.className = 'knob'; k.tabIndex = 0;
+  k.style.setProperty('--k', cap); k.style.setProperty('--dot', dot);
+  k.setAttribute('role', 'slider'); k.setAttribute('aria-label', label);
+  k.setAttribute('aria-valuemin', 0); k.setAttribute('aria-valuemax', 100);
+  const lbl = document.createElement('span'); lbl.textContent = label;
+  ctl.append(k, lbl); $('#knobs').append(ctl);
+
+  const norm = v => log ? Math.log(v / min) / Math.log(max / min) : (v - min) / (max - min);
+  const set = n => {
+    n = clamp(n, 0, 1);
+    K[key] = log ? min * Math.pow(max / min, n) : min + n * (max - min);
+    k.style.setProperty('--pos', n); k.setAttribute('aria-valuenow', Math.round(n * 100));
+    applyKnob(key);
+  };
+  set(norm(def));
+
+  let y0, n0;
+  k.addEventListener('pointerdown', e => { k.setPointerCapture(e.pointerId); y0 = e.clientY; n0 = norm(K[key]); e.preventDefault(); });
+  k.addEventListener('pointermove', e => { if (k.hasPointerCapture(e.pointerId)) set(n0 + (y0 - e.clientY) / (e.shiftKey ? 700 : 170)); });
+  k.addEventListener('wheel', e => { e.preventDefault(); set(norm(K[key]) - e.deltaY * .0015); }, { passive: false });
+  k.addEventListener('dblclick', () => set(norm(def)));
+  k.addEventListener('keydown', e => {
+    const s = { ArrowUp: .04, ArrowRight: .04, ArrowDown: -.04, ArrowLeft: -.04 }[e.key];
+    if (s !== undefined) { e.preventDefault(); set(norm(K[key]) + s); }
+  });
+});
+
+// fifth slot in the knob row: scatter / reset
+const sc = document.createElement('div'); sc.className = 'ctl scatter';
+sc.innerHTML = `<button class="round" aria-label="Scatter the sand and reset"><svg viewBox="0 0 24 24">${ICONS.scatter}</svg></button><span>scatter</span>`;
+sc.querySelector('button').addEventListener('pointerdown', e => e.preventDefault()); // don't take focus on click
+sc.querySelector('button').addEventListener('click', startReset);
+$('#knobs').append(sc);
+
+// site header: theme switch (same behaviour as js/site.js, which this page doesn't load)
+const themeBtn = $('.theme-toggle'), root = document.documentElement;
+if (themeBtn) {
+  const cur = () => root.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const sync = () => {
+    const dark = cur() === 'dark';
+    themeBtn.setAttribute('aria-checked', String(dark));
+    themeBtn.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+  };
+  sync();
+  themeBtn.addEventListener('click', () => {
+    const next = cur() === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+    sync();
+  });
+}
+
+// site header: mobile menu toggle (same behaviour as js/site.js, which this page doesn't load)
+const navToggle = $('.nav-toggle'), nav = $('.site-header .nav');
+if (navToggle && nav) {
+  const close = () => { nav.classList.remove('is-open'); navToggle.setAttribute('aria-expanded', 'false'); };
+  navToggle.addEventListener('click', () => navToggle.setAttribute('aria-expanded', String(nav.classList.toggle('is-open'))));
+  nav.addEventListener('click', e => { if (e.target.tagName === 'A') close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && nav.classList.contains('is-open')) { close(); navToggle.focus(); } });
+}
+})();
+</script>
+  <script src="../js/nav-dot.js?v=6" defer></script>
+  <script src="../js/hue.js?v=2" defer></script>
+</body>
+</html>
