@@ -206,11 +206,17 @@
      its section. */
   document.querySelectorAll("[data-gallery]").forEach(function (track) {
     var section = track.closest("section");
-    var tiles = track.children;
+    var tiles = [];
     var dots = section.querySelector("[data-gallery-dots]");
     var prev = section.querySelector("[data-gallery-prev]");
     var next = section.querySelector("[data-gallery-next]");
-    for (var d = 0; d < tiles.length; d++) dots.appendChild(document.createElement("span"));
+    // Only tiles that are showing count (skim mode hides some).
+    var collect = function () {
+      tiles = Array.prototype.filter.call(track.children, function (t) { return t.offsetParent !== null; });
+      while (dots.children.length > tiles.length) dots.removeChild(dots.lastChild);
+      while (dots.children.length < tiles.length) dots.appendChild(document.createElement("span"));
+    };
+    collect();
 
     var stepW = function () {
       return tiles.length > 1 ? tiles[1].getBoundingClientRect().left - tiles[0].getBoundingClientRect().left : track.clientWidth;
@@ -228,6 +234,7 @@
     next.addEventListener("click", function () { track.scrollBy({ left: stepW(), behavior: reduce ? "auto" : "smooth" }); });
     track.addEventListener("scroll", function () { requestAnimationFrame(syncGallery); }, { passive: true });
     window.addEventListener("resize", syncGallery);
+    document.addEventListener("rally:skim", function () { collect(); track.scrollLeft = 0; syncGallery(); });
     syncGallery();
   });
 
@@ -253,21 +260,23 @@
     var lbImg = lb.querySelector("img"), lbCap = lb.querySelector("figcaption");
     var lbPrev = lb.querySelector(".rl-lightbox__prev"), lbNext = lb.querySelector(".rl-lightbox__next");
     var lbClose = lb.querySelector(".rl-lightbox__close");
-    var lbAt = 0, lbReturn = null;
+    var lbAt = 0, lbReturn = null, lbList = [];
 
     var lbShow = function (i) {
-      lbAt = clamp(i, 0, lbItems.length - 1);
-      var src = lbItems[lbAt].querySelector("img");
-      var cap = lbItems[lbAt].parentElement.querySelector("p");
+      lbAt = clamp(i, 0, lbList.length - 1);
+      var src = lbList[lbAt].querySelector("img");
+      var cap = lbList[lbAt].parentElement.querySelector("p");
       lbImg.src = src.currentSrc || src.src;
       lbImg.alt = src.alt;
       lbCap.innerHTML = cap ? cap.innerHTML : "";
       lbPrev.disabled = lbAt === 0;
-      lbNext.disabled = lbAt === lbItems.length - 1;
+      lbNext.disabled = lbAt === lbList.length - 1;
     };
-    var lbOpen = function (i) {
+    var lbOpen = function (el) {
       lbReturn = document.activeElement;
-      lbShow(i);
+      // Only photos that are showing (skim mode hides some of the row).
+      lbList = Array.prototype.filter.call(lbItems, function (x) { return x.offsetParent !== null; });
+      lbShow(lbList.indexOf(el));
       document.documentElement.classList.add("rl-lightbox-open");
       lb.classList.add("is-open");
       lbClose.focus({ preventScroll: true });
@@ -278,9 +287,9 @@
       if (lbReturn) lbReturn.focus({ preventScroll: true });
     };
     lbItems.forEach(function (el, i) {
-      el.addEventListener("click", function () { lbOpen(i); });
+      el.addEventListener("click", function () { lbOpen(el); });
       el.addEventListener("keydown", function (e) {
-        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); lbOpen(i); }
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); lbOpen(el); }
       });
     });
     lbPrev.addEventListener("click", function (e) { e.stopPropagation(); lbShow(lbAt - 1); });
@@ -330,6 +339,40 @@
       var dx = e.changedTouches[0].clientX - lx, dy = e.changedTouches[0].clientY - ly;
       lx = null;
       if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) lbShow(lbAt + (dx < 0 ? 1 : -1));
+    });
+  }
+
+  /* ---- 6. Skim mode ------------------------------------------------------
+     "Short on time?" switch: html.rl-skim hides the in-between detail (see
+     rally.css). Keeps your place (the switch stays put on screen while the
+     page reflows around it), remembers the choice, and tells the rows and
+     pinned sections to re-measure. */
+  var skimBtn = document.querySelector("[data-skim-toggle]");
+  if (skimBtn) {
+    var html = document.documentElement;
+    var applySkim = function (on) {
+      html.classList.toggle("rl-skim", on);
+      skimBtn.setAttribute("aria-checked", on ? "true" : "false");
+      document.dispatchEvent(new Event("rally:skim"));
+      onScroll();
+    };
+    var saved = null;
+    try { saved = localStorage.getItem("rally-skim"); } catch (e) {}
+    if (saved === "1") applySkim(true);
+    skimBtn.addEventListener("click", function () {
+      var on = !html.classList.contains("rl-skim");
+      try { localStorage.setItem("rally-skim", on ? "1" : "0"); } catch (e) {}
+      var before = skimBtn.getBoundingClientRect().top;
+      var flip = function () {
+        applySkim(on);
+        window.scrollBy({ top: skimBtn.getBoundingClientRect().top - before, behavior: "instant" });
+      };
+      if (reduce) { flip(); return; }
+      html.classList.add("rl-skim-switching");
+      setTimeout(function () {
+        flip();
+        requestAnimationFrame(function () { html.classList.remove("rl-skim-switching"); });
+      }, 150);
     });
   }
 })();

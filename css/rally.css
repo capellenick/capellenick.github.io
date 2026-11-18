@@ -770,3 +770,53 @@ html.rl-lightbox-open { overflow: hidden; }
 /* Model credit (CC BY), quiet, above the next-project link. */
 .rl-credit { font-size: 0.8rem; color: var(--ink-50, rgba(0,0,0,.5)); margin: 0 0 2rem; }
 .rl-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+
+/* ---- Skim mode -----------------------------------------------------------
+   "Short on time?" switch between the facts and the problem. With it on
+   (html.rl-skim), the page keeps every eyebrow + headline, the stats, the
+   scope pills, the phone walkthrough, the first and last process photos and
+   the decision images (bold titles only), the value proposition, the forces
+   bars, the verdict and the prototype link; the in-between detail hides.
+   js/rally.js flips it, keeps your place and remembers the choice. */
+.rl-skimbar { display: flex; justify-content: flex-start; margin-top: clamp(2.5rem, 5vw, 3.5rem); }
+.rl-skim__toggle {
+  display: inline-flex; align-items: center; gap: 0.9rem;
+  padding: 0; background: none; border: 0; color: inherit;
+  font-family: var(--font-label); font-size: 1.15rem; letter-spacing: -0.005em;
+  cursor: pointer;
+}
+.rl-skim__label { color: var(--ink-50); }
+.rl-skim__label strong { color: var(--ink); font-weight: 500; margin-left: 0.2em; }
+.rl-skim__track {
+  position: relative; width: 46px; height: 26px; border-radius: 99px;
+  background: var(--rl-card); box-shadow: inset 0 0 0 1px var(--hairline-2, rgba(127,127,127,0.25));
+  transition: background-color 0.25s ease;
+}
+.rl-skim__thumb {
+  position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--ink); transition: transform 0.25s cubic-bezier(0.3, 0.7, 0.2, 1), background-color 0.25s ease;
+}
+.rl-skim__toggle[aria-checked="true"] .rl-skim__track { background: var(--rl-lime); box-shadow: none; }
+.rl-skim__toggle[aria-checked="true"] .rl-skim__thumb { transform: translateX(20px); background: #141414; }
+.rl-skim__toggle:focus-visible { outline: 2px solid var(--rl-lime); outline-offset: 6px; border-radius: 8px; }
+
+html.rl-skim .rl-skim-hide,
+html.rl-skim .rl-cap-more,
+html.rl-skim .rl-personas,
+html.rl-skim .rl-beforeafter,
+html.rl-skim .rl-gallery:not(.rl-mapping) .rl-body,
+html.rl-skim .rl-mapping .rl-ptile:not(:first-child):not(:last-child),
+html.rl-skim .rl-bmc > :not(.rl-bmc__value),
+html.rl-skim .rl-force__note,
+html.rl-skim .rl-pair { display: none !important; }
+/* The value proposition alone, not stranded in an empty canvas grid. */
+html.rl-skim .rl-bmc { display: block; max-width: 34rem; }
+/* A quick dip while the page reflows, so the switch reads as one change. */
+main { transition: opacity 0.15s ease; }
+html.rl-skim-switching main { opacity: 0.15; }
+/* Opening a photo shows its full caption, skim mode or not. */
+html.rl-skim .rl-lightbox .rl-cap-more { display: inline !important; }
+/* The two scroll-pinned sections play faster in skim mode (less scrolling
+   for the same sequence); js/rally.js measures their live height. */
+html.rl-skim .rl-show { --show-h: 340vh; }
+html.rl-skim .rl-narrow { height: 150vh; }

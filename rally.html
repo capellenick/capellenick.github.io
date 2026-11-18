@@ -10,7 +10,7 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="https://use.typekit.net/wsb8ckc.css" />
   <link rel="stylesheet" href="css/style.css?v=91" />
-  <link rel="stylesheet" href="css/rally.css?v=61" />
+  <link rel="stylesheet" href="css/rally.css?v=65" />
   <!-- three.js for the 3D phone in "How Rally works" (js/rally-3d.js). -->
   <script type="importmap">
     { "imports": {
@@ -80,13 +80,21 @@
         <div><dt>Status</dt><dd><a class="rl-link" href="https://capellenick.github.io/rally/" target="_blank" rel="noopener" data-cursor="Open">Interactive <span class="rl-nowrap">prototype<svg class="rl-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.2 2.6H17V16.4M17 2.6L3.4 16.2" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="butt" stroke-linejoin="miter"/></svg></span></a></dd></div>
         <div><dt>Year</dt><dd>2026</dd></div>
       </dl>
+      <!-- Skim mode: hides the in-between detail so the page reads as big
+           headlines, stats and key images (js/rally.js, .rl-skim in rally.css). -->
+      <div class="rl-skimbar">
+        <button type="button" class="rl-skim__toggle" role="switch" aria-checked="false" data-skim-toggle>
+          <span class="rl-skim__label">Short on time? <strong>Skim mode</strong></span>
+          <span class="rl-skim__track" aria-hidden="true"><span class="rl-skim__thumb"></span></span>
+        </button>
+      </div>
     </section>
 
     <!-- ================= PROBLEM + RESEARCH ================= -->
     <section class="rl-section rl-wrap">
       <p class="rl-eyebrow" data-reveal>The problem</p>
       <h2 class="rl-statement" data-reveal>Finding consistent partners is harder than playing the actual sport.</h2>
-      <p class="rl-body" data-reveal>Back home in Raleigh, I had a rotation of friends I played tennis with every week. Then I moved to Boone for school and had to start from scratch. Group chats and open play were hit or miss, and people flaked last minute. Rally started as a fix for my own problem. The design challenge? Find reliable partners while building community around the sport.</p>
+      <p class="rl-body" data-reveal>Back home in Raleigh, I had a rotation of friends I played tennis with every week. Then I moved to Boone for school and had to start from scratch.<span class="rl-skim-hide"> Group chats and open play were hit or miss, and people flaked last minute. Rally started as a fix for my own problem. The design challenge? Find reliable partners while building community around the sport.</span></p>
 
       <div class="rl-stats rl-stats--2">
         <div class="rl-stat" data-reveal>
@@ -117,7 +125,7 @@
         </div>
       </div>
 
-      <h3 class="rl-subhead" data-reveal>Personas</h3>
+      <h3 class="rl-subhead rl-skim-hide" data-reveal>Personas</h3>
       <div class="rl-personas">
         <article class="rl-persona" data-reveal>
           <header class="rl-persona__id">
@@ -185,27 +193,27 @@
       <div class="rl-gallery__track rl-gallery__track--wide" data-gallery tabindex="0" aria-label="Process images, scroll sideways">
         <article class="rl-ptile">
           <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox><img src="assets/projects/rally/process-notebook-1.jpg?v=3" alt="A notebook spread: early app design notes, three goals to track, random app ideas, and a running app idea that opens up to pickup soccer, basketball, pickleball, tennis and volleyball" width="1800" height="1200" /></div>
-          <p><strong>It started as a running app.</strong> The first idea used competition to keep runners motivated. Pretty quickly I wanted it to open up to other sports, like pickup soccer, pickleball and tennis.</p>
+          <p><strong>It started as a running app.</strong><span class="rl-cap-more"> The first idea used competition to keep runners motivated. Pretty quickly I wanted it to open up to other sports, like pickup soccer, pickleball and tennis.</span></p>
         </article>
         <article class="rl-ptile">
           <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox><img src="assets/projects/rally/process-notebook-2.jpg?v=3" alt="A notebook spread: persona candidates and layout sketches on the left, and dated app design notes on the right listing the problem, the sports and features like court finders and no-show flags" width="1800" height="1200" loading="lazy" /></div>
-          <p><strong>Who it&rsquo;s for.</strong> I sketched persona layouts and wrote down the real problem: it&rsquo;s hard to find people to play with consistently. Flagging no-shows was in the notes from the start.</p>
+          <p><strong>Who it&rsquo;s for.</strong><span class="rl-cap-more"> I sketched persona layouts and wrote down the real problem: it&rsquo;s hard to find people to play with consistently. Flagging no-shows was in the notes from the start.</span></p>
         </article>
         <article class="rl-ptile">
           <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox><img src="assets/projects/rally/process-notebook-3.jpg?v=3" alt="A notebook spread: a list of app names including SportsConnect, Rally and Ping with early R logo sketches, and four handwritten user stories" width="1800" height="1200" loading="lazy" /></div>
-          <p><strong>Naming it.</strong> SportsConnect, Ping and Rally were all on the list. Rally stuck, and the logo sketches started with an R and a ball.</p>
+          <p><strong>Naming it.</strong><span class="rl-cap-more"> SportsConnect, Ping and Rally were all on the list. Rally stuck, and the logo sketches started with an R and a ball.</span></p>
         </article>
         <article class="rl-ptile">
           <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox><img src="assets/projects/rally/process-studio.jpg" alt="A desk in the design studio with a laptop and notebook, in front of a whiteboard listing features on one side and a user story on the other" width="1800" height="1200" loading="lazy" /></div>
-          <p><strong>The whiteboard was my best friend.</strong> Being able to work big, iterate quickly, and jot ideas down in a tactile form throughout my process helped me build out the real purpose of my product.</p>
+          <p><strong>The whiteboard was my best friend.</strong><span class="rl-cap-more"> Being able to work big, iterate quickly, and jot ideas down in a tactile form throughout my process helped me build out the real purpose of my product.</span></p>
         </article>
         <article class="rl-ptile">
           <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox><img src="assets/projects/rally/process-sitemap-wide.jpg" alt="A whiteboard in the design studio with the first site map: start, onboarding, then Explore, Activity, Community and Profile branches with sticky notes, and a hand-written list of sports" width="1498" height="1000" loading="lazy" /></div>
-          <p><strong>The first site map.</strong> At that stage, the most organic way to get feedback was to present the site map and walk through each section. Notes and suggested changes went on sticky notes, placed right in the section they were about.</p>
+          <p><strong>The first site map.</strong><span class="rl-cap-more"> At that stage, the most organic way to get feedback was to present the site map and walk through each section. Notes and suggested changes went on sticky notes, placed right in the section they were about.</span></p>
         </article>
         <article class="rl-ptile">
           <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox><img src="assets/projects/rally/process-figma-drafts.jpg" alt="Early Figma drafts of three screens: a dark suggestions list of players with colour-coded tags for days, sports and times, a light search results list filtered by tennis, Saturday, outdoor and beginner, and a calendar view, with classmates' comment avatars on the frames" width="1800" height="1200" loading="lazy" /></div>
-          <p><strong>First drafts in Figma.</strong> The early screens matched you with people, with colour-coded tags for days, sports and times. Classmates left comments right on the frames, and the final app shifted to open matches you can scan at a glance.</p>
+          <p><strong>First drafts in Figma.</strong><span class="rl-cap-more"> The early screens matched you with people, with colour-coded tags for days, sports and times. Classmates left comments right on the frames, and the final app shifted to open matches you can scan at a glance.</span></p>
         </article>
       </div>
       <div class="rl-wrap rl-gallery__controls">
@@ -266,29 +274,29 @@
       <div class="rl-gallery__track" data-gallery tabindex="0" aria-label="Design decisions, scroll sideways">
         <article class="rl-tile">
           <div class="rl-tile__media"><img class="rl-cutout" src="assets/projects/rally/ui-card.png" alt="A Rally match card: tennis, singles, intermediate, 6 to 7:30pm at App State Tennis Courts, with a Request button" loading="lazy" /></div>
-          <p><strong>Skill level, up front.</strong> Every card shows the level right under the sport, because nobody wants an uneven game.</p>
+          <p><strong>Skill level, up front.</strong><span class="rl-cap-more"> Every card shows the level right under the sport, because nobody wants an uneven game.</span></p>
         </article>
         <article class="rl-tile">
           <div class="rl-tile__media"><img src="assets/projects/rally/ui-profile.jpg?v=2" alt="A profile with a phone verified badge, 11 matches played and a 100% show-up rate" loading="lazy" /></div>
-          <p><strong>Trust before you meet.</strong> Phone verification and a show-up rate on every profile. In testing, a few people wanted to see who they&rsquo;d be playing with right away, so tapping a name or profile picture now goes straight to that person&rsquo;s profile.</p>
+          <p><strong>Trust before you meet.</strong><span class="rl-cap-more"> Phone verification and a show-up rate on every profile. In testing, a few people wanted to see who they&rsquo;d be playing with right away, so tapping a name or profile picture now goes straight to that person&rsquo;s profile.</span></p>
         </article>
         <article class="rl-tile">
           <div class="rl-tile__media rl-tile__media--phone">
             <div class="phone"><div class="phone__screen"><img src="assets/projects/rally/screen-feed.jpg" alt="Rally's Explore screen: Boone, Open Matches sorted by soonest, Tennis, Pickleball and Beginner filters, then today's open matches" width="804" height="1748" loading="lazy" /></div></div>
           </div>
-          <p><strong>Browse, don&rsquo;t get matched.</strong> No black-box algorithm. Filter by sport and level, pick the game you want, and the host picks the players.</p>
+          <p><strong>Browse, don&rsquo;t get matched.</strong><span class="rl-cap-more"> No black-box algorithm. Filter by sport and level, pick the game you want, and the host picks the players.</span></p>
         </article>
         <article class="rl-tile">
           <div class="rl-tile__media"><img class="rl-panel" src="assets/projects/rally/ui-chat.png" alt="A chat thread: the host approved the request, then messages about courts and a fresh can of balls" loading="lazy" /></div>
-          <p><strong>Chat stays in Rally.</strong> Plan the match without handing out your number.</p>
+          <p><strong>Chat stays in Rally.</strong><span class="rl-cap-more"> Plan the match without handing out your number.</span></p>
         </article>
         <article class="rl-tile">
           <div class="rl-tile__media"><img class="rl-cutout" src="assets/projects/rally/ui-calendar.png" alt="A confirmed tennis match with Jordan, with Message Jordan and Add to Calendar buttons" loading="lazy" /></div>
-          <p><strong>Straight to your calendar.</strong> Once you&rsquo;re confirmed, one tap adds the match to your calendar, court and time included.</p>
+          <p><strong>Straight to your calendar.</strong><span class="rl-cap-more"> Once you&rsquo;re confirmed, one tap adds the match to your calendar, court and time included.</span></p>
         </article>
         <article class="rl-tile">
           <div class="rl-tile__media"><img class="rl-cutout" src="assets/projects/rally/ui-played.png" alt="A prompt asking: Did you play with Diego? with Yes, we played and No" loading="lazy" /></div>
-          <p><strong>Measure what matters.</strong> Success is two people who actually played, not downloads.</p>
+          <p><strong>Measure what matters.</strong><span class="rl-cap-more"> Success is two people who actually played, not downloads.</span></p>
         </article>
       </div>
       <div class="rl-wrap rl-gallery__controls">
@@ -304,7 +312,7 @@
     <section class="rl-section rl-wrap">
       <p class="rl-eyebrow" data-reveal>The business side</p>
       <h2 class="rl-headline rl-headline--wide" data-reveal>How would Rally hold up as a business? I did the research.</h2>
-      <p class="rl-body" data-reveal>Before building more, I looked at Rally the way an investor would: the trends around it, how it would make money, and how tough the market is.</p>
+      <p class="rl-body rl-skim-hide" data-reveal>Before building more, I looked at Rally the way an investor would: the trends around it, how it would make money, and how tough the market is.</p>
 
       <h3 class="rl-subhead" data-reveal>How it would work <span>Business model canvas</span></h3>
       <div class="rl-bmc" data-reveal>
@@ -365,7 +373,7 @@
   <script src="js/nav-dot.js?v=7" defer></script>
   <script src="js/hue.js?v=15" defer></script>
   <script src="js/logo-dots.js?v=9" defer></script>
-  <script src="js/rally.js?v=21" defer></script>
+  <script src="js/rally.js?v=22" defer></script>
   <script type="module" src="js/rally-3d.js?v=13"></script>
 </body>
 </html>
