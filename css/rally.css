@@ -131,7 +131,9 @@
 .rl-cta--big:hover .rl-arrow { transform: translate(4px, -4px); }
 .rl-cta .rl-arrow { transition: transform 0.2s ease; }
 .rl-cta:hover .rl-arrow { transform: translate(2px, -2px); }
-.rl-link { color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3em; }
+.rl-link { color: inherit; text-decoration: none; }
+.rl-nowrap { white-space: nowrap; }
+.rl-link .rl-arrow { display: inline-block; margin-left: 0.25em; vertical-align: -0.02em; }   /* rides along with the last word when it wraps */
 /* The square-ended arrow (Nick's), sized to the text. */
 .rl-arrow { width: 0.78em; height: 0.78em; flex: none; }
 .rl-lede {
@@ -375,7 +377,7 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
   letter-spacing: -0.02em;
   font-size: 1.9rem;
   line-height: 1;
-  color: var(--rl-orange);
+  color: var(--rl-lime);   /* the section is always dark, so neon reads in both themes */
 }
 .rl-steps h3 { font-family: var(--font-hero); font-weight: 500; letter-spacing: -0.02em; font-size: 1.9rem; line-height: 1; margin: 0 0 0.35rem; }   /* same face + size as the numbers */
 .rl-steps p { font-family: var(--font-hero); font-weight: 500; letter-spacing: -0.01em; }   /* whole step in the numbers' face */
