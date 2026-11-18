@@ -323,7 +323,6 @@
    on the light page that lime is unreadable, so it goes a deeper lime. */
 .rl-right { transition: color 0.35s ease; }
 .rl-narrow.is-done .rl-right { color: var(--rl-lime); }
-:root:not([data-theme="dark"]) .rl-narrow.is-done .rl-right { color: #7f9a12; }
 .rl-beforeafter { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; max-width: 900px; }
 .rl-beforeafter p:last-child { color: var(--ink-72); line-height: 1.45; margin: 0; }
 .rl-beforeafter .rl-eyebrow { color: var(--ink); }   /* same as the headline above */
@@ -564,8 +563,8 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
 .rl-bmc p { margin: 0; color: var(--ink-72); }
 .rl-bmc .rl-card__num { color: var(--ink-50); margin-bottom: 0.6rem; }
 /* Green: money, growth, value. */
-.rl-bmc__value { background: #47815f !important; }   /* a touch deeper than --rl-green so white text clears 4.5:1 */
-.rl-bmc__value p, .rl-bmc__value .rl-card__num { color: #fff !important; }   /* white on the green, both themes */
+.rl-bmc__value { background: var(--rl-lime) !important; }   /* neon, like the kept pills */
+.rl-bmc__value p, .rl-bmc__value .rl-card__num { color: #141414 !important; }   /* near-black on neon, as on the pills */
 .rl-bmc__value p:not(.rl-card__num) { font-family: var(--font-hero); font-weight: 600; font-size: 1.12rem; line-height: 1.32; }
 .rl-bmc__value .rl-card__num { font-weight: 600; }
 .rl-bmc__partners { grid-area: partners; }
@@ -593,7 +592,7 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
 .rl-force__bar { grid-area: bar; height: 10px; border-radius: 99px; background: var(--rl-card); overflow: hidden; }
 .rl-force__bar span {
   display: block; height: 100%; border-radius: inherit;
-  background: var(--ink);
+  background: var(--rl-lime);   /* neon, like the kept pills */
   transform: scaleX(0); transform-origin: left;
   transition: transform 1.1s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
