@@ -22,6 +22,27 @@
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 
+  /* ---- 0. IMAGE RETRY ----------------------------------------------------
+     A download cut short (a refresh mid-load, a hiccup on the local server)
+     can leave Chrome showing an image as broken until the next full reload.
+     Any image that fails gets one quiet retry. Covers images that already
+     failed before this script ran, and any that fail later (lazy ones). */
+  function retryImage(img) {
+    if (img.dataset.retried || !img.getAttribute("src")) return;
+    img.dataset.retried = "1";
+    var src = img.getAttribute("src");
+    setTimeout(function () {
+      img.src = src + (src.indexOf("?") < 0 ? "?" : "&") + "retry=1";
+    }, 400);
+  }
+  document.addEventListener("error", function (e) {
+    if (e.target.tagName === "IMG") retryImage(e.target);
+  }, true);
+  Array.prototype.forEach.call(document.images, function (img) {
+    if (img.complete && img.getAttribute("src") && !img.naturalWidth) retryImage(img);
+  });
+
+
   /* ---- 1. THEME TOGGLE --------------------------------------------------- */
   var themeBtn = document.querySelector(".theme-toggle");
 
@@ -38,10 +59,16 @@
   if (themeBtn) {
     syncThemeButton();
     themeBtn.addEventListener("click", function () {
-      var next = currentTheme() === "dark" ? "light" : "dark";
-      root.setAttribute("data-theme", next);
-      try { localStorage.setItem("theme", next); } catch (e) {}
-      syncThemeButton();
+      var flip = function () {
+        var next = currentTheme() === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try { localStorage.setItem("theme", next); } catch (e) {}
+        syncThemeButton();
+      };
+      // Everything has its own transition speed, so it would change piecemeal:
+      // cross-fade the whole page as one instead (style.css has the timing).
+      if (document.startViewTransition && !reduceMotion) document.startViewTransition(flip);
+      else flip();
     });
   }
 
@@ -56,7 +83,11 @@
 
     (function splitWords(node) {
       Array.prototype.slice.call(node.childNodes).forEach(function (child) {
-        if (child.nodeType === 1) { splitWords(child); return; }
+        if (child.nodeType === 1) {
+          // Already one unit (the rotating word) or screen-reader-only text.
+          if (!child.classList.contains("hero-word") && !child.classList.contains("sr-only")) splitWords(child);
+          return;
+        }
         if (child.nodeType !== 3 || !child.textContent.trim()) return;
         var frag = document.createDocumentFragment();
         child.textContent.split(/(\s+)/).forEach(function (part) {
@@ -92,6 +123,55 @@
     var fontsReady = (document.fonts && document.fonts.ready) || Promise.resolve();
     Promise.race([fontsReady, new Promise(function (r) { setTimeout(r, 800); })]).then(playHero);
     window.addEventListener("pageshow", function (e) { if (e.persisted) playHero(); });
+  }
+
+
+  /* ---- 1b. HERO ROTATING WORD ---------------------------------------
+     "…the intersection of ___ and design." Each word holds for 3s, then the
+     next drops in from above as the old one sinks and fades out, while the
+     slot eases to the new word's width so "and design." glides rather than
+     jumps. Colour cycles with the cursor/header (hue.js sets --cycle-text on
+     the rotator). Reduced motion: stays on the first word. */
+  var rotator = document.querySelector(".hero-rotator");
+  if (rotator && !reduceMotion) {
+    var ROT_HOLD = 3000, ROT_MOVE = 600;
+    var ROT_EASE = "cubic-bezier(0.65, 0, 0.35, 1)";   // ease-in-out, Pentagram-like
+    var rotWords = rotator.getAttribute("data-words").split(",").map(function (w) { return w.trim(); });
+    var rotIndex = 0;
+    var rotCurrent = rotator.querySelector(".hero-rotator__word");
+
+    var rotate = function () {
+      rotIndex = (rotIndex + 1) % rotWords.length;
+      var oldW = rotator.getBoundingClientRect().width;
+
+      var outgoing = rotCurrent;
+      outgoing.classList.add("is-out");          // absolute: leaves the flow, stays in place
+      var incoming = document.createElement("span");
+      incoming.className = "hero-rotator__word";
+      incoming.textContent = rotWords[rotIndex];
+      rotator.appendChild(incoming);
+      rotCurrent = incoming;
+
+      rotator.style.width = "";
+      var newW = rotator.getBoundingClientRect().width;
+      rotator.style.width = oldW + "px";
+      void rotator.offsetWidth;
+      rotator.style.transition = "width " + ROT_MOVE + "ms " + ROT_EASE;
+      rotator.style.width = newW + "px";
+
+      var opts = { duration: ROT_MOVE, easing: ROT_EASE, fill: "both" };
+      outgoing.animate([{ transform: "none", opacity: 1 },
+                        { transform: "translateY(0.45em)", opacity: 0 }], opts)
+        .onfinish = function () { outgoing.remove(); };
+      incoming.animate([{ transform: "translateY(-0.45em)", opacity: 0 },
+                        { transform: "none", opacity: 1 }], opts)
+        .onfinish = function () {
+          rotator.style.transition = "";
+          rotator.style.width = "";             // back to auto, so resizes stay right
+        };
+    };
+    // First swap a beat after the sentence has slid in.
+    setTimeout(function () { rotate(); setInterval(rotate, ROT_HOLD + ROT_MOVE); }, ROT_HOLD + 1200);
   }
 
 
@@ -239,18 +319,36 @@
   // footer's sky band, where the grey nav washes out. Flag it so the CSS can
   // recolour logo + nav (see .is-over-sky in style.css). Switches once the
   // sky reaches the middle of the header, i.e. the text line.
+  //
+  // And the header slips *behind* the footer: each item is clipped along the
+  // band's top edge, pixel for pixel, so as the footer rises it covers them —
+  // half-peeking mid-scroll, gone once the footer fills the screen. (The
+  // logo's place is then taken by the footer's frosted ↑ circle.) The clip
+  // box overhangs the items' own boxes so the nav dot, focus rings and the
+  // name's scattered dots aren't cut off while the footer is still below them.
   if (skyBand && siteHeader) {
     var skyTicking = false;
+    var tuckEls = siteHeader.querySelectorAll(".logo, .nav, .theme-toggle, .nav-toggle");
     var checkHeaderOverSky = function () {
       skyTicking = false;
       var mid = siteHeader.getBoundingClientRect().height / 2;
-      siteHeader.classList.toggle("is-over-sky", skyBand.getBoundingClientRect().top <= mid);
+      var skyTop = skyBand.getBoundingClientRect().top;
+      siteHeader.classList.toggle("is-over-sky", skyTop <= mid);
+      Array.prototype.forEach.call(tuckEls, function (el) {
+        var r = el.getBoundingClientRect();
+        el.style.clipPath = skyTop < r.bottom + 200
+          ? "inset(-200px -200px " + (r.bottom - skyTop) + "px -200px)"
+          : "";
+      });
     };
     var queueSkyCheck = function () {
       if (!skyTicking) { skyTicking = true; requestAnimationFrame(checkHeaderOverSky); }
     };
     window.addEventListener("scroll", queueSkyCheck, { passive: true });
     window.addEventListener("resize", queueSkyCheck);
+    // warp.js's smooth scroll announces each step, so the clip lands in the
+    // same frame as the scroll instead of one behind it.
+    window.addEventListener("glide", checkHeaderOverSky);
     checkHeaderOverSky();
   }
 
@@ -397,6 +495,9 @@
 
     skyBand.addEventListener("click", function (e) {
       if (e.target.closest("a")) return; // real links keep working
+      // Frogs are a Sky thing: not from the mode pills or the Ripples stage
+      // (js/footer-modes.js and the game files).
+      if (e.target.closest("button, .game-stage")) return;
 
       var startX = e.clientX - 21, startY = e.clientY - 19;
       var frog = document.createElement("div");

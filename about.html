@@ -9,7 +9,7 @@
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="https://use.typekit.net/wsb8ckc.css" />
-  <link rel="stylesheet" href="css/style.css?v=53" />
+  <link rel="stylesheet" href="css/style.css?v=91" />
 
   <script>
     document.documentElement.classList.add("js");
@@ -27,7 +27,7 @@
     <div class="site-header__inner">
       <a class="logo" href="index.html">Nick Capelle</a>
       <nav class="nav" id="primary-nav" aria-label="Primary">
-        <a href="play/">Play</a>
+        <a href="play/" hidden>Play</a><!-- PLAY archived: remove `hidden` to bring it back -->
         <a href="about.html" aria-current="page">About</a>
       </nav>
       <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Switch to dark theme">
@@ -45,56 +45,95 @@
     </div>
   </header>
 
-  <main id="main">
-    <section class="wrap about">
-      <img class="about-portrait" src="assets/portrait.svg" alt="Portrait of Nick Capelle" width="1000" height="1250" data-reveal />
-
-      <div class="about-text" data-reveal>
-        <h1>Hi, I&rsquo;m Nick.</h1>
-
-        <p>
-          Placeholder. I&rsquo;m a product designer focused on
-          &lt;the kind of problems you like&gt;. I care about
-          &lt;the thing you actually care about&gt; &mdash; clear systems,
-          honest interfaces, and the small decisions that add up.
-        </p>
-        <p>
-          Placeholder. Right now I&rsquo;m &lt;what you&rsquo;re doing&gt;.
-          Before that, &lt;where you were&gt;. I studied &lt;field&gt; at
-          &lt;school&gt;.
-        </p>
-        <p>
-          Placeholder. Away from the screen I&rsquo;m &lt;a sentence of
-          personality&gt; &mdash; posters, zines, and an unreasonable amount of
-          coffee.
-        </p>
-
-        <h2>Experience</h2>
-        <ul class="about-list">
-          <li><span>Product Designer &mdash; Company</span><span class="yr">2025&ndash;</span></li>
-          <li><span>Design Intern &mdash; Company</span><span class="yr">2024</span></li>
-          <li><span>Freelance &mdash; Various</span><span class="yr">2022&ndash;2024</span></li>
-        </ul>
-
-        <h2>Recognition</h2>
-        <ul class="about-list">
-          <li><span>Placeholder award or feature</span><span class="yr">2025</span></li>
-          <li><span>Placeholder award or feature</span><span class="yr">2024</span></li>
-        </ul>
-
-        <h2>Elsewhere</h2>
-        <p>
-          <a href="mailto:capelledesign@gmail.com">capelledesign@gmail.com</a><br />
-          <a href="https://www.linkedin.com/in/nicholas-capelle-328a95231" target="_blank" rel="noopener">LinkedIn</a> &nbsp;·&nbsp;
-          <a href="https://www.instagram.com/capelledesign" target="_blank" rel="noopener">Instagram</a> &nbsp;·&nbsp;
-          <a href="assets/resume.pdf" target="_blank" rel="noopener">R&eacute;sum&eacute;</a>
-        </p>
+  <main id="main" class="about-screen">
+    <!-- Photo stage (js/about.js): the window's width is split into one slot
+         per photo, in chronological order. Moving the cursor left to right
+         hard-cuts from photo to photo; each always appears at the same spot,
+         centred over its own slot (so the row reads left to right in time),
+         all at one height and top line. Phones: a swipeable strip.
+         Add/remove a photo = add/remove a <figure data-shot>; order = order. -->
+    <section class="about-stage" aria-label="Drawings and paintings, from childhood to now">
+      <div class="about-stage__shots">
+        <figure class="about-shot" data-shot hidden>
+          <img src="assets/about/01-i-am-awesome.jpg" alt="A childhood marker drawing titled I Am Awesome: a self-portrait thinking about Chewbacca, a castle, the book Holes and Halo 4" width="900" height="1600" loading="eager" decoding="async" draggable="false" />
+          <figcaption>I Am Awesome &mdash; marker</figcaption>
+        </figure>
+        <figure class="about-shot" data-shot hidden>
+          <img src="assets/about/04-dog-pastel.jpg" alt="Pastel drawing of a scruffy brown and black dog's face" width="848" height="1600" loading="eager" decoding="async" draggable="false" />
+          <figcaption>Dog &mdash; pastel</figcaption>
+        </figure>
+        <figure class="about-shot" data-shot hidden>
+          <img src="assets/about/05-trees-charcoal.jpg" alt="Charcoal drawing of bare trees casting long shadows across a field" width="1600" height="1206" loading="eager" decoding="async" draggable="false" />
+          <figcaption>Trees &mdash; charcoal</figcaption>
+        </figure>
+        <figure class="about-shot" data-shot hidden>
+          <img src="assets/about/06-branches-ink.jpg" alt="Ink drawing of crossed, bark-textured branches on white paper" width="1164" height="1600" loading="eager" decoding="async" draggable="false" />
+          <figcaption>Branches &mdash; ink</figcaption>
+        </figure>
+        <figure class="about-shot" data-shot hidden>
+          <img src="assets/about/02-stipple-self-portrait.jpg" alt="Stippled ink drawing of a figure in a shirt, arms raised to the face, wearing a digital watch" width="1600" height="899" loading="eager" decoding="async" draggable="false" />
+          <figcaption>Stipple study &mdash; ink</figcaption>
+        </figure>
+        <figure class="about-shot" data-shot hidden>
+          <img src="assets/about/03-gallery-dot-painting.jpg" alt="Nick standing in a gallery, pointing at his painting of a grid of colourful dotted circles" width="1200" height="1600" loading="eager" decoding="async" draggable="false" />
+          <figcaption>Dot painting &mdash; acrylic, on show</figcaption>
+        </figure>
       </div>
+      <div class="wrap about-stage__text">
+        <h1 class="sr-only">About Nick Capelle</h1>
+        <p class="about-stage__meta"><span class="about-count" aria-hidden="true"></span></p>
+      </div>
+    </section>
+
+    <!-- The story: three numbered columns along the bottom of the screen,
+         typeset like a Cargo index — one face, one size, hierarchy by
+         position only. No rules: number + title, then the paragraph. -->
+    <section class="wrap about-story" aria-label="About">
+      <article class="story-col" data-reveal>
+        <h2 class="story-title"><span class="story-num">01</span>Beginnings</h2>
+        <div class="story-body">
+          <div class="story-text">
+            <p>My love for design began with drawing and illustration. As a kid, I would constantly draw Spider-Man, Tom and Jerry, Master Chief, or my own name. Over time, I explored more mediums such as painting, ink, graphite, and charcoal while paying more attention to the art world around me. To this day, visiting art museums is one of my favorite things to do!</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="story-col" data-reveal>
+        <h2 class="story-title"><span class="story-num">02</span>Noticing</h2>
+        <div class="story-body">
+          <div class="story-text">
+            <p>Throughout high school, I grew a fascination with computer science and the intersection of technology and design. I started delving into the world of product design and began noticing all the subpar UX around me, whether that was autoplay on Netflix or YouTube, a useful button removed from an interface, or even an unclear door handle. From then on, I knew I wanted to help design a more intuitive, user-friendly world.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="story-col" data-reveal>
+        <h2 class="story-title"><span class="story-num">03</span>Process</h2>
+        <div class="story-body">
+          <div class="story-text">
+            <p>My practice is driven by curiosity and play. I like to break things down to their basic elements, often through modular systems, math, and science, and rebuild them toward something unexpected. I&rsquo;m drawn to opposites: the tactile and the digital, the natural and the systematic, the everyday and the surprising. Much of my work asks you to take part, inviting small, low-pressure moments of curiosity, presence, and play.</p>
+          </div>
+        </div>
+      </article>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="sky-band">
+      <!-- Footer modes (js/footer-modes.js): pills switch the footer between the
+           pixel sky and the games: Ripples (click to flood a new colour) and
+           Chladni (click for a new cymatics figure) and Scatter (click for a new word). -->
+      <div class="footer-modes" role="group" aria-label="Footer style">
+        <a class="mode-pill mode-round mode-home" href="index.html" aria-label="Back to the homepage"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13.5V2.5M3.5 7 8 2.5 12.5 7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <button type="button" class="mode-pill" data-mode="sky" aria-pressed="false" hidden>Sky</button><!-- Sky archived: remove `hidden` (and add "sky" back to MODES in footer-modes.js) to bring it back -->
+        <button type="button" class="mode-pill" data-mode="ripples" aria-pressed="true">Ripples</button>
+        <button type="button" class="mode-pill" data-mode="chladni" aria-pressed="false">Chladni</button>
+        <button type="button" class="mode-pill" data-mode="scatter" aria-pressed="false">Scatter</button>
+        <button type="button" class="mode-pill mode-round mode-shuffle" aria-label="Shuffle footer style"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 4h3.5c2 0 3 1 4 3.5S10.5 12 12.5 12H15M12.5 9.5 15 12l-2.5 2.5M1 12h3.5c1 0 1.8-.3 2.4-1M9.1 5c.6-.7 1.4-1 2.4-1H15M12.5 1.5 15 4l-2.5 2.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+      <div class="game-stage ripple-stage" aria-hidden="true"><span class="ripple-circle"></span></div>
+      <div class="game-stage chladni-stage" aria-hidden="true"><canvas></canvas></div>
+      <div class="game-stage scatter-stage" aria-hidden="true"><svg></svg></div>
       <div class="sky-clouds" aria-hidden="true">
         <svg class="cloud" viewBox="0 0 16 4" style="left:5%;  top:15%; width:97px; height:24.25px;">
           <rect x="3" y="0" width="3" height="1"/><rect x="9" y="0" width="3" height="1"/>
@@ -274,17 +313,25 @@
           <span class="footer-clock">Boone, NC Local time &mdash; <time id="local-time">--:--:--</time></span>
           <span class="footer-weather" id="footer-weather"></span>
         </span>
-        <nav class="footer-credit" aria-label="Contact">
-          <a href="mailto:capelledesign@gmail.com" data-cursor="Email">Email</a>
-          <a href="https://www.linkedin.com/in/nicholas-capelle-328a95231" target="_blank" rel="noopener" data-cursor="Open">LinkedIn</a>
-          <a href="https://www.instagram.com/capelledesign" target="_blank" rel="noopener" data-cursor="Open">Instagram</a>
-        </nav>
+        <div class="footer-side">
+          <span class="footer-made">Designed and built by Nick Capelle</span>
+          <nav class="footer-credit" aria-label="Contact">
+            <a href="mailto:capelledesign@gmail.com" data-cursor="Email">Email</a>
+            <a href="https://www.linkedin.com/in/nicholas-capelle-328a95231" target="_blank" rel="noopener" data-cursor="Open">LinkedIn</a>
+            <a href="https://www.instagram.com/capelledesign" target="_blank" rel="noopener" data-cursor="Open">Instagram</a>
+          </nav>
+        </div>
       </div>
     </div>
   </footer>
 
-  <script src="js/site.js?v=21" defer></script>
-  <script src="js/nav-dot.js?v=6" defer></script>
-  <script src="js/hue.js?v=2" defer></script>
+  <script src="js/site.js?v=35" defer></script>
+  <script src="js/about.js?v=3" defer></script>
+  <script src="js/nav-dot.js?v=7" defer></script>
+  <script src="js/hue.js?v=15" defer></script>
+  <script src="js/logo-dots.js?v=9" defer></script>
+  <script src="js/footer-modes.js?v=8" defer></script>
+  <script src="js/chladni.js?v=5" defer></script>
+  <script src="js/scatter.js?v=11" defer></script>
 </body>
 </html>

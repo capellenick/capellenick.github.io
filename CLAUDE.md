@@ -24,7 +24,7 @@ fast-orientation supplement.
 - **Header/footer are duplicated**, not shared, across every page — the
   tradeoff of no build step. `partials/header.html` and
   `partials/footer.html` are the canonical source: edit there first, then
-  propagate to index.html, about.html, playground.html, project-1..4.html,
+  propagate to index.html, about.html, playground.html, project-1..6.html,
   and play/index.html (the synth / Play page: same header, but its links use
   `../`, PLAY carries aria-current, and it has its own small inline copy of
   the theme-switch JS because it doesn't load site.js; in light mode only the
@@ -32,8 +32,8 @@ fast-orientation supplement.
   full footer). A short Python find/replace script propagating the exact
   block to all full-footer pages at once is the fastest way — see recent
   `git log` messages for the pattern used repeatedly.
-- **Fonts:** Neue Haas Grotesk Display Pro 55 Roman, all caps (logo + nav,
-  `--font-label`) and 65 Medium (home hero/bio line, `--font-hero`) + Balto
+- **Fonts:** Neue Haas Grotesk Display Pro 55 Roman (nav, in sentence
+  case; `--font-label`) and 65 Medium (home hero/bio line, `--font-hero`) + Balto
   (everything else), all from the Adobe Fonts/Typekit kit linked in every
   `<head>`.
 

@@ -13,7 +13,12 @@ Any of these work. The site needs to be served over `http://` (not opened as a
 ```bash
 # from inside this folder
 python3 serve.py          # no-cache server; plain refresh shows latest
+python3 serve.py --lan    # also reachable from a phone on the same Wi-Fi
 ```
+
+By default only this computer can open it, so it's fine to leave running on
+shared Wi-Fi. `--lan` opens the whole folder (.git included) to the network —
+use it briefly, then stop it.
 
 Then open <http://localhost:4599>. (Node users: `npx serve` also works.)
 
@@ -31,14 +36,47 @@ refresh (⌘⇧R) forces a fresh load either way.
 
 ```
 index.html          Home — 2x4.org-style hero + 2-col work grid (no filters)
-about.html          About — portrait, bio, experience
+about.html          About — one screen: photo stage + four numbered story columns
 playground.html     Playground — grid of experiments (Phase-2 mind-map goes here)
-project-1..4.html   Case studies — split-screen: images left, copy right.
-                    1 GD50 posters · 2 True Root · 3 Blackbox · 4 Type Guide
+rally.html          Rally product case study (custom long-scroll page, its own
+                    css/rally.css + js/rally.js): personal origin story, research,
+                    scope narrowing, "My process" row (sketchbook spreads aligned +
+                    colour-matched, whiteboard, site map, Figma drafts; click to
+                    enlarge in a lightbox), "How Rally works" (3D phone, steps change
+                    one whole step at a time, click a step to jump to it), design
+                    decisions row (cut-out UI on blurred court photos), business
+                    model + five forces, verdict. Links to the live prototype at
+                    capellenick.github.io/rally (deployed from ~/Sites/rally with
+                    its deploy.sh). The 3D phone is js/rally-3d.js (three.js from
+                    jsDelivr via an importmap; flat SVG phone is the fallback).
+                    Model: MajdyModels' iPhone 16 Pro Max, CC BY 4.0, recoloured
+                    to black titanium (assets/projects/rally/iphone/, credited at
+                    the bottom of rally.html)
+project-1..6.html   Case studies — split-screen: copy left, images right.
+                    1 GD50 posters · 2 True Root · 3 Blackbox · 4 Type Guide ·
+                    5 Mantodea Institute · 6 Merlefest '25 (next links loop 1→6→1)
 css/style.css       All styles. Design tokens are at the very top.
 js/site.js          Theme toggle, mobile nav, cursor, reveals, the footer sky
                     (gradient/clouds/stars/birds/plane/sun-moon), the frog
                     easter egg, and the Boone weather fetch
+js/hue.js           12s colour cycle for the header text + the native dot cursor
+js/nav-dot.js       Dot under the current nav link; swoops between PLAY/ABOUT
+js/footer-modes.js  Footer pills (Cotton-style): Sky / Ripples / Chladni /
+                    shuffle; remembered across pages. Ripples + Chladni are
+                    "games"; each tells it whether footer text goes dark/white
+js/chladni.js       Chladni footer game: play/'s cymatics plate + sand, no
+                    sound — clicks feed the plate the partials a key would
+                    play (knobs fixed: defaults, ring fully up)
+js/logo-dots.js     The header name as dots (traced from Nick's dotted alphabet);
+                    they scatter with the cursor's distance from the name
+js/scatter.js       Scatter footer game: glossary words in the dotted alphabet
+                    (traced a-z in the file), scattering with the cursor;
+                    on desktop, typing replaces the word live
+js/about.js         About photo stage: cursor x picks which photo shows (hard cut,
+                    each at its own fixed spot); phones get a swipe strip
+js/warp.js          Homepage only: WebGL scroll-warp on the project images
+                    (raggededge.com's bottom-edge flare) + smoothed wheel
+                    scrolling so it stays steady; desktop only
 assets/projects/    Real project images, one folder per project (web JPEGs,
                     2000px max). Copy came from the old capellenick.com site.
 assets/             Favicon + remaining placeholder SVGs (About, Playground).
@@ -234,8 +272,13 @@ Structure is already in place for:
   `.hero-statement` section (e.g. press Space to swap the sentence for a
   canvas), or its own area on Playground.
 - **Pan/zoom mind-map** on the Playground page (replace `.playground-grid`).
-- **Scroll-warp imagery** (WebGL) on project heroes.
+- **Scroll-warp on project-page images** — js/warp.js does the homepage
+  cards; the same shader could cover the project pages' image column.
 - **Spinning type wheel** in a page corner.
+- **LED subpixel game** (requested 2026-11-17, after Rally): a footer game
+  based on the "Strength in numbers" section of
+  apple.com/macbook-pro/proled-xdr-display/ — a field of tiny red/green/blue
+  subpixel dots behind the type that lights up around the cursor.
 - **Weather-reactive sky** — tie the footer's colors/cloud density to the
   Boone weather fetch that already runs (e.g. more/darker clouds when
   overcast, a rain effect). Offered, not yet requested.

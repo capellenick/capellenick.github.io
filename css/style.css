@@ -186,16 +186,6 @@ main { flex: 1 0 auto; }
    when site.js has set body.has-cursor: fine pointer, motion allowed).
    --------------------------------------------------------------------------- */
 
-/* --cursor-hue (0-360) is the shared colour-wheel position for the cursor
-   and the header. js/hue.js sets it on .site-header (it inherits down to the
-   logo, links and nav dot) — a CSS animation of it restyled those every
-   frame. OKLCH keeps every hue at the same perceived brightness. */
-@property --cursor-hue {
-  syntax: "<number>";
-  inherits: true;
-  initial-value: 0;
-}
-
 body.has-cursor,
 body.has-cursor a,
 body.has-cursor button,
@@ -220,7 +210,12 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   height: var(--header-h);
   display: flex;
   align-items: center;
+  /* The bar itself is see-through to clicks — it lies over the footer's pill
+     row once the header has tucked behind the footer — so only its real
+     controls catch the pointer (and those are clipped away when tucked). */
+  pointer-events: none;
 }
+.site-header :is(a, button, .nav) { pointer-events: auto; }
 
 .site-header__inner {
   width: 100%;
@@ -244,14 +239,31 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   padding-block: 0.25rem;
 }
 
+/* The name as dots (js/logo-dots.js). Scattered dots spill past the box and
+   ignore the pointer, so the link stays clickable and nothing else is blocked.
+   The plain text is hidden until the script swaps it in, so it doesn't flash;
+   if the script never runs, it appears after a second instead of going missing. */
+.logo-dots {
+  display: block;
+  width: 140px;
+  height: auto;
+  overflow: visible;
+  pointer-events: none;
+  fill: var(--hue-color);
+}
+.logo:has(.logo-dots) { background: none; padding-block: 0; }
+.js .logo:not(:has(.logo-dots)) { animation: logo-fallback 0s 1s both; }
+@keyframes logo-fallback { from { visibility: hidden; } to { visibility: visible; } }
+
 .nav {
   display: flex;
   gap: var(--nav-gap);
   font-family: var(--font-label);
-  font-size: 0.95rem;
-  font-weight: 400;
+  /* Caps a touch shorter than the dotted name's capitals (the N is ~20.7px;
+     this face's cap height is 0.73em). The mobile menu sets its own size. */
+  font-size: 1.6rem;
+  font-weight: 400;        /* Neue Haas Grotesk Display Pro 55 Roman */
   letter-spacing: 0;
-  text-transform: uppercase;
 }
 .nav a {
   position: relative;
@@ -261,12 +273,10 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
 }
 .nav a:hover,
 .nav a[aria-current="page"] { color: var(--ink); }
-/* Logo + nav cycle through the colour wheel in step with the cursor (same
-   --cursor-hue, set by js/hue.js on the header and the cursor). Two
-   lightness sets keep every hue above WCAG AA 4.5:1 for text, computed
-   across all 360° against the actual page colours: light theme L 0.51 (worst
-   4.8:1, greens), dark theme L 0.78 (worst 8.0:1). All links share the
-   colour; the current page is marked by its underline.
+/* Logo + nav cycle through the Play page's cymatics palette in step with
+   the cursor: js/hue.js sets --cycle-text on the header, already adjusted to
+   clear WCAG AA 4.5:1 against this theme's page colour. All links share the
+   colour; the current page is marked by the nav dot.
 
    The colour is painted as a background clipped to the letters, not as
    `color`: Chrome renders VISITED links' colour from a separate privacy
@@ -278,9 +288,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
 .nav a,
 .nav a:hover,
 .nav a[aria-current="page"] {
-  --hue-text-l: 0.51;
-  --hue-text-c: 0.17;
-  --hue-color: oklch(var(--hue-text-l) var(--hue-text-c) var(--cursor-hue));
+  --hue-color: var(--cycle-text, var(--ink));
   color: var(--hue-color);
   background-image: linear-gradient(var(--hue-color), var(--hue-color));
   -webkit-background-clip: text;
@@ -288,19 +296,13 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   -webkit-text-fill-color: transparent;
   transition: none;
 }
-:root[data-theme="dark"] :is(.logo, .nav a) {
-  --hue-text-l: 0.78;
-  --hue-text-c: 0.15;
-}
 
 /* Current-page marker: a cursor-sized dot under the link (js/nav-dot.js
    adds it, positions it and arcs it between PLAY and ABOUT on page change).
-   Same colour cycle and contrast sets as the nav text. */
+   Same colour cycle as the nav text. */
 .nav { position: relative; }
 .nav-dot {
-  --hue-text-l: 0.51;
-  --hue-text-c: 0.17;
-  --hue-color: oklch(var(--hue-text-l) var(--hue-text-c) var(--cursor-hue));
+  --hue-color: var(--cycle-text, var(--ink));
   position: absolute;
   top: 0; left: 0;
   width: 11px; height: 11px;   /* = the cursor */
@@ -310,10 +312,6 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   opacity: 0;
 }
 .nav-dot.is-on { opacity: 1; }
-:root[data-theme="dark"] .nav-dot {
-  --hue-text-l: 0.78;
-  --hue-text-c: 0.15;
-}
 
 /* Over the footer sky (site.js adds .is-over-sky while the sky band is under
    the header) the colours can disappear into the blue. Same rule as the
@@ -365,6 +363,14 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   background: color-mix(in srgb, var(--ink) 12%, var(--paper));
   transition: transform 0.35s var(--ease);
 }
+/* Switching theme cross-fades the whole page as one (site.js, View Transitions;
+   browsers without it just switch). The thumb gets its own layer so it slides
+   instead of fading, and the page underneath stays clickable throughout. */
+.theme-toggle__thumb { view-transition-name: theme-thumb; }
+::view-transition { pointer-events: none; }
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: 0.5s; animation-timing-function: ease; }
+::view-transition-group(theme-thumb) { animation-duration: 0.5s; animation-timing-function: var(--ease); }
 :root[data-theme="dark"] .theme-toggle__thumb {
   transform: translateX(calc(var(--tt-size) + var(--tt-gap)));
 }
@@ -447,20 +453,40 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
 .hero-word { display: inline-block; }           /* inline boxes can't be transformed */
 .hero-statement p.is-split .hero-word { opacity: 0; }
 .hero-statement p.is-playing .hero-word { animation: hero-in 0.75s var(--ease) both; }
+
+/* Rotating word ("…intersection of ___ and design.", site.js part 1b). The
+   slot is relative so the outgoing word can sit absolutely on top of the
+   incoming one; colour cycles with the header (--cycle-text from hue.js,
+   already contrast-checked for this theme). */
+.hero-rotator {
+  position: relative;
+  white-space: nowrap;
+  color: var(--cycle-text, inherit);
+}
+.hero-rotator__word { display: inline-block; }
+.hero-break { display: none; }   /* phones/tablets only — see the small-screen block */
+.hero-rotator__word.is-out { position: absolute; left: 0; top: 0; }
 .hero-statement p {
   font-family: var(--font-hero);
   font-weight: 500;
   line-height: 1.04;
   letter-spacing: -0.01em;
-  /* Desktop: at most five lines, ending at the right edge of the PLAY link
-     (the first nav item). The room right of PLAY is one nav gap, ABOUT
-     (3.06rem in Neue Haas caps at 0.95rem; 3.1rem with slack), the header gap
-     (1.25rem) and the 62px icon toggle. In 65 Medium the sentence needs a box
-     13.6em wide to fit in five lines, so the font is sized to (room ÷ 13.8)
-     and every width wraps the same. */
+  /* Always three lines, ending at the right edge of the PLAY link (the first
+     nav item):
+       I'm Nick Capelle, a multidisciplinary
+       graphic design student exploring the
+       intersection of ___ and design.
+     The room right of PLAY is one nav gap, ABOUT (3.06rem in Neue Haas caps
+     at 0.95rem; 3.1rem with slack), the header gap (1.25rem) and the 62px
+     icon toggle. In 65 Medium the sentence needs a box 15.44em wide for the
+     longest rotating word ("technology") to stay on three lines, so the font
+     is sized to (room ÷ 15.8) and the box is capped at 15.8em — every width,
+     and every word, breaks in the same two places. Adding a longer word to
+     data-words in index.html may need a bigger divisor. */
   --hero-reserve: calc(3.1rem + var(--nav-gap) + 1.25rem + 62px);
   padding-right: var(--hero-reserve);
-  font-size: clamp(2.2rem, calc((100cqi - var(--hero-reserve)) / 13.8), 5.2rem);
+  font-size: clamp(1.25rem, calc((100cqi - var(--hero-reserve)) / 15.8), 5.2rem);
+  max-width: calc(15.8em + var(--hero-reserve));
 }
 /* No special link styling here — it falls back to the site-wide default
    (no underline at rest, underline on hover), same as any other inline link. */
@@ -485,6 +511,12 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   row-gap: 48px;      /* roomier than their 34px so each caption clearly belongs to the image above it */
 }
 .work-card[hidden] { display: none; }
+/* Per-card framing: object-position works for the plain <img> and for the
+   WebGL warp (js/warp.js reads it). Merlefest's poster sits low in its
+   portrait photo, so frame a little lower to centre it in the 3:2 card. */
+.work-card a[href="project-6.html"] .card-media img { object-position: 50% 60%; }
+/* Archived for now (PLAY nav link, Sky footer pill): kept in the markup, hidden. */
+.nav a[hidden], .mode-pill[hidden] { display: none !important; }
 .work-card a { display: block; }
 
 .card-media {
@@ -539,6 +571,24 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
 @media (max-width: 700px) {
   .work-grid { grid-template-columns: 1fr; row-gap: 32px; }
 }
+
+/* Scroll warp (js/warp.js, desktop only): a WebGL canvas redraws each image
+   over its frame, bending it as it enters from the bottom of the window. The
+   canvas overhangs the frame sideways for the flare, so the section clips
+   horizontally (clip, not hidden — no scroll container, sticky etc. intact).
+   Once a canvas has drawn, the real <img> is hidden but stays for layout,
+   alt text and as the fallback. */
+.work { overflow-x: clip; }
+.work-card a { position: relative; }
+.card-warp {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.card-media.is-warped { background: none; }
+.card-media.is-warped img,
+.card-media.is-warped video { opacity: 0; }
 
 
 /* ---------------------------------------------------------------------------
@@ -688,61 +738,136 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
    8. ABOUT PAGE
    --------------------------------------------------------------------------- */
 
-.about {
-  padding-top: clamp(3rem, 9vw, 6rem);
-  padding-bottom: var(--section-gap);
+/* One screen, no scroll (desktop): the photo stage fills whatever the four
+   story columns along the bottom leave. Phones scroll (see below). */
+.about-screen {
+  height: calc(100svh - var(--header-h));
+  min-height: 560px;
   display: grid;
-  gap: clamp(2rem, 6vw, 4.5rem);
-}
-.about-portrait {
-  width: 100%;
-  border-radius: var(--radius-img);
-  background: var(--media-bg);
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-}
-.about-text { max-width: 58ch; }
-.about-text h1 {
-  font-size: clamp(2rem, 1.4rem + 3vw, 3.4rem);
-  font-weight: 500;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
-  margin-bottom: 1.25rem;
-}
-.about-text p + p { margin-top: 1.15rem; }
-.about-text h2 {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-50);
-  margin-top: 3rem;
-  margin-bottom: 1rem;
-}
-.about-text a {
-  text-decoration: underline;
-  text-underline-offset: 0.16em;
-}
-.about-list { list-style: none; padding: 0; border-top: 1px solid var(--hairline); }
-.about-list li {
-  display: flex;
-  justify-content: space-between;
-  gap: 1.5rem;
-  padding-block: 0.9rem;
-  border-bottom: 1px solid var(--hairline);
-}
-.about-list .yr {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--ink-30);
-  white-space: nowrap;
+  grid-template-rows: minmax(0, 1fr) auto;
 }
 
-@media (min-width: 860px) {
-  .about { grid-template-columns: 320px 1fr; align-items: start; }
-  .about-portrait { position: sticky; top: calc(var(--header-h) + 2rem); }
+/* Photo stage (js/about.js): the photos stack in place and only one shows —
+   the cursor's left-to-right position picks which, a hard cut each time.
+   All one height and top line; js/about.js sets each one's left so it sits
+   centred over its slot (cq units: the stage is a size container). */
+.about-stage {
+  position: relative;
+  container-type: size;
+  overflow: hidden;
 }
+.about-stage__shots { position: absolute; inset: 0; }
+.about-shot {
+  position: absolute;
+  left: 0;          /* js/about.js centres each over its slot */
+  top: 5%;
+  margin: 0;
+}
+.about-shot img {
+  display: block;
+  height: 76cqh;
+  width: auto;
+  max-width: 40cqw;
+  object-fit: contain;
+  object-position: left top;
+  border-radius: 4px;
+  user-select: none;
+}
+/* Hidden photos stay laid out (just invisible), so each is already decoded
+   and painted-ready: the cut is instant even the first time it shows. */
+.about-shot[hidden] { display: block; visibility: hidden; }
+.about-shot figcaption { display: none; }   /* shown in the stage meta line instead */
+.about-stage__text {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding-bottom: 0.9rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  pointer-events: none;
+}
+.about-hello {
+  font-family: var(--font-hero);
+  font-weight: 500;
+  font-size: clamp(1.6rem, 0.9rem + 1.5vw, 2.4rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.about-stage__meta {
+  font-family: var(--font-label);
+  font-size: 0.95rem;
+  color: var(--ink-50);
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.about-count { color: var(--ink); }
+.about-stage__meta { margin-left: auto; }   /* right-aligned on its own */
+
+/* The story: three columns typeset like a Cargo index (see about.html) —
+   Neue Haas Text, one size, regular, tight leading, all ink, no rules.
+   Number + title on one line, then the paragraph. */
+.about-story {
+  --story-size: clamp(0.8rem, 0.5rem + 0.45vw, 0.94rem);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  padding-bottom: clamp(1rem, 2.4vh, 1.75rem);
+  font-family: var(--font-text);
+  font-size: var(--story-size);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+.story-col { min-width: 0; }
+.story-title { font: inherit; margin: 0 0 1.25em; }   /* one blank line, like the reference */
+.story-num { display: inline-block; min-width: 2.5em; }
+.story-text p { margin: 0; }
+.story-text p + p { margin-top: 1.25em; }
+.story-text a { text-decoration: underline; text-underline-offset: 0.16em; }
+.about-stage__meta { font-family: var(--font-text); font-size: 0.94rem; line-height: 1.25; }
+
+/* Phones / touch / short windows: not enough room for one screen — the page
+   scrolls, the photos become a swipeable strip, the columns stack. */
+@media (hover: none), (max-width: 760px) {
+  .about-screen { height: auto; min-height: 0; display: block; }
+  .about-stage { container-type: normal; overflow: visible; display: flex; flex-direction: column; }
+  .about-stage__text { position: static; order: -1; padding-top: clamp(2rem, 10vw, 3.5rem); padding-bottom: 1.25rem; }
+  .about-stage__meta { display: none; }
+  .about-stage__shots {
+    position: static;
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-inline: var(--gutter);
+    padding-bottom: 0.5rem;
+    scrollbar-width: none;
+  }
+  .about-stage__shots::-webkit-scrollbar { display: none; }
+  .about-shot, .about-shot[hidden] {
+    display: block;
+    visibility: visible;
+    position: static;
+    left: auto !important;
+    flex: none;
+    scroll-snap-align: start;
+    scroll-margin-left: var(--gutter);
+  }
+  .about-shot img { height: 52svh; max-width: 82vw; object-fit: cover; }
+  .about-shot figcaption {
+    display: block;
+    margin-top: 0.5rem;
+    font-family: var(--font-label);
+    font-size: 0.85rem;
+    color: var(--ink-50);
+  }
+  .about-story { grid-template-columns: 1fr; row-gap: 2rem; padding-top: 2.5rem; padding-bottom: var(--section-gap); --story-size: 1rem; }
+}
+
 
 
 /* ---------------------------------------------------------------------------
@@ -799,13 +924,12 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
    clouds, pixel stars (night only), pixel birds + a plane (day only), and
    a pixel sun/moon — all driven by the visitor's actual time of day (see
    js/site.js part 8). The utility row sits inside it, recoloring
-   light/dark to stay legible. The line above the footer (.site-footer's
-   top border) is the fixed boundary — the sky never goes above it.
+   light/dark to stay legible. No dividing line: the page runs straight
+   into the band.
    Click anywhere in the sky that isn't a link to drop a frog (part 9).
    --------------------------------------------------------------------------- */
 
 .site-footer {
-  border-top: 1px solid var(--hairline);   /* the line at the top of the footer — stays */
   margin-top: auto;
 }
 
@@ -921,15 +1045,16 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
 
 .footer-utility {
   position: relative;
-  z-index: 1;
+  z-index: 3;   /* above the game stages */
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.6rem 1.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
+  font-family: var(--font-label);   /* same face as the header logo + nav */
+  font-weight: 400;
+  font-size: 0.95rem;
+  letter-spacing: 0;
   text-transform: uppercase;
   color: rgba(20, 22, 30, 0.78);
   transition: color 0.6s ease;
@@ -939,6 +1064,132 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
 .footer-meta { display: flex; flex-direction: column; gap: 0.4em; }
 .footer-clock { font-variant-numeric: tabular-nums; }
 .footer-weather:empty { display: none; }   /* no gap while the fetch hasn't landed yet */
+/* Footer modes (js/footer-modes.js) — Cotton-style pills along the top of
+   the footer, level with the header line: once the footer fills the screen
+   the header has tucked behind it, and the row (led by the ↑ home circle)
+   takes its place. Unselected pills are frosted glass — whatever
+   is behind them is blurred and washed toward white, so the label stays
+   readable over busy patterns; the selected one goes solid white. */
+.footer-modes {
+  position: absolute;
+  z-index: 3;
+  top: calc((var(--header-h) - 30px) / 2);   /* level with the header line it replaces */
+  left: var(--gutter);
+  right: var(--gutter);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.mode-pill {
+  height: 30px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.42);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  backdrop-filter: blur(10px) saturate(1.4);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);   /* the glass's edge */
+  color: rgb(20, 22, 30);
+  font-family: var(--font-label);
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease;
+}
+.mode-pill:hover { background: rgba(255, 255, 255, 0.62); }
+.mode-pill[aria-pressed="true"] { background: #fff; }
+.mode-pill:focus-visible { outline: 2px solid rgb(20, 22, 30); outline-offset: 2px; }
+.mode-round { width: 30px; padding: 0; display: grid; place-items: center; }
+.mode-round svg { width: 15px; height: 15px; }
+/* ↑ circle: takes the logo's place once the header has tucked behind the
+   footer (site.js part 8). Home page: scrolls to the top; elsewhere: home. */
+.mode-home { margin-right: 4px; }
+
+/* Games (js/footer-modes.js + one file per game): each fills the whole band
+   as a .game-stage. Switching games, the new one fades in ON TOP of the old,
+   which stays fully opaque underneath until it's covered and then drops out —
+   a crossfade of two half-transparent layers let the sky show through.
+   No fade on page load (.modes-live is added a frame after the first mode is
+   set), so the game doesn't rise out of the sky either. */
+.game-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0s linear 0.4s, visibility 0s linear 0.4s;
+}
+.sky-band[data-footer-mode="ripples"] .ripple-stage,
+.sky-band[data-footer-mode="chladni"] .chladni-stage,
+.sky-band[data-footer-mode="scatter"] .scatter-stage {
+  z-index: 2;
+  opacity: 1;
+  visibility: visible;
+  transition: none;
+}
+.sky-band.modes-live[data-footer-mode="ripples"] .ripple-stage,
+.sky-band.modes-live[data-footer-mode="chladni"] .chladni-stage,
+.sky-band.modes-live[data-footer-mode="scatter"] .scatter-stage {
+  transition: opacity 0.4s ease;
+}
+
+/* Ripples: a flat field (--rip-bg) with a medium circle (--rip-fg) in the
+   middle; clicks spawn .ripple floods (scaled 0 -> 1). */
+.ripple-stage { background: var(--rip-bg); }
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  pointer-events: none;
+}
+.ripple-circle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(120px, 14vw, 200px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  translate: -50% -50%;
+  background: var(--rip-fg);
+  transition: background-color 0.5s ease;
+  pointer-events: none;
+}
+
+/* Chladni (js/chladni.js): the Play page's LED cymatics panel, stretched to
+   fill the band. The canvas draws its own LED grid. */
+.chladni-stage { background: #1a1a1c; }
+.chladni-stage canvas { display: block; width: 100%; height: 100%; }
+
+/* Scatter (js/scatter.js): a large dotted word on the page colour, drawn in
+   the shared colour cycle. White frosted pills would vanish against the light
+   theme's page, so there they get an edge, and the selected one goes solid ink. */
+.scatter-stage {
+  background: var(--paper);
+  touch-action: manipulation;              /* a quick second tap changes the word again, not the zoom */
+  -webkit-tap-highlight-color: transparent;
+}
+.scatter-stage svg { display: block; width: 100%; height: 100%; fill: var(--cycle-text, var(--ink)); }
+:root:not([data-theme="dark"]) .sky-band[data-footer-mode="scatter"] .mode-pill { box-shadow: inset 0 0 0 1px rgba(20, 22, 30, 0.22); }
+:root:not([data-theme="dark"]) .sky-band[data-footer-mode="scatter"] .mode-pill[aria-pressed="true"] { background: rgb(20, 22, 30); color: #fff; }
+
+/* Text over a game: dark or white, whichever reads better on what the game is
+   showing (footer-modes.js sets data-game-ink on the band and .is-game /
+   .is-game-light on the header), in either theme, whatever the time-of-day
+   sky says. */
+.sky-band:not([data-footer-mode="sky"]) .footer-utility { color: rgba(20, 22, 30, 0.78); }
+.sky-band:not([data-footer-mode="sky"])[data-game-ink="light"] .footer-utility { color: rgba(255, 255, 255, 0.9); }
+:root .site-header.is-over-sky.is-game {   /* :root outranks the dark-theme over-sky rule */
+  --sky-ink: rgb(20, 22, 30);
+  --sky-ink-dim: rgba(20, 22, 30, 0.72);
+}
+:root .site-header.is-over-sky.is-game.is-game-light {
+  --sky-ink: #fff;
+  --sky-ink-dim: rgba(255, 255, 255, 0.78);
+}
+
+.footer-side { display: flex; flex-direction: column; align-items: flex-end; gap: 0.4em; }
 .footer-credit { display: flex; gap: 1.15rem; }
 .footer-utility a { position: relative; z-index: 1; cursor: pointer; }
 .footer-utility a:hover { opacity: 0.7; }
@@ -1030,31 +1281,65 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   .nav-toggle { display: block; order: 3; }
   .theme-toggle { order: 2; }
 
+  /* The menu: a full-screen panel of large links, not a dropdown. The name and
+     buttons stay on top of it, and the page behind doesn't scroll. */
   .nav {
     order: 4;
-    position: absolute;
-    left: 0; right: 0;
-    top: var(--header-h);
+    position: fixed;
+    inset: 0;
+    z-index: 1;
     flex-direction: column;
-    gap: 0;
+    gap: 0.35rem;
     background: var(--paper);
-    border-bottom: 1px solid var(--hairline-2);
-    padding: 0.25rem var(--gutter) 1rem;
-    font-size: 0.95rem;
+    padding: calc(var(--header-h) + 1.5rem) var(--gutter) var(--gutter);
+    font-size: clamp(2.75rem, 12vw, 4.5rem);
+    letter-spacing: -0.02em;
 
-    max-height: 0;
-    overflow: hidden;
     opacity: 0;
-    pointer-events: none;
-    transition: max-height 0.3s var(--ease), opacity 0.2s var(--ease);
+    visibility: hidden;
+    transition: opacity 0.25s var(--ease), visibility 0s linear 0.25s;
   }
-  .nav.is-open { max-height: 60vh; opacity: 1; pointer-events: auto; }
-  .nav a { padding-block: 0.9rem; border-bottom: 1px solid var(--hairline); color: var(--ink); }
-  .nav a:last-child { border-bottom: 0; }
+  .nav.is-open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.25s var(--ease);
+    clip-path: none !important;   /* the footer tuck only applies to the closed header */
+  }
+  .nav a { padding-block: 0.1em; line-height: 1.05; }
+  .nav a[aria-current="page"]::after {   /* stands in for the nav dot */
+    content: "";
+    display: inline-block;
+    width: 0.22em;
+    height: 0.22em;
+    margin-left: 0.28em;
+    border-radius: 50%;
+    background: var(--hue-color);
+    vertical-align: 0.04em;
+  }
+  html:has(.nav.is-open),
+  body:has(.nav.is-open) { overflow: hidden; }
+  .logo, .theme-toggle, .nav-toggle { position: relative; z-index: 2; }
+  /* On the panel, always the page colours, even if the footer is under the header. */
+  .site-header:has(.nav.is-open) :is(.logo, .nav a) { --hue-color: var(--cycle-text, var(--ink)); }
+
+  /* Menu button: just the icon, with a comfortable tap area. */
+  .nav-toggle { width: 44px; height: 44px; margin-right: -11px; border: 0; border-radius: 0; }
+  .nav-toggle span,
+  .nav-toggle span::before,
+  .nav-toggle span::after { width: 22px; }
+
+  /* Footer text stacks, all left-aligned. */
+  .footer-utility { flex-direction: column; align-items: flex-start; }
+  .footer-side { align-items: flex-start; }
+
   .nav-dot { display: none; }   /* nav lives in the hamburger menu here */
-  /* nav is collapsed into the hamburger here, so the hero uses the full width
-     and simply wraps to as many lines as it needs */
-  .hero-statement p { padding-right: 0; font-size: clamp(1.95rem, 1rem + 4.4vw, 3.7rem); }
+  /* nav is collapsed into the hamburger here, so the hero uses the full
+     width and wraps to as many lines as it needs. The rotating word always
+     starts its own last line ("___ and design.", 9.44em at its longest, which
+     fits even a 320px phone), so swapping words never reflows the lines
+     above it. */
+  .hero-statement p { padding-right: 0; font-size: clamp(1.8rem, 1rem + 4.4vw, 3.7rem); }   /* 1.8rem floor keeps "technology and design." on one line at 320px */
+  .hero-break { display: block; }
 
   /* Project pages: stop the split, use one normal page scroll */
   .project-page main { display: block; height: auto; }
@@ -1095,4 +1380,10 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   [data-reveal] { opacity: 1; transform: none; }
   .logo, .nav a, .nav-dot { --hue-color: var(--ink) !important; }
   .hero-statement p, .hero-word { animation: none !important; opacity: 1 !important; }
+  .hero-rotator { color: inherit; }   /* no colour cycle; stays on its first word */
 }
+
+/* Images with a light and a dark version (e.g. the Rally cover): only the
+   one matching the current theme shows. */
+:root:not([data-theme="dark"]) .for-dark,
+:root[data-theme="dark"] .for-light { display: none; }

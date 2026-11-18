@@ -33,6 +33,7 @@
   function linkFor(key) {
     var links = nav.querySelectorAll("a");
     for (var i = 0; i < links.length; i++) {
+      if (links[i].hidden) continue;   // archived links (PLAY) get no dot
       if (keyFor(new URL(links[i].href).pathname) === key) return links[i];
     }
     return null;

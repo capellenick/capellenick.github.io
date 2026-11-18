@@ -12,6 +12,25 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "4600", "--directory", "../m1-listen"],
       "port": 4600
+    },
+    {
+      "name": "rally",
+      "runtimeExecutable": "/Users/chuck/.local/node/bin/node",
+      "runtimeArgs": ["../rally/node_modules/vite/bin/vite.js", "../rally", "--port", "5174", "--strictPort"],
+      "port": 5174
+    },
+    {
+      "name": "rally-lan",
+      "runtimeExecutable": "/Users/chuck/.local/node/bin/node",
+      "runtimeArgs": ["../rally/node_modules/vite/bin/vite.js", "preview", "../rally", "--host", "--port", "4175", "--strictPort"],
+      "port": 4175
+    },
+    {
+      "name": "tourwatch",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["../tourwatch/serve.py", "--phone"],
+      "port": 5178,
+      "url": "http://127.0.0.1:5178"
     }
   ]
 }

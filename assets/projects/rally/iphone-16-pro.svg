@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 0 436 900" width="436" height="900">
+  <!-- iPhone 16 Pro, black titanium, front. Drawn in points to match the
+       402 x 874 display: body 428 x 900, 13pt from the body edge to the
+       screen. The screen is a transparent window (even-odd cutout), so the
+       page puts the app capture underneath. Buttons stick out 4pt each side.
+       Traced from a product photo; used by css/rally.css (.phone::after). -->
+  <defs>
+    <linearGradient id="band" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#4a4a4e"/>
+      <stop offset="0.012" stop-color="#2a2a2d"/>
+      <stop offset="0.5" stop-color="#1d1d1f"/>
+      <stop offset="0.988" stop-color="#2a2a2d"/>
+      <stop offset="1" stop-color="#46464a"/>
+    </linearGradient>
+    <linearGradient id="bandV" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.10"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.06"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9a9aa0" stop-opacity="0.75"/>
+      <stop offset="0.35" stop-color="#5c5c62" stop-opacity="0.45"/>
+      <stop offset="0.7" stop-color="#4a4a50" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#8a8a90" stop-opacity="0.6"/>
+    </linearGradient>
+    <linearGradient id="btnL" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#58585c"/>
+      <stop offset="0.45" stop-color="#2b2b2e"/>
+      <stop offset="1" stop-color="#1a1a1c"/>
+    </linearGradient>
+    <linearGradient id="btnR" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#58585c"/>
+      <stop offset="0.45" stop-color="#2b2b2e"/>
+      <stop offset="1" stop-color="#1a1a1c"/>
+    </linearGradient>
+    <linearGradient id="sapphire" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3c3c40"/>
+      <stop offset="0.5" stop-color="#151517"/>
+      <stop offset="1" stop-color="#2c2c30"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.07"/>
+      <stop offset="0.25" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Buttons (behind the body) -->
+  <g>
+    <rect x="-3.6" y="158" width="6" height="34" rx="2" fill="url(#btnL)"/>
+    <rect x="-3.6" y="232" width="6" height="62" rx="2" fill="url(#btnL)"/>
+    <rect x="-3.6" y="310" width="6" height="62" rx="2" fill="url(#btnL)"/>
+    <rect x="425.6" y="252" width="6" height="100" rx="2" fill="url(#btnR)"/>
+    <!-- Camera Control: nearly flush, sapphire in a titanium surround -->
+    <rect x="426" y="560" width="4.4" height="70" rx="2" fill="#2a2a2d"/>
+    <rect x="427" y="563" width="2.6" height="64" rx="1.3" fill="url(#sapphire)"/>
+  </g>
+
+  <!-- Body: titanium band + black glass with the screen cut out -->
+  <path fill-rule="evenodd" fill="url(#band)"
+    d="M77 0H351A77 77 0 0 1 428 77V823A77 77 0 0 1 351 900H77A77 77 0 0 1 0 823V77A77 77 0 0 1 77 0Z
+       M77.5 2.6H350.5A74.4 74.4 0 0 1 425.4 77V823A74.4 74.4 0 0 1 350.5 897.4H77.5A74.4 74.4 0 0 1 2.6 823V77A74.4 74.4 0 0 1 77.5 2.6Z"/>
+  <path fill-rule="evenodd" fill="url(#bandV)"
+    d="M77 0H351A77 77 0 0 1 428 77V823A77 77 0 0 1 351 900H77A77 77 0 0 1 0 823V77A77 77 0 0 1 77 0Z
+       M77.5 2.6H350.5A74.4 74.4 0 0 1 425.4 77V823A74.4 74.4 0 0 1 350.5 897.4H77.5A74.4 74.4 0 0 1 2.6 823V77A74.4 74.4 0 0 1 77.5 2.6Z"/>
+  <!-- the polished chamfer catching light -->
+  <path fill="none" stroke="url(#rim)" stroke-width="0.9"
+    d="M77 0.5H351A76.5 76.5 0 0 1 427.5 77V823A76.5 76.5 0 0 1 351 899.5H77A76.5 76.5 0 0 1 0.5 823V77A76.5 76.5 0 0 1 77 0.5Z"/>
+  <!-- black bezel around the display -->
+  <path fill-rule="evenodd" fill="#050506"
+    d="M77.5 2.6H350.5A74.4 74.4 0 0 1 425.4 77V823A74.4 74.4 0 0 1 350.5 897.4H77.5A74.4 74.4 0 0 1 2.6 823V77A74.4 74.4 0 0 1 77.5 2.6Z
+       M75 13H353A62 62 0 0 1 415 75V825A62 62 0 0 1 353 887H75A62 62 0 0 1 13 825V75A62 62 0 0 1 75 13Z"/>
+  <!-- glass edge: a hair of light where the bezel meets the band -->
+  <path fill="none" stroke="#2c2c30" stroke-width="0.7"
+    d="M77.5 3H350.5A74 74 0 0 1 425 77V823A74 74 0 0 1 350.5 897H77.5A74 74 0 0 1 3 823V77A74 74 0 0 1 77.5 3Z"/>
+  <!-- a soft sheen across the whole front glass (sits over the screen) -->
+  <path fill="url(#glass)"
+    d="M77.5 2.6H350.5A74.4 74.4 0 0 1 425.4 77V823A74.4 74.4 0 0 1 350.5 897.4H77.5A74.4 74.4 0 0 1 2.6 823V77A74.4 74.4 0 0 1 77.5 2.6Z"/>
+</svg>

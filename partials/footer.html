@@ -14,6 +14,20 @@
 
 <footer class="site-footer">
   <div class="sky-band">
+    <!-- Footer modes (js/footer-modes.js): pills switch the footer between the
+         pixel sky and the games: Ripples (click to flood a new colour) and
+           Chladni (click for a new cymatics figure) and Scatter (click for a new word). -->
+    <div class="footer-modes" role="group" aria-label="Footer style">
+      <a class="mode-pill mode-round mode-home" href="index.html" aria-label="Back to the homepage"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13.5V2.5M3.5 7 8 2.5 12.5 7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <button type="button" class="mode-pill" data-mode="sky" aria-pressed="false" hidden>Sky</button><!-- Sky archived: remove `hidden` (and add "sky" back to MODES in footer-modes.js) to bring it back -->
+      <button type="button" class="mode-pill" data-mode="ripples" aria-pressed="true">Ripples</button>
+      <button type="button" class="mode-pill" data-mode="chladni" aria-pressed="false">Chladni</button>
+      <button type="button" class="mode-pill" data-mode="scatter" aria-pressed="false">Scatter</button>
+      <button type="button" class="mode-pill mode-round mode-shuffle" aria-label="Shuffle footer style"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 4h3.5c2 0 3 1 4 3.5S10.5 12 12.5 12H15M12.5 9.5 15 12l-2.5 2.5M1 12h3.5c1 0 1.8-.3 2.4-1M9.1 5c.6-.7 1.4-1 2.4-1H15M12.5 1.5 15 4l-2.5 2.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+    <div class="game-stage ripple-stage" aria-hidden="true"><span class="ripple-circle"></span></div>
+    <div class="game-stage chladni-stage" aria-hidden="true"><canvas></canvas></div>
+    <div class="game-stage scatter-stage" aria-hidden="true"><svg></svg></div>
     <div class="sky-clouds" aria-hidden="true">
       <svg class="cloud" viewBox="0 0 16 4" style="left:5%;  top:15%; width:97px; height:24.25px;">
         <rect x="3" y="0" width="3" height="1"/><rect x="9" y="0" width="3" height="1"/>
@@ -193,15 +207,22 @@
         <span class="footer-clock">Boone, NC Local time &mdash; <time id="local-time">--:--:--</time></span>
         <span class="footer-weather" id="footer-weather"></span>
       </span>
-      <nav class="footer-credit" aria-label="Contact">
-        <a href="mailto:capelledesign@gmail.com" data-cursor="Email">Email</a>
-        <a href="https://www.linkedin.com/in/nicholas-capelle-328a95231" target="_blank" rel="noopener" data-cursor="Open">LinkedIn</a>
-        <a href="https://www.instagram.com/capelledesign" target="_blank" rel="noopener" data-cursor="Open">Instagram</a>
-      </nav>
+      <div class="footer-side">
+        <span class="footer-made">Designed and built by Nick Capelle</span>
+        <nav class="footer-credit" aria-label="Contact">
+          <a href="mailto:capelledesign@gmail.com" data-cursor="Email">Email</a>
+          <a href="https://www.linkedin.com/in/nicholas-capelle-328a95231" target="_blank" rel="noopener" data-cursor="Open">LinkedIn</a>
+          <a href="https://www.instagram.com/capelledesign" target="_blank" rel="noopener" data-cursor="Open">Instagram</a>
+        </nav>
+      </div>
     </div>
   </div>
 </footer>
 
-<script src="js/site.js?v=21" defer></script>
-<script src="js/nav-dot.js?v=6" defer></script>
-<script src="js/hue.js?v=2" defer></script>
+<script src="js/site.js?v=35" defer></script>
+<script src="js/nav-dot.js?v=7" defer></script>
+<script src="js/hue.js?v=9" defer></script>
+<script src="js/logo-dots.js?v=9" defer></script>
+<script src="js/footer-modes.js?v=7" defer></script>
+<script src="js/chladni.js?v=5" defer></script>
+<script src="js/scatter.js?v=10" defer></script>
