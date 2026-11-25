@@ -197,6 +197,7 @@
 
   var ticks = 0;
   function tick() {
+    if (document.hidden) return;          // hidden tab: no work at all
     var now = Date.now();
     var theme = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
     var c = cycleColour(now, theme);

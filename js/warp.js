@@ -297,11 +297,17 @@
       if (card.gl === undefined) {
         card.gl = null;
         var img = card.img;
-        var ready = img.complete && img.naturalWidth ? Promise.resolve() : img.decode();
-        ready.then(function () {
-          if (!card.init()) return;
+        // Always wait for the full decode: "complete" can be true a moment
+        // before an AVIF's pixels exist, which would upload a black texture.
+        img.loading = "eager";
+        img.decode().catch(function () {}).then(function () {
+          if (!img.naturalWidth || !card.init()) return;
           if (card.inView) { visible.add(card); start(); }
-        }).catch(function () {});
+          // If the browser swaps in a different file later, re-upload it.
+          img.addEventListener("load", function () {
+            img.decode().catch(function () {}).then(function () { if (card.gl) { card.upload(img); card.layout(); card.draw(true); } });
+          });
+        });
       }
       if (card.gl) { visible.add(card); start(); }
     });

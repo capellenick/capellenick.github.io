@@ -107,6 +107,10 @@
    under browser zoom. Phones and tablets keep the full-size base. */
 @media (min-width: 1025px) { html { font-size: 80%; } }
 
+/* Responsive images are wrapped in <picture>; it takes no box of its own,
+   so every img keeps laying out exactly as before. */
+picture { display: contents; }
+
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
