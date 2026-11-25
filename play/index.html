@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>m1 — Nick Capelle</title>
   <meta name="description" content="A six-key synth that drives a simulated Chladni plate: sand settles on the nodal lines of whatever you play, shown on an LED matrix." />
-  <link rel="icon" href="../assets/favicon.svg?v=2" type="image/svg+xml" />
-  <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png" />
-  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+  <link rel="icon" href="../assets/favicon.svg?v=3" type="image/svg+xml" />
+  <link rel="icon" href="../assets/favicon-32.png?v=2" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=2" />
   <link rel="stylesheet" href="https://use.typekit.net/wsb8ckc.css" />
   <!-- No-flash theme: runs before paint. Keep this identical on every page. -->
   <script>
     document.documentElement.classList.add("js");
     try {
       var t = localStorage.getItem("theme");
-      if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      if (!t) t = "dark";   // dark by default; the toggle (saved in localStorage) switches it
       document.documentElement.setAttribute("data-theme", t);
     } catch (e) {}
   </script>
@@ -710,7 +710,7 @@ $('#knobs').append(sc);
 // site header: theme switch (same behaviour as js/site.js, which this page doesn't load)
 const themeBtn = $('.theme-toggle'), root = document.documentElement;
 if (themeBtn) {
-  const cur = () => root.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const cur = () => root.getAttribute('data-theme') || 'dark';
   const sync = () => {
     const dark = cur() === 'dark';
     themeBtn.setAttribute('aria-checked', String(dark));

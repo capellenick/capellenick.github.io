@@ -48,7 +48,7 @@
 
   function currentTheme() {
     return root.getAttribute("data-theme")
-      || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      || "dark";
   }
   function syncThemeButton() {
     if (!themeBtn) return;
