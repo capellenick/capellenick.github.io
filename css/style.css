@@ -131,7 +131,7 @@ body {
   transition: background 0.4s var(--ease), color 0.4s var(--ease);
 }
 
-img, picture, video, svg { display: block; max-width: 100%; }
+img, video, svg { display: block; max-width: 100%; }
 video { height: auto; }
 
 a { color: inherit; text-decoration: none; }
@@ -525,6 +525,8 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
    WebGL warp (js/warp.js reads it). Merlefest's poster sits low in its
    portrait photo, so frame a little lower to centre it in the 3:2 card. */
 .work-card a[href="project-6.html"] .card-media img { object-position: 50% 60%; }
+/* Phones: frame lower, so the bottom of the poster isn't cut off. */
+@media (max-width: 760px) { .work-card a[href="project-6.html"] .card-media img { object-position: 50% 66%; } }
 /* Archived for now (PLAY nav link, Sky footer pill): kept in the markup, hidden. */
 .nav a[hidden], .mode-pill[hidden] { display: none !important; }
 .work-card a { display: block; }
@@ -1368,6 +1370,17 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   .project-media { padding: 0 var(--gutter) var(--gutter); }
   .project-copy { padding: 0.5rem var(--gutter) 2.5rem; }
   .project-copy__inner { max-width: 60ch; }
+  /* Order on phones: write-up, then the images, then "Next project" and the
+     footer line last. The copy wrappers step aside (display: contents) so
+     their pieces can be ordered around the image column. */
+  .project-copy, .project-copy__inner { display: contents; }
+  .project-copy .project-copy__inner > * { order: 1; margin-inline: var(--gutter); max-width: 60ch; }
+  .project-copy .project-copy__inner > :first-child { margin-top: 0.5rem; }
+  .project-media { order: 2; padding-top: 2.5rem; }
+  .project-copy .project-copy__inner > .project-next,
+  .project-copy .project-copy__inner > .project-foot { order: 3; }
+  .project-copy .project-copy__inner > .project-next { margin-top: 1.5rem; }
+  .project-copy .project-copy__inner > .project-foot { margin-bottom: 2.5rem; }
 }
 
 @media (max-width: 520px) {

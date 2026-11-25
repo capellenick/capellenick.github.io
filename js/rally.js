@@ -382,12 +382,19 @@
      The arrow stays while the section is pinned at its end, and fades once
      the section starts scrolling away (its bottom comes up into the window)
      on the way to the next one. Scroll back and it returns. */
-  [["[data-narrow]", "is-done"], ["[data-show]", "is-end"]].forEach(function (pair) {
+  // The hero's arrow appears 7 seconds after the page opens.
+  var hero = document.querySelector(".rl-hero");
+  if (hero) setTimeout(function () { hero.classList.add("is-cue"); }, 7000);
+
+  [["[data-narrow]", "is-done"], ["[data-show]", "is-end"], [".rl-hero", "is-cue"]].forEach(function (pair) {
     var sec = document.querySelector(pair[0]);
     if (!sec) return;
     var gone = false;
     var check = function () {
-      var leaving = sec.getBoundingClientRect().bottom < window.innerHeight - 60;
+      // The hero's arrow goes as soon as you start scrolling; the pinned
+      // sections' arrows once the section starts sliding away.
+      var leaving = sec === hero ? window.scrollY > 60
+        : sec.getBoundingClientRect().bottom < window.innerHeight - 60;
       if (leaving === gone) return;          // only touch the class when it changes
       gone = leaving;
       sec.classList.toggle("cue-gone", leaving);
