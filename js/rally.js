@@ -98,6 +98,7 @@
     if (i === step) return;
     step = i;
     for (var s = 0; s < steps.length; s++) steps[s].classList.toggle("is-active", s === i);
+    show.classList.toggle("is-end", i === N - 1);   // shows the "Continue scrolling" cue
   }
 
   // Advance the timed crossfades. True while moving.
@@ -375,4 +376,24 @@
       }, 150);
     });
   }
+
+
+  /* ---- 7. Keep-going arrows fade out between sections ------------------
+     The arrow stays while the section is pinned at its end, and fades once
+     the section starts scrolling away (its bottom comes up into the window)
+     on the way to the next one. Scroll back and it returns. */
+  [["[data-narrow]", "is-done"], ["[data-show]", "is-end"]].forEach(function (pair) {
+    var sec = document.querySelector(pair[0]);
+    if (!sec) return;
+    var gone = false;
+    var check = function () {
+      var leaving = sec.getBoundingClientRect().bottom < window.innerHeight - 60;
+      if (leaving === gone) return;          // only touch the class when it changes
+      gone = leaving;
+      sec.classList.toggle("cue-gone", leaving);
+    };
+    window.addEventListener("scroll", function () { requestAnimationFrame(check); }, { passive: true });
+    window.addEventListener("resize", check);
+    check();
+  });
 })();

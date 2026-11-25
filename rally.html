@@ -7,10 +7,12 @@
   <title>Rally — Nick Capelle</title>
   <meta name="description" content="Rally: a product design case study for finding tennis and pickleball partners at your level, from research and business strategy to an interactive prototype." />
 
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/favicon.svg?v=2" type="image/svg+xml" />
+  <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <link rel="stylesheet" href="https://use.typekit.net/wsb8ckc.css" />
   <link rel="stylesheet" href="css/style.css?v=91" />
-  <link rel="stylesheet" href="css/rally.css?v=65" />
+  <link rel="stylesheet" href="css/rally.css?v=77" />
   <!-- three.js for the 3D phone in "How Rally works" (js/rally-3d.js). -->
   <script type="importmap">
     { "imports": {
@@ -28,7 +30,7 @@
     } catch (e) {}
   </script>
 </head>
-<body class="rally-page">
+<body class="rally-page" data-cycle="#cdeb45">
   <a class="skip-link" href="#main">Skip to content</a>
 
 </head>
@@ -125,38 +127,12 @@
         </div>
       </div>
 
-      <h3 class="rl-subhead rl-skim-hide" data-reveal>Personas</h3>
-      <div class="rl-personas">
-        <article class="rl-persona" data-reveal>
-          <header class="rl-persona__id">
-            <span class="rl-persona__avatar" aria-hidden="true">A</span>
-            <div><p class="rl-card__num">Persona 1</p><h4>Andy</h4></div>
-            <dl><div><dt>Age</dt><dd>22</dd></div><div><dt>Location</dt><dd>Boone, NC</dd></div><div><dt>Occupation</dt><dd>Student</dd></div><div><dt>Sociability</dt><dd>Introvert</dd></div></dl>
-          </header>
-          <div class="rl-persona__box rl-persona__about"><h5>About</h5><p>A computer science major in Boone who grew up playing tennis but hasn&rsquo;t played consistently in college. He values team sports, and finding people at his level is the hard part.</p></div>
-          <div class="rl-persona__box"><h5>Motivations</h5><ul><li>Tennis partner to play with</li><li>Tennis tournament sign-up</li><li>Physical well-being</li><li>Playing with friends and family back home</li></ul></div>
-          <div class="rl-persona__box"><h5>Pain points</h5><ul><li>Finding tennis or pickleball players at his level</li><li>Finding partners who play consistently</li><li>Doesn&rsquo;t usually use apps to find friends</li></ul></div>
-          <div class="rl-persona__box rl-persona__goals"><h5>Goals</h5><ul><li>Keep playing a sport he loves</li><li>More cardio</li><li>Get better at doubles</li><li>Shake the rust off by playing consistently</li></ul></div>
-          <div class="rl-persona__box rl-persona__journey"><h5>User journey</h5><ol class="rl-journey"><li class="rl-journey__0"><h5>Discovery</h5><p>Finds the app, fills out a profile and sets goals.</p></li><li class="rl-journey__1"><h5>Exploration</h5><p>Browses nearby courts and players with his filters.</p></li><li class="rl-journey__2"><h5>Tennis match</h5><p>Matches with a partner and schedules a game.</p></li><li class="rl-journey__3"><h5>Community</h5><p>Part of a tennis group with goals and challenges.</p></li></ol></div>
-        </article>
-        <article class="rl-persona" data-reveal>
-          <header class="rl-persona__id">
-            <span class="rl-persona__avatar" aria-hidden="true">L</span>
-            <div><p class="rl-card__num">Persona 2</p><h4>Luis</h4></div>
-            <dl><div><dt>Age</dt><dd>33</dd></div><div><dt>Location</dt><dd>Austin, TX</dd></div><div><dt>Occupation</dt><dd>Product management</dd></div><div><dt>Sociability</dt><dd>Extrovert</dd></div></dl>
-          </header>
-          <div class="rl-persona__box rl-persona__about"><h5>About</h5><p>A senior project manager in Austin who ran track and cross country, kept running through college and work, and finished an Ironman and a marathon. He loves intuitive apps that help him hit his goals.</p></div>
-          <div class="rl-persona__box"><h5>Motivations</h5><ul><li>Running group to train with</li><li>Half marathon sign-up</li><li>Remote accountability partners</li><li>Physical well-being</li></ul></div>
-          <div class="rl-persona__box"><h5>Pain points</h5><ul><li>Returning knee injury</li><li>Pavement versus gravel trails</li><li>Finding groups at a similar pace</li><li>Finding trails after moving to a new city</li></ul></div>
-          <div class="rl-persona__box rl-persona__goals"><h5>Goals</h5><ul><li>Run a half marathon</li><li>Build healthy cardio habits</li><li>Find a running group for accountability</li><li>Get back into running without getting hurt</li></ul></div>
-          <div class="rl-persona__box rl-persona__journey"><h5>User journey</h5><ol class="rl-journey"><li class="rl-journey__0"><h5>Discovery</h5><p>Finds the app, builds a profile and sets goals.</p></li><li class="rl-journey__1"><h5>Exploration</h5><p>Browses nearby trails with his filters.</p></li><li class="rl-journey__2"><h5>Running match</h5><p>Joins a group or partner and schedules a run.</p></li><li class="rl-journey__3"><h5>Community</h5><p>Part of a running group with goals and challenges.</p></li></ol></div>
-        </article>
-      </div>
     </section>
 
     <!-- ================= CONVERGE (scroll-driven) ================= -->
     <section class="rl-narrow" data-narrow aria-label="How the research narrowed the scope">
       <div class="rl-narrow__sticky rl-wrap">
+        <span class="rl-cue" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M10 0.8v18M3.8 13.6L10 19.4l6.2-5.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="miter"/></svg></span>
         <p class="rl-eyebrow">How the data changed the challenge</p>
         <h2 class="rl-headline">From a sports app for everything, to two sports done <span class="rl-right">right</span>.</h2>
         <ul class="rl-chips" aria-label="Sports and features considered">
@@ -192,27 +168,27 @@
            same sideways track, dots and paddles as Design decisions. -->
       <div class="rl-gallery__track rl-gallery__track--wide" data-gallery tabindex="0" aria-label="Process images, scroll sideways">
         <article class="rl-ptile">
-          <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox><img src="assets/projects/rally/process-notebook-1.jpg?v=3" alt="A notebook spread: early app design notes, three goals to track, random app ideas, and a running app idea that opens up to pickup soccer, basketball, pickleball, tennis and volleyball" width="1800" height="1200" /></div>
+          <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox data-cross-cursor><img src="assets/projects/rally/process-notebook-1.jpg?v=3" alt="A notebook spread: early app design notes, three goals to track, random app ideas, and a running app idea that opens up to pickup soccer, basketball, pickleball, tennis and volleyball" width="1800" height="1200" /></div>
           <p><strong>It started as a running app.</strong><span class="rl-cap-more"> The first idea used competition to keep runners motivated. Pretty quickly I wanted it to open up to other sports, like pickup soccer, pickleball and tennis.</span></p>
         </article>
         <article class="rl-ptile">
-          <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox><img src="assets/projects/rally/process-notebook-2.jpg?v=3" alt="A notebook spread: persona candidates and layout sketches on the left, and dated app design notes on the right listing the problem, the sports and features like court finders and no-show flags" width="1800" height="1200" loading="lazy" /></div>
+          <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox data-cross-cursor><img src="assets/projects/rally/process-notebook-2.jpg?v=3" alt="A notebook spread: persona candidates and layout sketches on the left, and dated app design notes on the right listing the problem, the sports and features like court finders and no-show flags" width="1800" height="1200" loading="lazy" /></div>
           <p><strong>Who it&rsquo;s for.</strong><span class="rl-cap-more"> I sketched persona layouts and wrote down the real problem: it&rsquo;s hard to find people to play with consistently. Flagging no-shows was in the notes from the start.</span></p>
         </article>
         <article class="rl-ptile">
-          <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox><img src="assets/projects/rally/process-notebook-3.jpg?v=3" alt="A notebook spread: a list of app names including SportsConnect, Rally and Ping with early R logo sketches, and four handwritten user stories" width="1800" height="1200" loading="lazy" /></div>
+          <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox data-cross-cursor><img src="assets/projects/rally/process-notebook-3.jpg?v=3" alt="A notebook spread: a list of app names including SportsConnect, Rally and Ping with early R logo sketches, and four handwritten user stories" width="1800" height="1200" loading="lazy" /></div>
           <p><strong>Naming it.</strong><span class="rl-cap-more"> SportsConnect, Ping and Rally were all on the list. Rally stuck, and the logo sketches started with an R and a ball.</span></p>
         </article>
         <article class="rl-ptile">
-          <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox><img src="assets/projects/rally/process-studio.jpg" alt="A desk in the design studio with a laptop and notebook, in front of a whiteboard listing features on one side and a user story on the other" width="1800" height="1200" loading="lazy" /></div>
+          <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox data-cross-cursor><img src="assets/projects/rally/process-studio.jpg" alt="A desk in the design studio with a laptop and notebook, in front of a whiteboard listing features on one side and a user story on the other" width="1800" height="1200" loading="lazy" /></div>
           <p><strong>The whiteboard was my best friend.</strong><span class="rl-cap-more"> Being able to work big, iterate quickly, and jot ideas down in a tactile form throughout my process helped me build out the real purpose of my product.</span></p>
         </article>
         <article class="rl-ptile">
-          <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox><img src="assets/projects/rally/process-sitemap-wide.jpg" alt="A whiteboard in the design studio with the first site map: start, onboarding, then Explore, Activity, Community and Profile branches with sticky notes, and a hand-written list of sports" width="1498" height="1000" loading="lazy" /></div>
+          <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox data-cross-cursor><img src="assets/projects/rally/process-sitemap-wide.jpg" alt="A whiteboard in the design studio with the first site map: start, onboarding, then Explore, Activity, Community and Profile branches with sticky notes, and a hand-written list of sports" width="1498" height="1000" loading="lazy" /></div>
           <p><strong>The first site map.</strong><span class="rl-cap-more"> At that stage, the most organic way to get feedback was to present the site map and walk through each section. Notes and suggested changes went on sticky notes, placed right in the section they were about.</span></p>
         </article>
         <article class="rl-ptile">
-          <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox><img src="assets/projects/rally/process-figma-drafts.jpg" alt="Early Figma drafts of three screens: a dark suggestions list of players with colour-coded tags for days, sports and times, a light search results list filtered by tennis, Saturday, outdoor and beginner, and a calendar view, with classmates' comment avatars on the frames" width="1800" height="1200" loading="lazy" /></div>
+          <div class="rl-ptile__media" role="button" tabindex="0" aria-label="Enlarge image" data-lightbox data-cross-cursor><img src="assets/projects/rally/process-figma-drafts.jpg" alt="Early Figma drafts of three screens: a dark suggestions list of players with colour-coded tags for days, sports and times, a light search results list filtered by tennis, Saturday, outdoor and beginner, and a calendar view, with classmates' comment avatars on the frames" width="1800" height="1200" loading="lazy" /></div>
           <p><strong>First drafts in Figma.</strong><span class="rl-cap-more"> The early screens matched you with people, with colour-coded tags for days, sports and times. Classmates left comments right on the frames, and the final app shifted to open matches you can scan at a glance.</span></p>
         </article>
       </div>
@@ -223,6 +199,35 @@
           <button type="button" data-gallery-next aria-label="Next"><svg viewBox="0 0 16 24" aria-hidden="true"><polyline points="5,5 12,12 5,19" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
       </div>
+      <div class="rl-wrap rl-mapping__personas">
+      <h3 class="rl-subhead rl-skim-hide" data-reveal>Personas</h3>
+        <div class="rl-personas">
+          <article class="rl-persona" data-reveal>
+            <header class="rl-persona__id">
+              <span class="rl-persona__avatar" aria-hidden="true">A</span>
+              <div><p class="rl-card__num">Persona 1</p><h4>Andy</h4></div>
+              <dl><div><dt>Age</dt><dd>22</dd></div><div><dt>Location</dt><dd>Boone, NC</dd></div><div><dt>Occupation</dt><dd>Student</dd></div><div><dt>Sociability</dt><dd>Introvert</dd></div></dl>
+            </header>
+            <div class="rl-persona__box rl-persona__about"><h5>About</h5><p>A computer science major in Boone who grew up playing tennis but hasn&rsquo;t played consistently in college. He values team sports, and finding people at his level is the hard part.</p></div>
+            <div class="rl-persona__box"><h5>Motivations</h5><ul><li>Tennis partner to play with</li><li>Tennis tournament sign-up</li><li>Physical well-being</li><li>Playing with friends and family back home</li></ul></div>
+            <div class="rl-persona__box"><h5>Pain points</h5><ul><li>Finding tennis or pickleball players at his level</li><li>Finding partners who play consistently</li><li>Doesn&rsquo;t usually use apps to find friends</li></ul></div>
+            <div class="rl-persona__box rl-persona__goals"><h5>Goals</h5><ul><li>Keep playing a sport he loves</li><li>More cardio</li><li>Get better at doubles</li><li>Shake the rust off by playing consistently</li></ul></div>
+            <div class="rl-persona__box rl-persona__journey"><h5>User journey</h5><ol class="rl-journey"><li class="rl-journey__0"><h5>Discovery</h5><p>Finds the app, fills out a profile and sets goals.</p></li><li class="rl-journey__1"><h5>Exploration</h5><p>Browses nearby courts and players with his filters.</p></li><li class="rl-journey__2"><h5>Tennis match</h5><p>Matches with a partner and schedules a game.</p></li><li class="rl-journey__3"><h5>Community</h5><p>Part of a tennis group with goals and challenges.</p></li></ol></div>
+          </article>
+          <article class="rl-persona" data-reveal>
+            <header class="rl-persona__id">
+              <span class="rl-persona__avatar" aria-hidden="true">L</span>
+              <div><p class="rl-card__num">Persona 2</p><h4>Luis</h4></div>
+              <dl><div><dt>Age</dt><dd>33</dd></div><div><dt>Location</dt><dd>Austin, TX</dd></div><div><dt>Occupation</dt><dd>Product management</dd></div><div><dt>Sociability</dt><dd>Extrovert</dd></div></dl>
+            </header>
+            <div class="rl-persona__box rl-persona__about"><h5>About</h5><p>A senior project manager in Austin who ran track and cross country, kept running through college and work, and finished an Ironman and a marathon. He loves intuitive apps that help him hit his goals.</p></div>
+            <div class="rl-persona__box"><h5>Motivations</h5><ul><li>Running group to train with</li><li>Half marathon sign-up</li><li>Remote accountability partners</li><li>Physical well-being</li></ul></div>
+            <div class="rl-persona__box"><h5>Pain points</h5><ul><li>Returning knee injury</li><li>Pavement versus gravel trails</li><li>Finding groups at a similar pace</li><li>Finding trails after moving to a new city</li></ul></div>
+            <div class="rl-persona__box rl-persona__goals"><h5>Goals</h5><ul><li>Run a half marathon</li><li>Build healthy cardio habits</li><li>Find a running group for accountability</li><li>Get back into running without getting hurt</li></ul></div>
+            <div class="rl-persona__box rl-persona__journey"><h5>User journey</h5><ol class="rl-journey"><li class="rl-journey__0"><h5>Discovery</h5><p>Finds the app, builds a profile and sets goals.</p></li><li class="rl-journey__1"><h5>Exploration</h5><p>Browses nearby trails with his filters.</p></li><li class="rl-journey__2"><h5>Running match</h5><p>Joins a group or partner and schedules a run.</p></li><li class="rl-journey__3"><h5>Community</h5><p>Part of a running group with goals and challenges.</p></li></ol></div>
+          </article>
+        </div>
+      </div>
     </section>
 
     <!-- ================= SHOWCASE (pinned, scroll-driven) ================= -->
@@ -230,6 +235,7 @@
          the screen moves through the core loop. js/rally.js drives it. -->
     <section class="rl-show" data-show aria-label="How Rally works">
       <div class="rl-show__sticky">
+        <span class="rl-cue" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M10 0.8v18M3.8 13.6L10 19.4l6.2-5.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="miter"/></svg></span>
         <div class="rl-show__grid rl-wrap">
           <div class="rl-show__text">
             <p class="rl-eyebrow">How Rally works</p>
@@ -371,9 +377,9 @@
 
   <script src="js/site.js?v=35" defer></script>
   <script src="js/nav-dot.js?v=7" defer></script>
-  <script src="js/hue.js?v=15" defer></script>
+  <script src="js/hue.js?v=20" defer></script>
   <script src="js/logo-dots.js?v=9" defer></script>
-  <script src="js/rally.js?v=22" defer></script>
+  <script src="js/rally.js?v=28" defer></script>
   <script type="module" src="js/rally-3d.js?v=13"></script>
 </body>
 </html>

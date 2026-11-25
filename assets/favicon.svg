@@ -1,4 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <rect width="32" height="32" rx="6" fill="#1b1b1b"/>
-  <text x="16" y="22" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="#f2f3f4">NC</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Nick Capelle: 17-dot mark. One drawing for both browser themes (dark
+       dots on light tabs, light dots on dark tabs), so it's always the same
+       size in the tab. -->
+  <style>g { fill: #444; } @media (prefers-color-scheme: dark) { g { fill: #b0b0b0; } }</style>
+  <g><circle cx="10" cy="10" r="8"/><circle cx="50" cy="10" r="8"/><circle cx="90" cy="10" r="8"/><circle cx="30" cy="30" r="8"/><circle cx="50" cy="30" r="8"/><circle cx="70" cy="30" r="8"/><circle cx="10" cy="50" r="8"/><circle cx="30" cy="50" r="8"/><circle cx="50" cy="50" r="8"/><circle cx="70" cy="50" r="8"/><circle cx="90" cy="50" r="8"/><circle cx="30" cy="70" r="8"/><circle cx="50" cy="70" r="8"/><circle cx="70" cy="70" r="8"/><circle cx="10" cy="90" r="8"/><circle cx="50" cy="90" r="8"/><circle cx="90" cy="90" r="8"/></g>
 </svg>

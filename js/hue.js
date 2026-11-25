@@ -22,7 +22,8 @@
 
    • Text: sets --cycle-text on .site-header, .hero-rotator and .scatter-stage, 20x a second
      (style.css paints them with it).
-   • Cursor: the dot (and a matching cross, --cross-cursor) is the real system cursor, so the OS draws it and it
+   • Cursor: the dot is the real system cursor (and, over anything marked
+     data-cross-cursor, a matching magnifying glass), so the OS draws it and it
      never lags. 10x a second this draws a fresh 11px dot (a 2x SVG, crisp on
      Retina) and puts it in --dot-cursor on <body>, which style.css uses for
      `cursor`. Only where site.js set body.has-cursor (not play/).
@@ -72,7 +73,6 @@
   var rotator = document.querySelector(".hero-rotator");   // homepage rotating word
   var scatter = document.querySelector(".scatter-stage");  // footer game
   var body = document.body;
-  var ticks = 0;
 
   /* ---- colour maths: sRGB <-> OKLCH, WCAG contrast ---- */
   function toLin(v) { v /= 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }
@@ -114,9 +114,18 @@
     return "#" + lin.map(function (v) { return ("0" + Math.round(fromLin(v)).toString(16)).slice(-2); }).join("");
   }
 
-  var STOPS_ALL = PALETTE.map(function (h) { return linToOklch(hexLin(h)); });
-  var STOPS_LIGHT = PALETTE.filter(function (h) { return SKIP_LIGHT.indexOf(h) < 0; })
-                           .map(function (h) { return linToOklch(hexLin(h)); });
+  // A page can name its own palette on <body data-cycle="#hex #hex ...">
+  // (project pages use their project's colours; one colour holds still).
+  // Pages without one use the site palette above.
+  var own = (body.getAttribute("data-cycle") || "").match(/#[0-9a-fA-F]{6}/g);
+  var STOPS_ALL, STOPS_LIGHT;
+  if (own && own.length) {
+    STOPS_ALL = STOPS_LIGHT = own.map(function (h) { return linToOklch(hexLin(h)); });
+  } else {
+    STOPS_ALL = PALETTE.map(function (h) { return linToOklch(hexLin(h)); });
+    STOPS_LIGHT = PALETTE.filter(function (h) { return SKIP_LIGHT.indexOf(h) < 0; })
+                         .map(function (h) { return linToOklch(hexLin(h)); });
+  }
   var BG_Y = { light: lum(hexLin(BG.light)), dark: lum(hexLin(BG.dark)) };
 
   // The colour at this moment, before any contrast nudge.
@@ -152,20 +161,41 @@
     return mapped(theme === "light" ? lo : hi, c[1], c[2]);
   }
 
+  // The dot: exactly as it has always worked. A fresh dot in the current
+  // colour on <body> (--dot-cursor) every other tick, nothing else.
+  function svgUrl(svg) { return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")'; }
   function setCursor(fill) {
     var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">' +
               '<circle cx="12" cy="12" r="11" fill="' + fill + '"/></svg>';
-    var url = 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
     // 24px image at 2x = a 12px box with an 11px dot; hotspot at its centre.
-    body.style.setProperty("--dot-cursor", "-webkit-image-set(" + url + " 2x) 6 6, auto");
-    // A thin cross in the same colour, for things you click to enlarge
-    // (the Rally process photos use it via --cross-cursor).
-    var cross = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">' +
-                '<path d="M16 2v28M2 16h28" stroke="' + fill + '" stroke-width="5" stroke-linecap="round"/></svg>';
-    var curl = 'url("data:image/svg+xml,' + encodeURIComponent(cross) + '")';
-    body.style.setProperty("--cross-cursor", "-webkit-image-set(" + curl + " 2x) 8 8, crosshair");
+    body.style.setProperty("--dot-cursor", "-webkit-image-set(" + svgUrl(svg) + " 2x) 6 6, auto");
+    if (crossEl) setCross(crossEl, fill);
   }
 
+  // The zoom cursor (things you click to enlarge, marked data-cross-cursor): only
+  // ever set on the one element under the pointer, and only while it's
+  // there. Updating a second cursor value on <body> for the whole page as
+  // well as the dot made Chrome on macOS keep dropping back to the system
+  // arrow, so the page-wide update stays the dot alone.
+  var crossEl = null, lastFill = "";
+  function setCross(el, fill) {
+    // A magnifying glass with a plus in the lens (Nick's icon): 48px at 2x
+    // = 24pt, short handle, hotspot at the centre of the lens.
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48">' +
+              '<g fill="none" stroke="' + fill + '" stroke-width="4.4">' +
+              '<circle cx="20" cy="20" r="14"/>' +
+              '<path d="M20 12.4v15.2M12.4 20h15.2"/>' +
+              '<path d="M30.2 30.2L38.5 38.5" stroke-linecap="butt"/></g></svg>';
+    el.style.setProperty("--cross-cursor", "-webkit-image-set(" + svgUrl(svg) + " 2x) 10 10, zoom-in");
+  }
+  document.addEventListener("pointerover", function (e) {
+    var el = e.target.closest && e.target.closest("[data-cross-cursor]");
+    if (el === crossEl) return;
+    crossEl = el;
+    if (el && lastFill) setCross(el, lastFill);
+  });
+
+  var ticks = 0;
   function tick() {
     var now = Date.now();
     var theme = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
@@ -178,7 +208,10 @@
     if (header) header.style.setProperty("--cycle-text", text);
     if (rotator) rotator.style.setProperty("--cycle-text", text);
     if (scatter) scatter.style.setProperty("--cycle-text", text);
-    if (ticks++ % 2 === 0 && body.classList.contains("has-cursor")) setCursor(hex(legible(c, theme, 3.1)));
+    if (ticks++ % 2 === 0 && body.classList.contains("has-cursor")) {
+      lastFill = hex(legible(c, theme, 3.1));
+      setCursor(lastFill);
+    }
   }
   tick();
   setInterval(tick, 50);
