@@ -62,11 +62,11 @@
 
   /* Metrics */
   --wrap: none;     /* full-bleed like nouvelleidee.work — margins come from --gutter only */
-  --gutter: 32px;   /* nouvelleidee.work: 32px desktop, 24px tablet, 16px phone (see below) */
+  --gutter: 2rem;   /* nouvelleidee.work: 2rem desktop, 1.5rem tablet, 1rem phone (see below) */
   --nav-gap: clamp(1.1rem, 2.6vw, 2rem);
-  --header-h: 68px;
+  --header-h: 4.25rem;
   --section-gap: clamp(4rem, 10vw, 8rem);
-  --radius-img: 15px;   /* every content-image frame uses this — matches nouvelleidee.work */
+  --radius-img: 0.9375rem;   /* every content-image frame uses this — matches nouvelleidee.work */
 
   /* Motion */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -75,7 +75,7 @@
 }
 
 /* Side margins step down like nouvelleidee.work's (Webflow breakpoints):
-   32px desktop, 24px tablet (<=991px), 16px phone (<=479px). */
+   2rem desktop, 1.5rem tablet (<=61.9375rem), 1rem phone (<=29.9375rem). */
 @media (max-width: 991px) { :root { --gutter: 24px; } }
 @media (max-width: 479px) { :root { --gutter: 16px; } }
 
@@ -100,6 +100,12 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; }
+
+/* Desktop is designed at what Chrome shows at 80% zoom. Every fixed size
+   is in rem, so an 80% base reproduces that look at normal 100% zoom;
+   screen-relative sizes (vw, vh, cqi) stay as they are, exactly as they do
+   under browser zoom. Phones and tablets keep the full-size base. */
+@media (min-width: 1025px) { html { font-size: 80%; } }
 
 html {
   -webkit-text-size-adjust: 100%;
@@ -134,8 +140,8 @@ b, strong { font-weight: 500; }
 main { flex: 1 0 auto; }
 
 :focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 3px;
+  outline: 0.125rem solid var(--ink);
+  outline-offset: 0.1875rem;
   border-radius: 1px;
 }
 
@@ -148,7 +154,7 @@ main { flex: 1 0 auto; }
 .skip-link {
   position: fixed; left: 1rem; top: -3rem; z-index: 200;
   background: var(--ink); color: var(--paper);
-  padding: 0.55rem 0.9rem; border-radius: 4px;
+  padding: 0.55rem 0.9rem; border-radius: 0.25rem;
   transition: top 0.2s var(--ease);
 }
 .skip-link:focus { top: 1rem; }
@@ -245,7 +251,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
    if the script never runs, it appears after a second instead of going missing. */
 .logo-dots {
   display: block;
-  width: 140px;
+  width: 8.75rem;
   height: auto;
   overflow: visible;
   pointer-events: none;
@@ -259,7 +265,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   display: flex;
   gap: var(--nav-gap);
   font-family: var(--font-label);
-  /* Caps a touch shorter than the dotted name's capitals (the N is ~20.7px;
+  /* Caps a touch shorter than the dotted name's capitals (the N is ~1.2937rem;
      this face's cap height is 0.73em). The mobile menu sets its own size. */
   font-size: 1.6rem;
   font-weight: 400;        /* Neue Haas Grotesk Display Pro 55 Roman */
@@ -305,7 +311,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   --hue-color: var(--cycle-text, var(--ink));
   position: absolute;
   top: 0; left: 0;
-  width: 11px; height: 11px;   /* = the cursor */
+  width: 0.6875rem; height: 0.6875rem;   /* = the cursor */
   border-radius: 50%;
   background: var(--hue-color);
   pointer-events: none;
@@ -343,8 +349,8 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
 /* No pill: just the two icons side by side, with a circle sitting behind
    whichever one is selected (it slides across when the theme flips). */
 .theme-toggle {
-  --tt-size: 30px;   /* each icon's hit area, and the selected circle */
-  --tt-gap: 2px;
+  --tt-size: 1.875rem;   /* each icon's hit area, and the selected circle */
+  --tt-gap: 0.125rem;
   position: relative;
   display: flex;
   gap: var(--tt-gap);
@@ -384,7 +390,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   color: var(--ink-30);
   transition: color 0.3s var(--ease);
 }
-.theme-toggle__icon svg { width: 15px; height: 15px; }
+.theme-toggle__icon svg { width: 0.9375rem; height: 0.9375rem; }
 /* Light mode: sun is active. Dark mode: moon is active. */
 .theme-toggle__icon--sun { color: var(--ink); }
 :root[data-theme="dark"] .theme-toggle__icon--sun { color: var(--ink-30); }
@@ -393,9 +399,9 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
 /* Hamburger (mobile only) */
 .nav-toggle {
   display: none;
-  width: 34px; height: 34px;
+  width: 2.125rem; height: 2.125rem;
   border: 1px solid var(--hairline-2);
-  border-radius: 6px;
+  border-radius: 0.375rem;
   position: relative;
   flex: none;
 }
@@ -405,13 +411,13 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   content: "";
   position: absolute;
   left: 50%; top: 50%;
-  width: 16px; height: 1.5px;
+  width: 1rem; height: 0.0938rem;
   background: var(--ink);
   transform: translate(-50%, -50%);
   transition: transform 0.25s var(--ease), opacity 0.2s var(--ease);
 }
 .nav-toggle span::before { transform: translate(-50%, -6px); }
-.nav-toggle span::after  { transform: translate(-50%, 5px); }
+.nav-toggle span::after  { transform: translate(-50%, 0.3125rem); }
 .nav-toggle[aria-expanded="true"] span { background: transparent; }
 .nav-toggle[aria-expanded="true"] span::before { transform: translate(-50%, -50%) rotate(45deg); }
 .nav-toggle[aria-expanded="true"] span::after  { transform: translate(-50%, -50%) rotate(-45deg); }
@@ -445,7 +451,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
    Until then the sentence is hidden; if the script never runs, the failsafe
    animation below fades it in on its own after a beat. */
 @keyframes hero-in {
-  from { opacity: 0; transform: translateX(64px); }
+  from { opacity: 0; transform: translateX(4rem); }
   to   { opacity: 1; transform: none; }
 }
 .js .hero-statement p { animation: hero-in 0.75s var(--ease) 1.2s both; }   /* failsafe only */
@@ -477,13 +483,13 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
        graphic design student exploring the
        intersection of ___ and design.
      The room right of PLAY is one nav gap, ABOUT (3.06rem in Neue Haas caps
-     at 0.95rem; 3.1rem with slack), the header gap (1.25rem) and the 62px
+     at 0.95rem; 3.1rem with slack), the header gap (1.25rem) and the 3.875rem
      icon toggle. In 65 Medium the sentence needs a box 15.44em wide for the
      longest rotating word ("technology") to stay on three lines, so the font
      is sized to (room ÷ 15.8) and the box is capped at 15.8em — every width,
      and every word, breaks in the same two places. Adding a longer word to
      data-words in index.html may need a bigger divisor. */
-  --hero-reserve: calc(3.1rem + var(--nav-gap) + 1.25rem + 62px);
+  --hero-reserve: calc(3.1rem + var(--nav-gap) + 1.25rem + 3.875rem);
   padding-right: var(--hero-reserve);
   font-size: clamp(1.25rem, calc((100cqi - var(--hero-reserve)) / 15.8), 5.2rem);
   max-width: calc(15.8em + var(--hero-reserve));
@@ -492,7 +498,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
    (no underline at rest, underline on hover), same as any other inline link. */
 
 /* Straight from hero into the grid — no filter bar, no rule line.
-   The gap here is deliberately generous (nouvelleidee.work measures ~156px
+   The gap here is deliberately generous (nouvelleidee.work measures ~9.75rem
    between its hero statement and its next section at this viewport). */
 .work {
   padding-top: var(--section-gap);
@@ -500,15 +506,15 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
 }
 
 /* 2-column grid of project cards. nouvelleidee.work's own grid gap
-   measures a tight, fixed 16px — matched here rather than scaling with
+   measures a tight, fixed 1rem — matched here rather than scaling with
    viewport width. */
 .work-grid {
   list-style: none;
   padding: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  column-gap: 16px;   /* nouvelleidee.work's image gap */
-  row-gap: 48px;      /* roomier than their 34px so each caption clearly belongs to the image above it */
+  column-gap: 1rem;   /* nouvelleidee.work's image gap */
+  row-gap: 3rem;      /* roomier than their 2.125rem so each caption clearly belongs to the image above it */
 }
 .work-card[hidden] { display: none; }
 /* Per-card framing: object-position works for the plain <img> and for the
@@ -525,7 +531,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   border-radius: var(--radius-img);
   background: var(--media-bg);
   aspect-ratio: 3 / 2;
-  margin-bottom: 13px;   /* nouvelleidee.work's image-to-title gap, measured */
+  margin-bottom: 0.8125rem;   /* nouvelleidee.work's image-to-title gap, measured */
   isolation: isolate;   /* own stacking context — keeps clipping predictable */
 }
 .card-media img,
@@ -544,7 +550,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
 }
 
 /* Stacked title + tag. Sizes and colours from nouvelleidee.work's project
-   captions (20.8px title in ink over a 16px grey tag line, same at every
+   captions (1.3rem title in ink over a 1rem grey tag line, same at every
    width); their face is Neue Montreal, Neue Haas Grotesk Display is the
    closest in our kit. Nick's adjustments: title and tag both at 500 (same
    weight; size and colour carry the hierarchy), tracking a hair tighter than
@@ -569,7 +575,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
 }
 
 @media (max-width: 700px) {
-  .work-grid { grid-template-columns: 1fr; row-gap: 32px; }
+  .work-grid { grid-template-columns: 1fr; row-gap: 2rem; }
 }
 
 /* Scroll warp (js/warp.js, desktop only): a WebGL canvas redraws each image
@@ -632,10 +638,10 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
 
 .project-media {
   /* full gutter on the outside (right) edge */
-  padding: 0.5rem var(--gutter) var(--gutter) 8px;
+  padding: 0.5rem var(--gutter) var(--gutter) 0.5rem;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1rem;
 }
 .project-media figure { margin: 0; }
 .project-media img,
@@ -721,7 +727,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   line-height: 0.95;
   letter-spacing: -0.02em;
 }
-.project-next a:hover strong { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.12em; }
+.project-next a:hover strong { text-decoration: underline; text-decoration-thickness: 0.125rem; text-underline-offset: 0.12em; }
 
 /* slim footer that rides at the end of the copy column */
 .project-foot {
@@ -742,7 +748,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
    story columns along the bottom leave. Phones scroll (see below). */
 .about-screen {
   height: calc(100svh - var(--header-h));
-  min-height: 560px;
+  min-height: 35rem;
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
 }
@@ -770,7 +776,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   max-width: 40cqw;
   object-fit: contain;
   object-position: left top;
-  border-radius: 4px;
+  border-radius: 0.25rem;
   user-select: none;
 }
 /* Hidden photos stay laid out (just invisible), so each is already decoded
@@ -840,7 +846,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   .about-stage__shots {
     position: static;
     display: flex;
-    gap: 12px;
+    gap: 0.75rem;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     padding-inline: var(--gutter);
@@ -892,7 +898,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   list-style: none;
   padding: 0 0 var(--section-gap);
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(14.375rem, 1fr));
   gap: clamp(0.9rem, 2.2vw, 1.6rem);
 }
 .play-card {
@@ -1028,8 +1034,8 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   position: absolute;
   top: 12%;
   left: var(--sky-icon-pos, 50%);
-  width: clamp(22px, 3vw, 30px);
-  height: clamp(22px, 3vw, 30px);
+  width: clamp(1.375rem, 3vw, 1.875rem);
+  height: clamp(1.375rem, 3vw, 1.875rem);
   transform: translateX(-50%);
   pointer-events: none;
 }
@@ -1073,21 +1079,21 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
 .footer-modes {
   position: absolute;
   z-index: 3;
-  top: calc((var(--header-h) - 30px) / 2);   /* level with the header line it replaces */
+  top: calc((var(--header-h) - 1.875rem) / 2);   /* level with the header line it replaces */
   left: var(--gutter);
   right: var(--gutter);
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 0.375rem;
 }
 .mode-pill {
-  height: 30px;
-  padding: 0 15px;
+  height: 1.875rem;
+  padding: 0 0.9375rem;
   border: 0;
-  border-radius: 15px;
+  border-radius: 0.9375rem;
   background: rgba(255, 255, 255, 0.42);
-  -webkit-backdrop-filter: blur(10px) saturate(1.4);
-  backdrop-filter: blur(10px) saturate(1.4);
+  -webkit-backdrop-filter: blur(0.625rem) saturate(1.4);
+  backdrop-filter: blur(0.625rem) saturate(1.4);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);   /* the glass's edge */
   color: rgb(20, 22, 30);
   font-family: var(--font-label);
@@ -1099,12 +1105,12 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
 }
 .mode-pill:hover { background: rgba(255, 255, 255, 0.62); }
 .mode-pill[aria-pressed="true"] { background: #fff; }
-.mode-pill:focus-visible { outline: 2px solid rgb(20, 22, 30); outline-offset: 2px; }
-.mode-round { width: 30px; padding: 0; display: grid; place-items: center; }
-.mode-round svg { width: 15px; height: 15px; }
+.mode-pill:focus-visible { outline: 0.125rem solid rgb(20, 22, 30); outline-offset: 0.125rem; }
+.mode-round { width: 1.875rem; padding: 0; display: grid; place-items: center; }
+.mode-round svg { width: 0.9375rem; height: 0.9375rem; }
 /* ↑ circle: takes the logo's place once the header has tucked behind the
    footer (site.js part 8). Home page: scrolls to the top; elsewhere: home. */
-.mode-home { margin-right: 4px; }
+.mode-home { margin-right: 0.25rem; }
 
 /* Games (js/footer-modes.js + one file per game): each fills the whole band
    as a .game-stage. Switching games, the new one fades in ON TOP of the old,
@@ -1148,7 +1154,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   position: absolute;
   left: 50%;
   top: 50%;
-  width: clamp(120px, 14vw, 200px);
+  width: clamp(7.5rem, 14vw, 12.5rem);
   aspect-ratio: 1;
   border-radius: 50%;
   translate: -50% -50%;
@@ -1199,8 +1205,8 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
    bounds, relative to the real viewport. */
 .frog {
   position: fixed;
-  width: 42px;
-  height: 38px;   /* sprite is 23x21 — keep its real aspect ratio */
+  width: 2.625rem;
+  height: 2.375rem;   /* sprite is 23x21 — keep its real aspect ratio */
   z-index: 500;
   pointer-events: none;
   will-change: transform;
@@ -1223,7 +1229,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   display: flex;
   align-items: flex-end;
   gap: clamp(0.75rem, 3vw, 2.25rem);
-  min-height: 120px;
+  min-height: 7.5rem;
   margin-bottom: clamp(2.5rem, 6vw, 4rem);
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--hairline);
@@ -1239,10 +1245,10 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   transition: transform 0.4s var(--ease), color 0.3s var(--ease);
 }
 .plant:hover { color: var(--ink); }
-.plant:focus-visible { outline-offset: 6px; }
+.plant:focus-visible { outline-offset: 0.375rem; }
 .footer-cols {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(9.375rem, 1fr));
   gap: 2rem;
   margin-bottom: 2.5rem;
 }
@@ -1266,7 +1272,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
    No-JS visitors (or a failed site.js) see everything, unanimated. */
 .js [data-reveal] {
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(1rem);
   transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
 .js [data-reveal].is-visible { opacity: 1; transform: none; }
@@ -1323,10 +1329,10 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   .site-header:has(.nav.is-open) :is(.logo, .nav a) { --hue-color: var(--cycle-text, var(--ink)); }
 
   /* Menu button: just the icon, with a comfortable tap area. */
-  .nav-toggle { width: 44px; height: 44px; margin-right: -11px; border: 0; border-radius: 0; }
+  .nav-toggle { width: 2.75rem; height: 2.75rem; margin-right: -11px; border: 0; border-radius: 0; }
   .nav-toggle span,
   .nav-toggle span::before,
-  .nav-toggle span::after { width: 22px; }
+  .nav-toggle span::after { width: 1.375rem; }
 
   /* Footer text stacks, all left-aligned. */
   .footer-utility { flex-direction: column; align-items: flex-start; }
@@ -1336,9 +1342,9 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   /* nav is collapsed into the hamburger here, so the hero uses the full
      width and wraps to as many lines as it needs. The rotating word always
      starts its own last line ("___ and design.", 9.44em at its longest, which
-     fits even a 320px phone), so swapping words never reflows the lines
+     fits even a 20rem phone), so swapping words never reflows the lines
      above it. */
-  .hero-statement p { padding-right: 0; font-size: clamp(1.8rem, 1rem + 4.4vw, 3.7rem); }   /* 1.8rem floor keeps "technology and design." on one line at 320px */
+  .hero-statement p { padding-right: 0; font-size: clamp(1.8rem, 1rem + 4.4vw, 3.7rem); }   /* 1.8rem floor keeps "technology and design." on one line at 20rem */
   .hero-break { display: block; }
 
   /* Project pages: stop the split, use one normal page scroll */

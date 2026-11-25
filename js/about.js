@@ -44,7 +44,11 @@
   function place() {
     if (!desktop.matches) return;
     var W = stage.clientWidth;
-    var gutter = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--gutter")) || 32;
+    var probe = document.createElement("div");      // --gutter is in rem: measure it in px
+    probe.style.cssText = "position:absolute;visibility:hidden;width:var(--gutter)";
+    document.body.appendChild(probe);
+    var gutter = probe.getBoundingClientRect().width || 32;
+    probe.remove();
     for (var i = 0; i < n; i++) {
       var w = shots[i].getBoundingClientRect().width;
       var x = (i + 0.5) / n * W - w / 2;

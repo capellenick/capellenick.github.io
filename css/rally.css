@@ -21,7 +21,7 @@
   --rl-ink: #141414;
   --rl-cream: #f4f3ec;
   --rl-card: color-mix(in srgb, var(--ink) 5%, var(--paper));
-  --rl-max: 1180px;
+  --rl-max: 73.75rem;
 }
 :root[data-theme="dark"] .rally-page { --rl-card: color-mix(in srgb, var(--ink) 7%, var(--paper)); }
 
@@ -83,7 +83,7 @@
   padding-bottom: 2rem;
 }
 .rl-wordmark { margin: 0; line-height: 0; color: var(--ink); }
-.rl-wordmark__svg { display: block; width: clamp(280px, 34vw, 580px); height: auto; overflow: visible; }
+.rl-wordmark__svg { display: block; width: clamp(17.5rem, 34vw, 36.25rem); height: auto; overflow: visible; }
 /* The wordmark's dot is a tennis ball: drops in and bounces on load.
    (transform-box makes the % moves relative to the ball's own size.) */
 .rl-ball {
@@ -128,9 +128,9 @@
   line-height: 1.02;
   gap: 0.25em;
 }
-.rl-cta--big:hover .rl-arrow { transform: translate(4px, -4px); }
+.rl-cta--big:hover .rl-arrow { transform: translate(0.25rem, -4px); }
 .rl-cta .rl-arrow { transition: transform 0.2s ease; }
-.rl-cta:hover .rl-arrow { transform: translate(2px, -2px); }
+.rl-cta:hover .rl-arrow { transform: translate(0.125rem, -2px); }
 .rl-link { color: inherit; text-decoration: none; }
 .rl-nowrap { white-space: nowrap; }
 .rl-link .rl-arrow { display: inline-block; margin-left: 0.25em; vertical-align: -0.02em; }   /* rides along with the last word when it wraps */
@@ -149,8 +149,8 @@
 /* The phone sits against the right edge of the content column, so the space
    to its right matches the space left of the wordmark at any width. */
 .rl-hero__device { display: grid; place-items: center end; }
-.rl-hero__device .phone { --w: clamp(220px, 24vw, 330px); animation: rl-rise 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both; }
-@keyframes rl-rise { from { transform: translateY(60px); opacity: 0; } to { transform: none; opacity: 1; } }
+.rl-hero__device .phone { --w: clamp(13.75rem, 24vw, 20.625rem); animation: rl-rise 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both; }
+@keyframes rl-rise { from { transform: translateY(3.75rem); opacity: 0; } to { transform: none; opacity: 1; } }
 
 .rl-facts {
   display: grid;
@@ -167,7 +167,7 @@
    screen). --w sets the width; everything else scales from it. The screen
    captures already include the status bar and Dynamic Island. ---------- */
 .phone {
-  --w: 300px;
+  --w: 18.75rem;
   position: relative;
   width: var(--w);
   aspect-ratio: 436 / 900;
@@ -218,26 +218,26 @@
 .rl-stats--3 .rl-stat__num { font-size: clamp(3rem, 1.7rem + 4vw, 5.6rem); }   /* survey numbers a step under the headline stats */
 
 /* ---- Personas: the boxes from the research deck, rebuilt as page content */
-.rl-personas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(28px, 4vw, 56px); row-gap: 10px; }
+.rl-personas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(1.75rem, 4vw, 3.5rem); row-gap: 0.625rem; }
 .rl-persona {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 0.625rem;
   align-content: start;
   /* Both personas share one set of rows, so their boxes line up. */
   grid-row: span 5;
   grid-template-rows: subgrid;
-  row-gap: 10px;
+  row-gap: 0.625rem;
 }
 .rl-persona__id,
-.rl-persona__box { padding: 1.25rem; border-radius: 18px; background: var(--rl-card); line-height: 1.4; }
+.rl-persona__box { padding: 1.25rem; border-radius: 1.125rem; background: var(--rl-card); line-height: 1.4; }
 .rl-persona__id,
 .rl-persona__about,
 .rl-persona__goals,
 .rl-persona__journey { grid-column: 1 / -1; }
 .rl-persona__id { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 1rem; }
 .rl-persona__avatar {
-  width: 56px; height: 56px; border-radius: 50%;
+  width: 3.5rem; height: 3.5rem; border-radius: 50%;
   display: grid; place-items: center;
   background: var(--hairline-2); color: var(--ink);
   font-family: var(--font-hero); font-weight: 500; font-size: 1.4rem;
@@ -256,8 +256,8 @@
 .rl-persona p { margin: 0; color: var(--ink-72); }
 .rl-persona ul { margin: 0; padding-left: 1.05em; color: var(--ink-72); }
 .rl-persona li + li { margin-top: 0.2rem; }
-.rl-journey { list-style: none; padding: 0; margin: 0.2rem 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
-.rl-journey li { padding: 0.75rem; border-radius: 12px; color: #141414; margin: 0 !important; }
+.rl-journey { list-style: none; padding: 0; margin: 0.2rem 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem; }
+.rl-journey li { padding: 0.75rem; border-radius: 0.75rem; color: #141414; margin: 0 !important; }
 .rl-journey h5 { margin-bottom: 0.25rem; }
 .rl-journey p { color: rgba(20, 20, 20, 0.78); font-size: 0.88rem; line-height: 1.32; }
 .rl-journey__0 { background: var(--rl-blue); }
@@ -267,13 +267,13 @@
 
 
 /* ---- Cards --------------------------------------------------------------- */
-.rl-cards { display: grid; gap: 14px; }
+.rl-cards { display: grid; gap: 0.875rem; }
 .rl-cards--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 3rem; }
 .rl-cards--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .rl-cards--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .rl-card {
   padding: 1.5rem;
-  border-radius: 20px;
+  border-radius: 1.25rem;
   background: var(--rl-card);
   line-height: 1.42;
 }
@@ -284,7 +284,7 @@
 .rl-list li + li { margin-top: 0.35rem; }
 
 .rl-figure { margin: clamp(3rem, 6vw, 4.5rem) 0 0; }
-.rl-figure img { display: block; width: 100%; height: auto; border-radius: 20px; }
+.rl-figure img { display: block; width: 100%; height: auto; border-radius: 1.25rem; }
 .rl-figure figcaption { color: var(--ink-50); margin-top: 0.75rem; }
 
 /* ---- Converge: the sports + features that got cut fade and strike out as
@@ -303,27 +303,27 @@
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 0.625rem;
   padding: 0;
   margin: 2.5rem 0 2.5rem;
-  max-width: 900px;
+  max-width: 56.25rem;
 }
 .rl-chips li {
   font-family: var(--font-hero);
   font-weight: 500;
   font-size: clamp(1.05rem, 0.8rem + 0.9vw, 1.6rem);
   padding: 0.45em 0.95em;
-  border-radius: 999px;
+  border-radius: 62.4375rem;
   background: var(--rl-card);
   transition: opacity 0.35s ease, color 0.35s ease, background-color 0.35s ease;
 }
-.rl-chips li.is-cut { opacity: 0.28; text-decoration: line-through; text-decoration-thickness: 2px; }
+.rl-chips li.is-cut { opacity: 0.28; text-decoration: line-through; text-decoration-thickness: 0.125rem; }
 .rl-chips li[data-keep].is-kept { background: var(--rl-lime); color: #141414; }
 /* "right" in the headline lights up with the kept pills. Neon lime on dark;
    on the light page that lime is unreadable, so it goes a deeper lime. */
 .rl-right { transition: color 0.35s ease; }
 .rl-narrow.is-done .rl-right { color: var(--rl-lime); }
-.rl-beforeafter { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; max-width: 900px; }
+.rl-beforeafter { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; max-width: 56.25rem; }
 .rl-beforeafter p:last-child { color: var(--ink-72); line-height: 1.45; margin: 0; }
 .rl-beforeafter .rl-eyebrow { color: var(--ink); }   /* same as the headline above */
 .rl-after { opacity: 0.35; transition: opacity 0.4s ease; }
@@ -382,9 +382,9 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
 .rl-steps p { font-family: var(--font-hero); font-weight: 500; letter-spacing: -0.01em; }   /* whole step in the numbers' face */
 .rl-steps p { margin: 0; line-height: 1.4; color: var(--ink-72); max-width: 36ch; }
 
-.rl-show__stage { display: grid; place-items: center; perspective: 1300px; }
+.rl-show__stage { display: grid; place-items: center; perspective: 81.25rem; }
 .rl-show__device {
-  --show-w: clamp(240px, min(26vw, 36svh), 360px);
+  --show-w: clamp(15rem, min(26vw, 36svh), 22.5rem);
   position: relative;
   transform-style: preserve-3d;
   transform: rotateY(var(--ry, 0deg)) rotateX(var(--rx, 0deg)) rotateZ(var(--rz, 0deg)) scale(var(--s, 1));
@@ -437,9 +437,9 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
   right: 4%;
   bottom: 2.6%;
   height: 7.6%;
-  border-radius: 999px;
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  border-radius: 62.4375rem;
+  backdrop-filter: blur(0.875rem) saturate(1.4);
+  -webkit-backdrop-filter: blur(0.875rem) saturate(1.4);
   background: rgba(30, 30, 30, 0.35);
 }
 /* A soft reflection that slides across the glass as the phone turns. */
@@ -456,7 +456,7 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
 /* ---- Gallery (Apple-style sideways tiles) ------------------------------- */
 .rl-gallery__track {
   display: flex;
-  gap: 18px;
+  gap: 1.125rem;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
@@ -468,7 +468,7 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
 .rl-gallery__track::-webkit-scrollbar { display: none; }
 .rl-tile {
   flex: none;
-  width: clamp(260px, 28vw, 360px);
+  width: clamp(16.25rem, 28vw, 22.5rem);
   scroll-snap-align: start;
 }
 .rl-tile__media {
@@ -476,7 +476,7 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
   display: grid;
   place-items: center;
   aspect-ratio: 4 / 5;
-  border-radius: 24px;
+  border-radius: 1.5rem;
   overflow: hidden;
   margin-bottom: 1rem;
   padding: 8%;
@@ -490,7 +490,7 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
   inset: -8%;
   z-index: -1;
   background: #1a1a1a center / cover no-repeat;
-  filter: blur(20px) brightness(0.55) saturate(1.15);
+  filter: blur(1.25rem) brightness(0.55) saturate(1.15);
 }
 .rl-tile:nth-child(1) .rl-tile__media::before { background-image: url(../assets/projects/rally/tile-bg-1.jpg); }
 .rl-tile:nth-child(2) .rl-tile__media::before { background-image: url(../assets/projects/rally/tile-bg-2.jpg); }
@@ -505,15 +505,15 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
   height: auto;
   max-height: 100%;
   object-fit: contain;
-  border-radius: 18px;
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 1.125rem;
+  box-shadow: 0 1.5rem 3.125rem rgba(0, 0, 0, 0.45), 0 0.125rem 0.5rem rgba(0, 0, 0, 0.3);
 }
 /* Card-shaped pieces cut to their own rounded edges (transparent PNG), so
    no frame of app background shows around them; the shadow follows the shape. */
 .rl-tile__media img.rl-cutout {
   border-radius: 0;
   box-shadow: none;
-  filter: drop-shadow(0 22px 40px rgba(0, 0, 0, 0.45)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 1.375rem 2.5rem rgba(0, 0, 0, 0.45)) drop-shadow(0 0.125rem 0.375rem rgba(0, 0, 0, 0.3));
 }
 /* Pieces that sit on the app's own background (the chat): captured on
    transparent and given an even panel here, so no edge of the app shows. */
@@ -534,19 +534,19 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
 .rl-tile p { margin: 0; line-height: 1.42; color: var(--ink-72); max-width: 32ch; }
 .rl-tile strong { color: var(--ink); font-weight: 600; }
 .rl-gallery__controls { display: flex; align-items: center; justify-content: space-between; margin-top: 1.5rem; }
-.rl-dots { display: flex; gap: 8px; }
-.rl-dots span { width: 8px; height: 8px; border-radius: 99px; background: var(--hairline-2); transition: width 0.3s ease, background-color 0.3s ease; }
-.rl-dots span.is-on { width: 28px; background: var(--ink); }
-.rl-paddles { display: flex; gap: 6px; }
+.rl-dots { display: flex; gap: 0.5rem; }
+.rl-dots span { width: 0.5rem; height: 0.5rem; border-radius: 6.1875rem; background: var(--hairline-2); transition: width 0.3s ease, background-color 0.3s ease; }
+.rl-dots span.is-on { width: 1.75rem; background: var(--ink); }
+.rl-paddles { display: flex; gap: 0.375rem; }
 /* Plain right-angle chevrons, no circle. */
 .rl-paddles button {
   display: grid; place-items: center;
-  width: 36px; height: 44px; padding: 0;
+  width: 2.25rem; height: 2.75rem; padding: 0;
   border: 0; background: none; color: var(--ink);
   cursor: pointer;
   transition: opacity 0.2s ease;
 }
-.rl-paddles svg { width: 16px; height: 24px; }
+.rl-paddles svg { width: 1rem; height: 1.5rem; }
 .rl-paddles button:disabled { opacity: 0.35; cursor: default; }
 
 /* ---- Business ------------------------------------------------------------ */
@@ -557,9 +557,9 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
     "partners activities value relationships segments"
     "partners resources  value channels      segments"
     "costs    costs      costs revenue       revenue";
-  gap: 10px;
+  gap: 0.625rem;
 }
-.rl-bmc > div { padding: 1.25rem; border-radius: 18px; background: var(--rl-card); line-height: 1.4; }
+.rl-bmc > div { padding: 1.25rem; border-radius: 1.125rem; background: var(--rl-card); line-height: 1.4; }
 .rl-bmc p { margin: 0; color: var(--ink-72); }
 .rl-bmc .rl-card__num { color: var(--ink-50); margin-bottom: 0.6rem; }
 /* Green: money, growth, value. */
@@ -578,7 +578,7 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
 .rl-bmc__revenue { grid-area: revenue; }
 
 .rl-headline--wide { max-width: 22ch; }
-.rl-forces-wrap { max-width: 940px; }
+.rl-forces-wrap { max-width: 58.75rem; }
 .rl-forces { display: grid; gap: 1.1rem; }
 .rl-force {
   display: grid;
@@ -589,7 +589,7 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
   row-gap: 0.3rem;
 }
 .rl-force__name { grid-area: name; margin: 0; }
-.rl-force__bar { grid-area: bar; height: 10px; border-radius: 99px; background: var(--rl-card); overflow: hidden; }
+.rl-force__bar { grid-area: bar; height: 0.625rem; border-radius: 6.1875rem; background: var(--rl-card); overflow: hidden; }
 .rl-force__bar span {
   display: block; height: 100%; border-radius: inherit;
   background: var(--rl-lime);   /* neon, like the kept pills */
@@ -615,7 +615,7 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
 
 
 
-.rl-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2rem, 4vw, 3.5rem); max-width: 1040px; margin-top: 3rem; }
+.rl-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2rem, 4vw, 3.5rem); max-width: 65rem; margin-top: 3rem; }
 .rl-pair p:last-child { color: var(--ink-72); line-height: 1.4; margin: 0; font-size: clamp(1.15rem, 1rem + 0.55vw, 1.5rem); }
 
 .rl-mapping .rl-headline { max-width: 30ch; }   /* the process headline sits on two lines on desktop */
@@ -624,12 +624,12 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
 .rl-gallery .rl-body { max-width: 62ch; }   /* the Design decisions intro runs wider, fewer lines */
 .rl-ptile {
   flex: none;
-  width: min(690px, 82vw);
+  width: min(43.125rem, 82vw);
   scroll-snap-align: start;
 }
 .rl-ptile__media {
   aspect-ratio: 3 / 2;
-  border-radius: 24px;
+  border-radius: 1.5rem;
   overflow: hidden;
   background: #0b0b0b;
 }
@@ -666,7 +666,7 @@ body.has-cursor .rl-ptile__media[data-lightbox] { cursor: var(--cross-cursor, zo
   aspect-ratio: 3 / 2;
   height: auto;
   object-fit: contain;
-  border-radius: 16px;
+  border-radius: 1rem;
   transform: scale(0.97);
 }
 .rl-lightbox.is-open img { transform: none; transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -674,7 +674,7 @@ body.has-cursor .rl-ptile__media[data-lightbox] { cursor: var(--cross-cursor, zo
 .rl-lightbox figcaption strong { color: #f2f3f4; font-weight: 600; }
 .rl-lightbox button {
   display: grid; place-items: center;
-  width: 44px; height: 44px;   /* tap target; just the icon shows */
+  width: 2.75rem; height: 2.75rem;   /* tap target; just the icon shows */
   background: none;
   color: inherit;
   opacity: 0.7;
@@ -685,14 +685,14 @@ body.has-cursor .rl-ptile__media[data-lightbox] { cursor: var(--cross-cursor, zo
 }
 .rl-lightbox button:hover, .rl-lightbox button:focus-visible { opacity: 1; }
 /* Arrows level with the middle of the photo (its height is the frame width / 1.5). */
-.rl-lightbox__prev, .rl-lightbox__next { margin-top: calc(min((100vw - 9rem) / 1.5, 100svh - 12rem) / 2 - 22px); }
+.rl-lightbox__prev, .rl-lightbox__next { margin-top: calc(min((100vw - 9rem) / 1.5, 100svh - 12rem) / 2 - 1.375rem); }
 .rl-lightbox button:disabled { opacity: 0.2; cursor: default; }
-.rl-lightbox button svg { width: 16px; height: 24px; }
+.rl-lightbox button svg { width: 1rem; height: 1.5rem; }
 .rl-lightbox__close { position: absolute; top: 1.25rem; right: 1.25rem; }
-.rl-lightbox__close svg { width: 18px !important; height: 18px !important; }
+.rl-lightbox__close svg { width: 1.125rem !important; height: 1.125rem !important; }
 html.rl-lightbox-open { overflow: hidden; }
 @media (max-width: 760px) {
-  .rl-lightbox { grid-template-columns: 0 minmax(0, 1fr) 0; padding: 0 12px; }
+  .rl-lightbox { grid-template-columns: 0 minmax(0, 1fr) 0; padding: 0 0.75rem; }
   .rl-lightbox__prev, .rl-lightbox__next { display: none !important; }   /* swipe instead */
 }
 
@@ -713,10 +713,10 @@ html.rl-lightbox-open { overflow: hidden; }
 @media (max-width: 900px) {
   .rl-hero { grid-template-columns: 1fr; text-align: left; min-height: 0; padding-top: 2.5rem; gap: 3rem; }
   .rl-hero__device { place-items: center; }
-  .rl-hero__device .phone { --w: min(68vw, 300px); }
+  .rl-hero__device .phone { --w: min(68vw, 18.75rem); }
   .rl-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .rl-cards--3, .rl-cards--4, .rl-process { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .rl-personas { grid-template-columns: 1fr; row-gap: 10px; }
+  .rl-personas { grid-template-columns: 1fr; row-gap: 0.625rem; }
   .rl-persona + .rl-persona { margin-top: 1.5rem; }
   .rl-bmc {
     grid-template-columns: 1fr 1fr;
@@ -769,7 +769,7 @@ html.rl-lightbox-open { overflow: hidden; }
 
 /* Model credit (CC BY), quiet, above the next-project link. */
 .rl-credit { font-size: 0.8rem; color: var(--ink-50, rgba(0,0,0,.5)); margin: 0 0 2rem; }
-.rl-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.rl-credit a { color: inherit; text-decoration: underline; text-underline-offset: 0.125rem; }
 
 /* ---- Skim mode -----------------------------------------------------------
    "Short on time?" switch between the facts and the problem. With it on
@@ -788,17 +788,17 @@ html.rl-lightbox-open { overflow: hidden; }
 .rl-skim__label { color: var(--ink-50); }
 .rl-skim__label strong { color: var(--ink); font-weight: 500; margin-left: 0.2em; }
 .rl-skim__track {
-  position: relative; width: 46px; height: 26px; border-radius: 99px;
+  position: relative; width: 2.875rem; height: 1.625rem; border-radius: 6.1875rem;
   background: var(--rl-card); box-shadow: inset 0 0 0 1px var(--hairline-2, rgba(127,127,127,0.25));
   transition: background-color 0.25s ease;
 }
 .rl-skim__thumb {
-  position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%;
+  position: absolute; top: 0.1875rem; left: 0.1875rem; width: 1.25rem; height: 1.25rem; border-radius: 50%;
   background: var(--ink); transition: transform 0.25s cubic-bezier(0.3, 0.7, 0.2, 1), background-color 0.25s ease;
 }
 .rl-skim__toggle[aria-checked="true"] .rl-skim__track { background: var(--rl-lime); box-shadow: none; }
-.rl-skim__toggle[aria-checked="true"] .rl-skim__thumb { transform: translateX(20px); background: #141414; }
-.rl-skim__toggle:focus-visible { outline: 2px solid var(--rl-lime); outline-offset: 6px; border-radius: 8px; }
+.rl-skim__toggle[aria-checked="true"] .rl-skim__thumb { transform: translateX(1.25rem); background: #141414; }
+.rl-skim__toggle:focus-visible { outline: 0.125rem solid var(--rl-lime); outline-offset: 0.375rem; border-radius: 0.5rem; }
 
 html.rl-skim .rl-skim-hide,
 html.rl-skim .rl-cap-more,
@@ -832,7 +832,7 @@ html.rl-skim .rl-narrow { height: 150vh; }
   margin-left: -0.7rem;
   color: var(--ink-50);
   opacity: 0;
-  transform: translateY(6px);
+  transform: translateY(0.375rem);
   transition: opacity 0.4s ease, transform 0.4s ease;
   pointer-events: none;
 }
@@ -854,9 +854,9 @@ html.rl-skim .rl-narrow { height: 150vh; }
 .rl-narrow.is-done .rl-cue svg, .rl-show.is-end .rl-cue svg { animation: rl-cue-bounce 7s ease-out 0.3s infinite; }
 @keyframes rl-cue-bounce {
   0%    { transform: translateY(0); }
-  3.2%  { transform: translateY(6px); }
+  3.2%  { transform: translateY(0.375rem); }
   5.9%  { transform: translateY(0); }
-  8%    { transform: translateY(2.5px); }
+  8%    { transform: translateY(0.1562rem); }
   10.7%, 100% { transform: translateY(0); }
 }
 @media (prefers-reduced-motion: reduce) { .rl-narrow.is-done .rl-cue svg, .rl-show.is-end .rl-cue svg { animation: none; } }
