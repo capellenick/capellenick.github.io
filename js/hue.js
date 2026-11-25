@@ -212,11 +212,11 @@
       lastFill = hex(legible(c, theme, 3.1));
       setCursor(lastFill);
     }
-    if (ticks % 10 === 0) setFavicon(hex(mapped(c[0], c[1], c[2])));
+    if (ticks % 2 === 0) setFavicon(hex(mapped(c[0], c[1], c[2])));   // 10x a second
     ticks++;
   }
 
-  // The tab icon (the 17-dot mark) takes the same colour, about twice a
+  // The tab icon (the 17-dot mark) takes the same colour, 10 times a
   // second and only when it changes. The static SVG in each page's <head>
   // stays as the fallback (no JS, reduced motion).
   var favLink = document.querySelector('link[rel="icon"][type="image/svg+xml"]');
