@@ -208,10 +208,28 @@
     if (header) header.style.setProperty("--cycle-text", text);
     if (rotator) rotator.style.setProperty("--cycle-text", text);
     if (scatter) scatter.style.setProperty("--cycle-text", text);
-    if (ticks++ % 2 === 0 && body.classList.contains("has-cursor")) {
+    if (ticks % 2 === 0 && body.classList.contains("has-cursor")) {
       lastFill = hex(legible(c, theme, 3.1));
       setCursor(lastFill);
     }
+    if (ticks % 10 === 0) setFavicon(hex(mapped(c[0], c[1], c[2])));
+    ticks++;
+  }
+
+  // The tab icon (the 17-dot mark) takes the same colour, about twice a
+  // second and only when it changes. The static SVG in each page's <head>
+  // stays as the fallback (no JS, reduced motion).
+  var favLink = document.querySelector('link[rel="icon"][type="image/svg+xml"]');
+  var favPng = document.querySelector('link[rel="icon"][type="image/png"]');
+  var lastFav = "";
+  var DOTS = [[10,10],[50,10],[90,10],[30,30],[50,30],[70,30],[10,50],[30,50],[50,50],[70,50],[90,50],[30,70],[50,70],[70,70],[10,90],[50,90],[90,90]]
+    .map(function (p) { return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="8"/>'; }).join("");
+  function setFavicon(fill) {
+    if (!favLink || fill === lastFav) return;
+    lastFav = fill;
+    favLink.href = "data:image/svg+xml," + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g fill="' + fill + '">' + DOTS + "</g></svg>");
+    if (favPng) favPng.remove(), favPng = null;   // so the browser doesn't prefer the static PNG
   }
   tick();
   setInterval(tick, 50);
