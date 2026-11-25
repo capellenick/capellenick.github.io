@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>The Mantodea Institute — Nick Capelle</title>
+  <meta name="description" content="Brand identity and homepage UX for a fictitious interactive museum dedicated to the praying mantis." />
+
+  <link rel="icon" href="assets/favicon.svg?v=5" type="image/svg+xml" />
+  <link rel="icon" href="assets/favicon-32.png?v=4" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=4" />
+  <link rel="preconnect" href="https://use.typekit.net" crossorigin />
+  <link rel="preconnect" href="https://p.typekit.net" crossorigin />
+  <link rel="stylesheet" href="https://use.typekit.net/wsb8ckc.css" />
+  <link rel="stylesheet" href="css/style.css?v=99" />
+
+  <script>
+    document.documentElement.classList.add("js");
+    try {
+      var t = localStorage.getItem("theme");
+      if (!t) t = "dark";   // dark by default; the toggle (saved in localStorage) switches it
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  </script>
+</head>
+<body class="project-page" data-cycle="#ee88ee #cc6188 #c77d49 #f1c168 #739968">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="logo" href="/">Nick Capelle</a>
+      <nav class="nav" id="primary-nav" aria-label="Primary">
+        <a href="play/" hidden>Play</a><!-- PLAY archived: remove `hidden` to bring it back -->
+        <a href="/about">About</a>
+      </nav>
+      <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Switch to dark theme">
+        <span class="theme-toggle__thumb" aria-hidden="true"></span>
+        <span class="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="6.34" y2="6.34"></line><line x1="17.66" y1="17.66" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="6.34" y2="17.66"></line><line x1="17.66" y1="6.34" x2="19.07" y2="4.93"></line></svg>
+        </span>
+        <span class="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </span>
+      </button>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Menu">
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- Split view. Left scrolls images; right scrolls copy. -->
+    <div class="project">
+      <!-- ============ IMAGE COLUMN — add / swap <figure> blocks ============ -->
+      <div class="project-media" tabindex="0" role="region" aria-label="Project images">
+        <figure>
+          <picture><source type="image/avif" srcset="assets/projects/mantodea/00-logo-banner-640.avif 640w, assets/projects/mantodea/00-logo-banner-1200.avif 1200w, assets/projects/mantodea/00-logo-banner-2000.avif 2000w" sizes="(max-width: 900px) 100vw, 60vw" /><img decoding="async" src="assets/projects/mantodea/00-logo-banner-1200.jpg" srcset="assets/projects/mantodea/00-logo-banner-640.jpg 640w, assets/projects/mantodea/00-logo-banner-1200.jpg 1200w, assets/projects/mantodea/00-logo-banner-2000.jpg 2000w" sizes="(max-width: 900px) 100vw, 60vw" alt="The Mantodea Institute logo, a geometric mantis above the name, on sage green" width="2000" height="1000" loading="eager" fetchpriority="high" /></picture>
+          <figcaption>01 &mdash; Logo.</figcaption>
+        </figure>
+        <figure>
+          <picture><source type="image/avif" srcset="assets/projects/mantodea/01-sketches-lettering-640.avif 640w, assets/projects/mantodea/01-sketches-lettering-1200.avif 1200w, assets/projects/mantodea/01-sketches-lettering-1500.avif 1500w" sizes="(max-width: 900px) 100vw, 60vw" /><img decoding="async" src="assets/projects/mantodea/01-sketches-lettering-1200.jpg" srcset="assets/projects/mantodea/01-sketches-lettering-640.jpg 640w, assets/projects/mantodea/01-sketches-lettering-1200.jpg 1200w, assets/projects/mantodea/01-sketches-lettering-1500.jpg 1500w" sizes="(max-width: 900px) 100vw, 60vw" alt="Sketchbook page of early mantis drawings and Mantodea Institute lettering studies" width="1500" height="2000" loading="lazy" /></picture>
+          <figcaption>02 &mdash; Sketches &mdash; lettering and marks.</figcaption>
+        </figure>
+        <figure>
+          <picture><source type="image/avif" srcset="assets/projects/mantodea/02-sketches-mantis-640.avif 640w, assets/projects/mantodea/02-sketches-mantis-1200.avif 1200w, assets/projects/mantodea/02-sketches-mantis-2000.avif 2000w" sizes="(max-width: 900px) 100vw, 60vw" /><img decoding="async" src="assets/projects/mantodea/02-sketches-mantis-1200.jpg" srcset="assets/projects/mantodea/02-sketches-mantis-640.jpg 640w, assets/projects/mantodea/02-sketches-mantis-1200.jpg 1200w, assets/projects/mantodea/02-sketches-mantis-2000.jpg 2000w" sizes="(max-width: 900px) 100vw, 60vw" alt="Sketchbook spread of detailed mantis studies and simplified poses" width="2000" height="1500" loading="lazy" /></picture>
+          <figcaption>03 &mdash; Sketches &mdash; form and posture.</figcaption>
+        </figure>
+        <figure>
+          <picture><source type="image/avif" srcset="assets/projects/mantodea/03-logo-iterations-640.avif 640w, assets/projects/mantodea/03-logo-iterations-1200.avif 1200w, assets/projects/mantodea/03-logo-iterations-1402.avif 1402w" sizes="(max-width: 900px) 100vw, 60vw" /><img decoding="async" src="assets/projects/mantodea/03-logo-iterations-1200.jpg" srcset="assets/projects/mantodea/03-logo-iterations-640.jpg 640w, assets/projects/mantodea/03-logo-iterations-1200.jpg 1200w, assets/projects/mantodea/03-logo-iterations-1402.jpg 1402w" sizes="(max-width: 900px) 100vw, 60vw" alt="Grid of sixteen digital logo iterations in black, white and green" width="1402" height="1388" loading="lazy" /></picture>
+          <figcaption>04 &mdash; Digital iterations.</figcaption>
+        </figure>
+        <figure>
+          <picture><source type="image/avif" srcset="assets/projects/mantodea/04-glyph-studies-640.avif 640w, assets/projects/mantodea/04-glyph-studies-1200.avif 1200w, assets/projects/mantodea/04-glyph-studies-2000.avif 2000w" sizes="(max-width: 900px) 100vw, 60vw" /><img decoding="async" src="assets/projects/mantodea/04-glyph-studies-1200.jpg" srcset="assets/projects/mantodea/04-glyph-studies-640.jpg 640w, assets/projects/mantodea/04-glyph-studies-1200.jpg 1200w, assets/projects/mantodea/04-glyph-studies-2000.jpg 2000w" sizes="(max-width: 900px) 100vw, 60vw" alt="Three simplified black mantis glyphs from front, standing and side views" width="2000" height="924" loading="lazy" /></picture>
+          <figcaption>05 &mdash; Glyph studies.</figcaption>
+        </figure>
+        <figure>
+          <picture><source type="image/avif" srcset="assets/projects/mantodea/05-logo-640.avif 640w, assets/projects/mantodea/05-logo-1200.avif 1200w, assets/projects/mantodea/05-logo-1500.avif 1500w" sizes="(max-width: 900px) 100vw, 60vw" /><img decoding="async" src="assets/projects/mantodea/05-logo-1200.jpg" srcset="assets/projects/mantodea/05-logo-640.jpg 640w, assets/projects/mantodea/05-logo-1200.jpg 1200w, assets/projects/mantodea/05-logo-1500.jpg 1500w" sizes="(max-width: 900px) 100vw, 60vw" alt="Final Mantodea Institute logo in dark green and cream on sage" width="1500" height="1500" loading="lazy" /></picture>
+          <figcaption>06 &mdash; Final mark.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/projects/mantodea/06-brand-guide.gif" alt="Animated pages from the Mantodea Institute brand guideline" width="2500" height="1397" loading="lazy" />
+          <figcaption>07 &mdash; Brand guideline.</figcaption>
+        </figure>
+        <figure>
+          <picture><source type="image/avif" srcset="assets/projects/mantodea/07-wireframe-sketch-1-640.avif 640w, assets/projects/mantodea/07-wireframe-sketch-1-1200.avif 1200w, assets/projects/mantodea/07-wireframe-sketch-1-2000.avif 2000w" sizes="(max-width: 900px) 100vw, 60vw" /><img decoding="async" src="assets/projects/mantodea/07-wireframe-sketch-1-1200.jpg" srcset="assets/projects/mantodea/07-wireframe-sketch-1-640.jpg 640w, assets/projects/mantodea/07-wireframe-sketch-1-1200.jpg 1200w, assets/projects/mantodea/07-wireframe-sketch-1-2000.jpg 2000w" sizes="(max-width: 900px) 100vw, 60vw" alt="Sketchbook spread of low-fidelity homepage wireframes with notes" width="2000" height="1500" loading="lazy" /></picture>
+          <figcaption>08 &mdash; Wireframes &mdash; first pass.</figcaption>
+        </figure>
+        <figure>
+          <picture><source type="image/avif" srcset="assets/projects/mantodea/14-wireframe-sketch-2-640.avif 640w, assets/projects/mantodea/14-wireframe-sketch-2-1200.avif 1200w, assets/projects/mantodea/14-wireframe-sketch-2-2000.avif 2000w" sizes="(max-width: 900px) 100vw, 60vw" /><img decoding="async" src="assets/projects/mantodea/14-wireframe-sketch-2-1200.jpg" srcset="assets/projects/mantodea/14-wireframe-sketch-2-640.jpg 640w, assets/projects/mantodea/14-wireframe-sketch-2-1200.jpg 1200w, assets/projects/mantodea/14-wireframe-sketch-2-2000.jpg 2000w" sizes="(max-width: 900px) 100vw, 60vw" alt="Sketchbook spread of refined homepage wireframes with annotations" width="2000" height="1500" loading="lazy" /></picture>
+          <figcaption>09 &mdash; Wireframes &mdash; refined.</figcaption>
+        </figure>
+        <figure>
+          <picture><source type="image/avif" srcset="assets/projects/mantodea/08-annotated-hero-640.avif 640w, assets/projects/mantodea/08-annotated-hero-1200.avif 1200w, assets/projects/mantodea/08-annotated-hero-2000.avif 2000w" sizes="(max-width: 900px) 100vw, 60vw" /><img decoding="async" src="assets/projects/mantodea/08-annotated-hero-1200.jpg" srcset="assets/projects/mantodea/08-annotated-hero-640.jpg 640w, assets/projects/mantodea/08-annotated-hero-1200.jpg 1200w, assets/projects/mantodea/08-annotated-hero-2000.jpg 2000w" sizes="(max-width: 900px) 100vw, 60vw" alt="Annotated homepage hero with navigation, slideshow and the headline Curiosity takes flight" width="2000" height="1059" loading="lazy" /></picture>
+          <figcaption>10 &mdash; Annotated &mdash; header and hero.</figcaption>
+        </figure>
+        <figure>
+          <picture><source type="image/avif" srcset="assets/projects/mantodea/09-annotated-exhibits-640.avif 640w, assets/projects/mantodea/09-annotated-exhibits-1200.avif 1200w, assets/projects/mantodea/09-annotated-exhibits-2000.avif 2000w" sizes="(max-width: 900px) 100vw, 60vw" /><img decoding="async" src="assets/projects/mantodea/09-annotated-exhibits-1200.jpg" srcset="assets/projects/mantodea/09-annotated-exhibits-640.jpg 640w, assets/projects/mantodea/09-annotated-exhibits-1200.jpg 1200w, assets/projects/mantodea/09-annotated-exhibits-2000.jpg 2000w" sizes="(max-width: 900px) 100vw, 60vw" alt="Annotated exhibits section with three image cards" width="2000" height="1059" loading="lazy" /></picture>
+          <figcaption>11 &mdash; Annotated &mdash; exhibits.</figcaption>
+        </figure>
+        <figure>
+          <picture><source type="image/avif" srcset="assets/projects/mantodea/10-annotated-events-640.avif 640w, assets/projects/mantodea/10-annotated-events-1200.avif 1200w, assets/projects/mantodea/10-annotated-events-2000.avif 2000w" sizes="(max-width: 900px) 100vw, 60vw" /><img decoding="async" src="assets/projects/mantodea/10-annotated-events-1200.jpg" srcset="assets/projects/mantodea/10-annotated-events-640.jpg 640w, assets/projects/mantodea/10-annotated-events-1200.jpg 1200w, assets/projects/mantodea/10-annotated-events-2000.jpg 2000w" sizes="(max-width: 900px) 100vw, 60vw" alt="Annotated upcoming events section with three event listings" width="2000" height="1059" loading="lazy" /></picture>
+          <figcaption>12 &mdash; Annotated &mdash; events.</figcaption>
+        </figure>
+        <figure>
+          <picture><source type="image/avif" srcset="assets/projects/mantodea/11-annotated-footer-640.avif 640w, assets/projects/mantodea/11-annotated-footer-1200.avif 1200w, assets/projects/mantodea/11-annotated-footer-2000.avif 2000w" sizes="(max-width: 900px) 100vw, 60vw" /><img decoding="async" src="assets/projects/mantodea/11-annotated-footer-1200.jpg" srcset="assets/projects/mantodea/11-annotated-footer-640.jpg 640w, assets/projects/mantodea/11-annotated-footer-1200.jpg 1200w, assets/projects/mantodea/11-annotated-footer-2000.jpg 2000w" sizes="(max-width: 900px) 100vw, 60vw" alt="Annotated footer with the mantis glyph, navigation and contact details" width="2000" height="1059" loading="lazy" /></picture>
+          <figcaption>13 &mdash; Annotated &mdash; footer.</figcaption>
+        </figure>
+        <figure>
+          <picture><source type="image/avif" srcset="assets/projects/mantodea/12-mockup-hero-640.avif 640w, assets/projects/mantodea/12-mockup-hero-1200.avif 1200w, assets/projects/mantodea/12-mockup-hero-2000.avif 2000w" sizes="(max-width: 900px) 100vw, 60vw" /><img decoding="async" src="assets/projects/mantodea/12-mockup-hero-1200.jpg" srcset="assets/projects/mantodea/12-mockup-hero-640.jpg 640w, assets/projects/mantodea/12-mockup-hero-1200.jpg 1200w, assets/projects/mantodea/12-mockup-hero-2000.jpg 2000w" sizes="(max-width: 900px) 100vw, 60vw" alt="Laptop showing the Mantodea Institute homepage hero, Curiosity takes flight" width="2000" height="1333" loading="lazy" /></picture>
+          <figcaption>14 &mdash; Homepage &mdash; hero.</figcaption>
+        </figure>
+        <figure>
+          <picture><source type="image/avif" srcset="assets/projects/mantodea/13-mockup-exhibits-640.avif 640w, assets/projects/mantodea/13-mockup-exhibits-1200.avif 1200w, assets/projects/mantodea/13-mockup-exhibits-2000.avif 2000w" sizes="(max-width: 900px) 100vw, 60vw" /><img decoding="async" src="assets/projects/mantodea/13-mockup-exhibits-1200.jpg" srcset="assets/projects/mantodea/13-mockup-exhibits-640.jpg 640w, assets/projects/mantodea/13-mockup-exhibits-1200.jpg 1200w, assets/projects/mantodea/13-mockup-exhibits-2000.jpg 2000w" sizes="(max-width: 900px) 100vw, 60vw" alt="Angled laptop showing the exhibits section" width="2000" height="1333" loading="lazy" /></picture>
+          <figcaption>15 &mdash; Homepage &mdash; exhibits.</figcaption>
+        </figure>
+        <figure>
+          <picture><source type="image/avif" srcset="assets/projects/mantodea/15-mockup-about-640.avif 640w, assets/projects/mantodea/15-mockup-about-1200.avif 1200w, assets/projects/mantodea/15-mockup-about-2000.avif 2000w" sizes="(max-width: 900px) 100vw, 60vw" /><img decoding="async" src="assets/projects/mantodea/15-mockup-about-1200.jpg" srcset="assets/projects/mantodea/15-mockup-about-640.jpg 640w, assets/projects/mantodea/15-mockup-about-1200.jpg 1200w, assets/projects/mantodea/15-mockup-about-2000.jpg 2000w" sizes="(max-width: 900px) 100vw, 60vw" alt="Laptop on a plinth showing the institute's mission statement" width="2000" height="1333" loading="lazy" /></picture>
+          <figcaption>16 &mdash; Homepage &mdash; mission.</figcaption>
+        </figure>
+        <figure>
+          <picture><source type="image/avif" srcset="assets/projects/mantodea/16-mockup-events-640.avif 640w, assets/projects/mantodea/16-mockup-events-1200.avif 1200w, assets/projects/mantodea/16-mockup-events-2000.avif 2000w" sizes="(max-width: 900px) 100vw, 60vw" /><img decoding="async" src="assets/projects/mantodea/16-mockup-events-1200.jpg" srcset="assets/projects/mantodea/16-mockup-events-640.jpg 640w, assets/projects/mantodea/16-mockup-events-1200.jpg 1200w, assets/projects/mantodea/16-mockup-events-2000.jpg 2000w" sizes="(max-width: 900px) 100vw, 60vw" alt="Laptop showing an event listing and the site footer" width="2000" height="1333" loading="lazy" /></picture>
+          <figcaption>17 &mdash; Homepage &mdash; events and footer.</figcaption>
+        </figure>
+      </div>
+
+      <!-- ============ COPY COLUMN ============ -->
+      <div class="project-copy" tabindex="0" role="region" aria-label="Project write-up">
+        <div class="project-copy__inner">
+          <h1>The Mantodea Institute</h1>
+          <p class="lede">
+            A fictitious interactive museum dedicated to the conservation and study of the praying mantis &mdash; a complete brand identity and digital experience built from zero.
+          </p>
+
+          <dl class="project-meta">
+            <div><dt>Discipline</dt><dd>UX/UI Design, Brand Identity, Print</dd></div>
+            <div><dt>Year</dt><dd>2025</dd></div>
+          </dl>
+
+          <section class="project-section">
+            <h2>Overview</h2>
+            <div class="project-section__body">
+            <p>
+              The design challenge was building a complete brand identity and digital experience from zero &mdash; no existing assets, no client direction, and no established audience to design for. Every decision, from the logo mark to the homepage layout, had to be made and justified independently. What started as a logo project became something larger: a full design system and UX interface built from a single visual idea.
+            </p>
+            </div>
+          </section>
+
+          <section class="project-section">
+            <h2>The Customer</h2>
+            <div class="project-section__body">
+            <p>
+              The Mantodea Institute serves two distinct visitors. The first is a family or casual visitor with no prior knowledge of mantises &mdash; they need immediate visual intrigue, practical information, and an experience that feels approachable rather than intimidating. The second is a student or researcher who needs the institution to feel credible and scientifically grounded before they&rsquo;ll engage seriously with the content. These two users pull in different directions: one needs simplicity and spectacle, the other needs rigor and depth. The homepage needed to serve both without compromising either.
+            </p>
+            </div>
+          </section>
+
+          <section class="project-section">
+            <h2>The Problem</h2>
+            <div class="project-section__body">
+            <p>
+              Museum websites tend to fail in one of two directions. They either lean too heavily on academic language and dense content, losing the casual visitor before they make it past the hero section, or they oversimplify to the point where a serious visitor finds nothing of substance. Beyond tone, there&rsquo;s an information architecture problem too &mdash; museum websites often bury practical information like hours, tickets, and upcoming events deep in navigation, forcing visitors to hunt for what they need. For the Mantodea Institute, the design needed to solve both problems simultaneously: accessible language and credible content organized within a clear, intuitive structure that gets every type of visitor where they need to go without friction.
+            </p>
+            </div>
+          </section>
+
+          <section class="project-section">
+            <h2>The Approach</h2>
+            <div class="project-section__body">
+            <p>
+              The project began with the logo, not the interface. An extensive sketching phase came first &mdash; loose, exploratory drawings focused on understanding the mantis&rsquo;s form, posture, and what makes it instantly recognizable. When the work moved into Illustrator, early digital iterations were too complex and lost clarity at smaller sizes. The solution was simplification: focusing on silhouette, proportion, and negative space rather than detail. That constraint turned out to be the most important design decision of the project. The simplified mark pushed the entire brand toward a cleaner, more minimal direction, away from heavy texture and illustration, toward space, structure, and clarity. What started as a single logo ended up setting the tone for a much larger visual language. That shift wasn&rsquo;t something I planned from the beginning, but it felt like the right direction as the project developed.
+            </p>
+            <p>
+              With the brand established, the UX process began with low-fidelity wireframes to work through layout, hierarchy, and user flow before touching any high-fidelity design. The wireframes helped me think through how a visitor moves through the homepage, from the hero section down to featured exhibits and upcoming events, and to test structural decisions before committing to them visually. An early decision to use video as the hero element was reconsidered at the wireframe stage after evaluating performance and usability constraints. The pivot to an image slideshow fit the brand better and gave the page more flexibility while still setting a strong visual tone. By resolving these decisions at low fidelity, the move into Figma was focused on refinement rather than problem solving.
+            </p>
+            </div>
+          </section>
+
+          <section class="project-section">
+            <h2>The Solution</h2>
+            <div class="project-section__body">
+            <p>
+              The homepage is structured around a single organizing principle: every section needs to serve both a casual visitor and a serious one without forcing either to work for what they need. The navigation bar surfaces hours and ticket purchasing immediately, before any scrolling, addressing the most practical needs of a first-time visitor before they&rsquo;ve read a word of content. The hero section leads with macro photography of a mantis in its natural environment and a headline designed to create intrigue rather than inform. &ldquo;Curiosity takes flight&rdquo; earns the scroll from a visitor who arrived with no prior interest in mantises.
+            </p>
+            <p>
+              Below the hero, the exhibits section presents three current shows as visual cards with dates, brief descriptions, and explore CTAs. The content is scientifically grounded but written in plain language, specific enough to satisfy a researcher scanning for credibility, accessible enough to engage a family deciding whether to visit. The same card component is used consistently across exhibits and events, creating a repeatable pattern that makes the page easy to scan regardless of where a visitor enters.
+            </p>
+            <p>
+              The events section extends the dual-audience logic further. Three upcoming events span different engagement levels, a hands-on workshop for families, a competitive activity for younger visitors, and a scientist talk for serious attendees, demonstrating that the institution serves a broad community without fragmenting the experience visually.
+            </p>
+            <p>
+              The footer carries the brand system through to its least glamorous element, with the mantis glyph, organized navigation, address, and contact information all present and consistently styled.
+            </p>
+            </div>
+          </section>
+
+          <section class="project-section">
+            <h2>The Outcome</h2>
+            <div class="project-section__body">
+            <p>
+              The Mantodea Institute homepage demonstrates what happens when a design system is built from the ground up rather than applied after the fact. The logo simplification process wasn&rsquo;t just a branding exercise, it established the visual rules that governed every subsequent decision, from the generous spacing and limited color palette to the consistent card components and restrained typography. The result is an interface where every element feels like it belongs to the same family because it does.
+            </p>
+            <p>
+              The project also demonstrates adaptability. Early assumptions were tested and revised, the hero video became a slideshow, complex logo iterations were stripped back to their essential form, and a class assignment became a complete UX case study. The ability to recognize when a direction isn&rsquo;t working and pivot without losing momentum is visible in the final product. The homepage is calm, credible, and easy to navigate, not despite the constraints and setbacks of the process, but partly because of them.
+            </p>
+            </div>
+          </section>
+
+          <!-- Next project -->
+          <nav class="project-next" aria-label="Next project">
+            <a href="/merlefest25" data-cursor="View">
+              <span class="kicker">Next project</span>
+              <strong>Merlefest &rsquo;25 Poster &rarr;</strong>
+            </a>
+          </nav>
+
+
+          <!-- Slim footer for project pages -->
+          <div class="project-foot">
+            <a href="mailto:capelledesign@gmail.com" data-cursor="Email">capelledesign@gmail.com</a>
+            <a href="https://www.linkedin.com/in/nicholas-capelle-328a95231" target="_blank" rel="noopener" data-cursor="Open">LinkedIn</a>
+            <a href="https://www.instagram.com/capelledesign" target="_blank" rel="noopener" data-cursor="Open">Instagram</a>
+            <span>&copy; <span id="year">2026</span> Nick Capelle</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/site.js?v=36" defer></script>
+  <script src="js/nav-dot.js?v=7" defer></script>
+  <script src="js/hue.js?v=24" defer></script>
+  <script src="js/logo-dots.js?v=9" defer></script>
+</body>
+</html>

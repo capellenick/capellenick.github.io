@@ -20,6 +20,13 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
 
 class NoCacheHandler(SimpleHTTPRequestHandler):
+    # Clean addresses, like GitHub Pages: /about serves about.html.
+    def translate_path(self, path):
+        p = super().translate_path(path)
+        if not os.path.exists(p) and os.path.exists(p + ".html"):
+            return p + ".html"
+        return p
+
     def end_headers(self):
         self.send_header("Cache-Control", "no-store, must-revalidate")
         super().end_headers()

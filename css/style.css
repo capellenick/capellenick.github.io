@@ -524,9 +524,9 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
 /* Per-card framing: object-position works for the plain <img> and for the
    WebGL warp (js/warp.js reads it). Merlefest's poster sits low in its
    portrait photo, so frame a little lower to centre it in the 3:2 card. */
-.work-card a[href="project-6.html"] .card-media img { object-position: 50% 60%; }
+.work-card a[href="/merlefest25"] .card-media img { object-position: 50% 60%; }
 /* Phones: frame lower, so the bottom of the poster isn't cut off. */
-@media (max-width: 760px) { .work-card a[href="project-6.html"] .card-media img { object-position: 50% 66%; } }
+@media (max-width: 760px) { .work-card a[href="/merlefest25"] .card-media img { object-position: 50% 66%; } }
 /* Archived for now (PLAY nav link, Sky footer pill): kept in the markup, hidden. */
 .nav a[hidden], .mode-pill[hidden] { display: none !important; }
 .work-card a { display: block; }
