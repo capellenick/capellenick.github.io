@@ -12,8 +12,8 @@
       on the left.
    4. Gallery — prev/next paddles and pill dots for the sideways tiles.
 
-   The 3D phone (js/rally-3d.js) listens for "rally:show" and draws from
-   the same numbers; the flat phone stays as the fallback.
+   The phone itself is 3D (js/rally-3d.js): this file only works out the
+   numbers and fires "rally:show"; rally-3d.js draws from them.
 
    Reduced motion: no turn and no count-up; the steps still change with
    scroll (they're content, not decoration), just without the motion.
@@ -76,11 +76,7 @@
      Steps 02-05 are equal bands after that; you're always on exactly one,
      and their screens swap with a short timed crossfade. */
   var show = document.querySelector("[data-show]");
-  var device = show && show.querySelector("[data-show-device]");
-  var screen = show && show.querySelector(".phone__screen");
-  var shots = show ? show.querySelectorAll("[data-shot]") : [];
   var steps = show ? show.querySelectorAll("[data-step]") : [];
-  var feedImg = show && show.querySelector(".rl-feedscroll__img");
   var HOLD = 0.05;           // phone holds still at the start of the pin
   var TURN = 0.18;           // ...then turns to face you over this much
   var FEED_END = 0.36;       // step 01 (the scrolling feed) ends here
@@ -124,25 +120,15 @@
     // instead of jumping into motion.
     var u = clamp((p - HOLD) / TURN, 0, 1);
     var t = reduce ? 1 : 0.5 - 0.5 * Math.cos(Math.PI * u);
-    device.style.setProperty("--ry", (-58 * (1 - t)).toFixed(2) + "deg");
-    device.style.setProperty("--rx", (16 * (1 - t)).toFixed(2) + "deg");
-    device.style.setProperty("--rz", (-8 * (1 - t)).toFixed(2) + "deg");
-    device.style.setProperty("--s", (0.8 + 0.2 * t).toFixed(3));
-    device.style.setProperty("--glare", (100 - 100 * t).toFixed(1) + "%");
 
     var eased = [1];
-    for (var k = 1; k < shots.length; k++) {
+    for (var k = 1; k < N; k++) {
       var o = ops[k]; o = o * o * (3 - 2 * o);
       eased.push(o);
-      shots[k].style.opacity = o.toFixed(3);
     }
     // The feed moves with the scroll across step 01 (a short rest at the end).
     var f = clamp((p - HOLD) / (FEED_END - HOLD - 0.03), 0, 1);   // linear: 1:1 with the scroll
-    if (feedImg && screen) {
-      var max = feedImg.getBoundingClientRect().height - screen.getBoundingClientRect().height;
-      feedImg.style.transform = "translate3d(0," + (-Math.max(0, max) * f).toFixed(2) + "px,0)";
-    }
-    // The 3D phone (js/rally-3d.js) draws from the same numbers.
+    // The 3D phone (js/rally-3d.js) draws from these numbers.
     document.dispatchEvent(new CustomEvent("rally:show", { detail: { t: t, ops: eased, f: f } }));
   }
 
@@ -197,7 +183,7 @@
     for (var k0 = 1; k0 < N; k0++) ops[k0] = k0 <= step ? 1 : 0;
     drawShow(shown);
     onScroll();
-    // The 3D phone loads later; give it the current state once it's up.
+    // The 3D phone is drawn once its model loads; give it the current state then.
     document.addEventListener("rally:3d-ready", function () { drawShow(shown); });
   }
   updateNarrow();

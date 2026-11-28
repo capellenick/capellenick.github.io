@@ -149,7 +149,7 @@
 /* The phone sits against the right edge of the content column, so the space
    to its right matches the space left of the wordmark at any width. */
 .rl-hero__device { display: grid; place-items: center end; }
-.rl-hero__device .phone { --w: clamp(13.75rem, 24vw, 20.625rem); animation: rl-rise 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both; }
+.rl-p3d--hero { --w: clamp(13.75rem, 24vw, 20.625rem); --ox: 10%; --oy: 8%; animation: rl-rise 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both; }
 @keyframes rl-rise { from { transform: translateY(3.75rem); opacity: 0; } to { transform: none; opacity: 1; } }
 
 .rl-facts {
@@ -162,6 +162,34 @@
 }
 .rl-facts dt { color: var(--ink-50); margin-bottom: 0.35rem; }
 .rl-facts dd { margin: 0; line-height: 1.35; }
+
+/* ---- 3D phone (js/rally-3d.js): the only phone in the hero and "How
+   Rally works". The box sets the phone's size in the layout (iPhone
+   proportions, --w wide); the canvas and the still overhang it by --ox /
+   --oy on each side so the turn never clips. The still is a render of the
+   same model in the same pose, shown until the canvas has drawn. The
+   overhang must match the stills' aspect (they're stretched to fit). */
+.rl-p3d {
+  --w: 18.75rem;
+  --ox: 10%;
+  --oy: 8%;
+  position: relative;
+  width: var(--w);
+  aspect-ratio: 436 / 900;
+}
+.rl-p3d__gl, .rl-p3d__still {
+  position: absolute;
+  left: calc(-1 * var(--ox));
+  top: calc(-1 * var(--oy));
+  width: calc(100% + 2 * var(--ox));
+  height: calc(100% + 2 * var(--oy));
+  max-width: none;
+  pointer-events: none;
+  user-select: none;
+}
+.rl-p3d__gl { opacity: 0; transition: opacity 0.3s ease; }
+.rl-p3d.is-3d .rl-p3d__gl { opacity: 1; }
+.rl-p3d.is-3d .rl-p3d__still { opacity: 0; transition: opacity 0s 0.3s; }
 
 /* ---- Phone frame (iPhone 17 Pro proportions: 426 x 898 with a 402 x 874
    screen). --w sets the width; everything else scales from it. The screen
@@ -383,77 +411,8 @@ body.has-cursor .rl-steps li:not(.is-active) { cursor: var(--dot-cursor, pointer
 .rl-steps p { font-family: var(--font-hero); font-weight: 500; letter-spacing: -0.01em; }   /* whole step in the numbers' face */
 .rl-steps p { margin: 0; line-height: 1.4; color: var(--ink-72); max-width: 36ch; }
 
-.rl-show__stage { display: grid; place-items: center; perspective: 81.25rem; }
-.rl-show__device {
-  --show-w: clamp(15rem, min(26vw, 36svh), 22.5rem);
-  position: relative;
-  transform-style: preserve-3d;
-  transform: rotateY(var(--ry, 0deg)) rotateX(var(--rx, 0deg)) rotateZ(var(--rz, 0deg)) scale(var(--s, 1));
-  will-change: transform;
-}
-.phone--show { --w: var(--show-w); transform: translateZ(0.5px); }
-/* The 3D phone (js/rally-3d.js) replaces the flat one once it loads. The
-   flat phone keeps its box so the layout doesn't move; the canvas
-   overhangs it so the turn never clips. */
-.rl-show__stage { position: relative; }
-.rl-show__gl {
-  position: absolute;
-  left: -40%;
-  top: -18%;
-  width: 180%;
-  height: 136%;
-  pointer-events: none;
-}
-.rl-show__stage.is-3d .phone--show { visibility: hidden; }
-.phone--show .phone__screen > [data-shot],
-.phone--show .phone__screen > picture > [data-shot] { opacity: 0; will-change: opacity; }
-.phone--show .phone__screen > [data-shot="0"] { opacity: 1; }
-.rl-feedscroll { overflow: hidden; }
-/* iOS-style scroll edge: content fades out under the status bar. */
-.rl-feedscroll::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 10%;
-  z-index: 1;
-  background: linear-gradient(#141414 55%, rgba(20, 20, 20, 0));
-  pointer-events: none;
-}
-.rl-feedscroll__img { position: absolute; top: 0; left: 0; will-change: transform; }
-.rl-feedscroll__chrome { position: absolute; top: 0; left: 0; z-index: 3; }
-/* ...and fades out behind the floating tab bar, like the other screens. */
-.rl-feedscroll::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 17%;
-  z-index: 1;
-  background: linear-gradient(rgba(26, 26, 26, 0), #1a1a1a 62%);
-  pointer-events: none;
-}
-/* Stands in for the tab bar's glass blur over the scrolling feed. */
-.rl-feedscroll__glass {
-  position: absolute;
-  z-index: 2;
-  left: 4%;
-  right: 4%;
-  bottom: 2.6%;
-  height: 7.6%;
-  border-radius: 62.4375rem;
-  backdrop-filter: blur(0.875rem) saturate(1.4);
-  -webkit-backdrop-filter: blur(0.875rem) saturate(1.4);
-  background: rgba(30, 30, 30, 0.35);
-}
-/* A soft reflection that slides across the glass as the phone turns. */
-.phone__glare {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  pointer-events: none;
-  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.12) 45%, transparent 60%);
-  background-size: 250% 100%;
-  background-position: var(--glare, 100%) 0;
-}
+.rl-show__stage { display: grid; place-items: center; }
+.rl-p3d--show { --w: clamp(15rem, min(26vw, 36svh), 22.5rem); --ox: 50%; --oy: 18%; }
 
 /* ---- Gallery (Apple-style sideways tiles) ------------------------------- */
 .rl-gallery__track {
@@ -715,7 +674,7 @@ html.rl-lightbox-open { overflow: hidden; }
 @media (max-width: 900px) {
   .rl-hero { grid-template-columns: 1fr; text-align: left; min-height: 0; padding-top: 2.5rem; gap: 3rem; }
   .rl-hero__device { place-items: center; }
-  .rl-hero__device .phone { --w: min(68vw, 18.75rem); }
+  .rl-p3d--hero { --w: min(68vw, 18.75rem); }
   .rl-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .rl-cards--3, .rl-cards--4, .rl-process { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .rl-personas { grid-template-columns: 1fr; row-gap: 0.625rem; }
@@ -739,7 +698,7 @@ html.rl-lightbox-open { overflow: hidden; }
   .rl-show__text .rl-headline { margin-top: -0.7rem; margin-bottom: 0.7rem; }   /* closer to its eyebrow; phone stays put */
   .rl-show__stage { order: -1; }
   .rl-steps { order: 0; }
-  .rl-show__device { --show-w: min(52vw, 33svh); }
+  .rl-p3d--show { --w: min(52vw, 33svh); }
 }
 @media (max-width: 600px) {
   .rl-stats--2, .rl-stats--3, .rl-cards--2, .rl-cards--3, .rl-cards--4, .rl-beforeafter, .rl-pair { grid-template-columns: 1fr; }
@@ -748,7 +707,7 @@ html.rl-lightbox-open { overflow: hidden; }
   .rl-journey { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .rl-ball, .rl-hero__device .phone { animation: none; }
+  .rl-ball, .rl-p3d--hero { animation: none; }
 }
 
 /* ---- Phones only ------------------------------------------------------------
@@ -771,7 +730,7 @@ html.rl-lightbox-open { overflow: hidden; }
   .rl-narrow.is-done .rl-after { opacity: 1; }
 
   .rl-show__grid { padding-top: calc(var(--header-h) + 0.75rem); }
-  .rl-show__device { --show-w: min(46vw, 29svh); }
+  .rl-p3d--show { --w: min(46vw, 29svh); }
   .rl-show__text .rl-headline { font-size: min(7vw, 2.4rem); white-space: nowrap; max-width: none; }
 }
 

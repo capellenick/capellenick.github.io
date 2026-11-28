@@ -47,8 +47,12 @@ rally.html          Rally product case study (custom long-scroll page, its own
                     decisions row (cut-out UI on blurred court photos), business
                     model + five forces, verdict. Links to the live prototype at
                     capellenick.github.io/rally (deployed from ~/Sites/rally with
-                    its deploy.sh). The 3D phone is js/rally-3d.js (three.js from
-                    jsDelivr via an importmap; flat SVG phone is the fallback).
+                    its deploy.sh). The phone in the hero and "How Rally works" is
+                    always the 3D one, js/rally-3d.js (three.js from jsDelivr via
+                    an importmap, loaded right away). Until it draws, and if
+                    WebGL fails, each spot shows a still render of the same model
+                    in the same pose (assets/projects/rally/phone3d-*.webp; re-
+                    render from rally.html?still, see the top of rally-3d.js).
                     Model: MajdyModels' iPhone 16 Pro Max, CC BY 4.0, recoloured
                     to black titanium (assets/projects/rally/iphone/, credited at
                     the bottom of rally.html)

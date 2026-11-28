@@ -13,9 +13,9 @@
   <link rel="preconnect" href="https://use.typekit.net" crossorigin />
   <link rel="preconnect" href="https://p.typekit.net" crossorigin />
   <link rel="stylesheet" href="https://use.typekit.net/wsb8ckc.css" />
-  <link rel="stylesheet" href="css/style.css?v=99" />
-  <link rel="stylesheet" href="css/rally.css?v=83" />
-  <!-- three.js for the 3D phone in "How Rally works" (js/rally-3d.js). -->
+  <link rel="stylesheet" href="css/style.css?v=100" />
+  <link rel="stylesheet" href="css/rally.css?v=84" />
+  <!-- three.js for the 3D phone in the hero and "How Rally works" (js/rally-3d.js). -->
   <script type="importmap">
     { "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
@@ -70,9 +70,11 @@
         <p class="rl-lede">Find tennis and pickleball partners near you, at your level, who actually show up.</p>
         <a class="rl-cta" href="https://capellenick.com/rallyprototype/" target="_blank" rel="noopener" data-cursor="Open">Try the prototype <svg class="rl-arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.2 2.6H17V16.4M17 2.6L3.4 16.2" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="butt" stroke-linejoin="miter"/></svg></a>
       </div>
-      <div class="rl-hero__device" data-hero-phone>
-        <div class="phone">
-          <div class="phone__screen"><img src="assets/projects/rally/screen-feed.jpg" alt="Rally's Explore screen: open tennis and pickleball matches in Boone, each with sport, level, time, court and a Request button" width="804" height="1748" /></div>
+      <!-- The 3D phone (js/rally-3d.js) draws over this box; the still is a
+           render of the same model in the same pose, shown until it's up. -->
+      <div class="rl-hero__device">
+        <div class="rl-p3d rl-p3d--hero" data-phone3d="hero" role="img" aria-label="Rally's Explore screen on an iPhone: open tennis and pickleball matches in Boone, each with sport, level, time, court and a Request button">
+          <img class="rl-p3d__still" src="assets/projects/rally/phone3d-hero.webp" alt="" fetchpriority="high" />
         </div>
       </div>
       <span class="rl-cue" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M10 0.8v18M3.8 13.6L10 19.4l6.2-5.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="miter"/></svg></span>
@@ -252,21 +254,8 @@
             </ol>
           </div>
           <div class="rl-show__stage">
-            <div class="rl-show__device" data-show-device>
-              <div class="phone phone--show">
-                <div class="phone__screen">
-                  <div class="rl-feedscroll" data-shot="0">
-                    <img class="rl-feedscroll__img" src="assets/projects/rally/screen-feed-long.jpg" alt="" width="804" height="3434" />
-                    <span class="rl-feedscroll__glass" aria-hidden="true"></span>
-                    <picture><source type="image/avif" srcset="assets/projects/rally/screen-overlay-640.avif 640w, assets/projects/rally/screen-overlay-804.avif 804w" sizes="(max-width: 760px) 100vw, 60vw" /><img decoding="async" class="rl-feedscroll__chrome" src="assets/projects/rally/screen-overlay-804.png" srcset="assets/projects/rally/screen-overlay-640.png 640w, assets/projects/rally/screen-overlay-804.png 804w" sizes="(max-width: 760px) 100vw, 60vw" alt="" width="804" height="1748" /></picture>
-                  </div>
-                  <picture><source type="image/avif" srcset="assets/projects/rally/screen-requested-640.avif 640w, assets/projects/rally/screen-requested-804.avif 804w" sizes="(max-width: 760px) 100vw, 60vw" /><img decoding="async" data-shot="1" src="assets/projects/rally/screen-requested-804.jpg" srcset="assets/projects/rally/screen-requested-640.jpg 640w, assets/projects/rally/screen-requested-804.jpg 804w" sizes="(max-width: 760px) 100vw, 60vw" alt="" width="804" height="1748" /></picture>
-                  <picture><source type="image/avif" srcset="assets/projects/rally/screen-confirmed-640.avif 640w, assets/projects/rally/screen-confirmed-804.avif 804w" sizes="(max-width: 760px) 100vw, 60vw" /><img decoding="async" data-shot="2" src="assets/projects/rally/screen-confirmed-804.jpg" srcset="assets/projects/rally/screen-confirmed-640.jpg 640w, assets/projects/rally/screen-confirmed-804.jpg 804w" sizes="(max-width: 760px) 100vw, 60vw" alt="" width="804" height="1748" /></picture>
-                  <picture><source type="image/avif" srcset="assets/projects/rally/screen-chat-640.avif 640w, assets/projects/rally/screen-chat-804.avif 804w" sizes="(max-width: 760px) 100vw, 60vw" /><img decoding="async" data-shot="3" src="assets/projects/rally/screen-chat-804.jpg" srcset="assets/projects/rally/screen-chat-640.jpg 640w, assets/projects/rally/screen-chat-804.jpg 804w" sizes="(max-width: 760px) 100vw, 60vw" alt="" width="804" height="1748" /></picture>
-                  <picture><source type="image/avif" srcset="assets/projects/rally/screen-played-640.avif 640w, assets/projects/rally/screen-played-804.avif 804w" sizes="(max-width: 760px) 100vw, 60vw" /><img decoding="async" data-shot="4" src="assets/projects/rally/screen-played-804.jpg" srcset="assets/projects/rally/screen-played-640.jpg 640w, assets/projects/rally/screen-played-804.jpg 804w" sizes="(max-width: 760px) 100vw, 60vw" alt="" width="804" height="1748" /></picture>
-                  <span class="phone__glare" aria-hidden="true"></span>
-                </div>
-              </div>
+            <div class="rl-p3d rl-p3d--show" data-phone3d="show" data-still-face="assets/projects/rally/phone3d-show-face.webp" aria-hidden="true">
+              <picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/projects/rally/phone3d-show-face.webp" /><img class="rl-p3d__still" src="assets/projects/rally/phone3d-show.webp" alt="" loading="lazy" /></picture>
             </div>
           </div>
         </div>
@@ -382,23 +371,9 @@
   <script src="js/nav-dot.js?v=7" defer></script>
   <script src="js/hue.js?v=24" defer></script>
   <script src="js/logo-dots.js?v=9" defer></script>
-  <script src="js/rally.js?v=30" defer></script>
-  <script>
-    /* The 3D phone (three.js + model, ~2 MB) loads only as "How Rally works"
-       nears the screen, and not at all on low-memory devices or slow / data-
-       saver connections, where the flat phone stays. */
-    (function () {
-      var c = navigator.connection || {};
-      if (c.saveData || /(^|-)2g|3g/.test(c.effectiveType || "") || (navigator.deviceMemory && navigator.deviceMemory < 4)) return;
-      var show = document.querySelector("[data-show]");
-      if (!show || !("IntersectionObserver" in window)) return;
-      var io = new IntersectionObserver(function (e) {
-        if (!e[0].isIntersecting) return;
-        io.disconnect();
-        import("./js/rally-3d.js?v=13");
-      }, { rootMargin: "1500px 0px" });
-      io.observe(show);
-    })();
-  </script>
+  <script src="js/rally.js?v=31" defer></script>
+  <!-- The 3D phone (three.js + model, ~2 MB), the only phone in the hero and
+       "How Rally works". Loads right away. -->
+  <script type="module" src="js/rally-3d.js?v=14"></script>
 </body>
 </html>
