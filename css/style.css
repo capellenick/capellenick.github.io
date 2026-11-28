@@ -54,7 +54,7 @@
 
   /* Derived tones (auto-recompute in dark mode via the vars above) */
   --ink-72:    color-mix(in srgb, var(--ink) 72%, var(--paper));
-  --ink-50:    color-mix(in srgb, var(--ink) 50%, var(--paper));
+  --ink-50:    color-mix(in srgb, var(--ink) 62%, var(--paper));   /* 4.6:1 on light paper (WCAG AA) */
   --ink-30:    color-mix(in srgb, var(--ink) 30%, var(--paper));
   --hairline:  color-mix(in srgb, var(--ink) 15%, var(--paper));
   --hairline-2:color-mix(in srgb, var(--ink) 28%, var(--paper));
@@ -83,6 +83,7 @@
 :root[data-theme="dark"] {
   --paper: #1b1b1b;
   --ink:   #f2f3f4;
+  --ink-50: color-mix(in srgb, var(--ink) 50%, var(--paper));   /* 4.7:1 on dark paper */
 }
 
 /* If JS never runs, still honour the OS preference */
@@ -90,6 +91,7 @@
   :root:not([data-theme="light"]) {
     --paper: #1b1b1b;
     --ink:   #f2f3f4;
+    --ink-50: color-mix(in srgb, var(--ink) 50%, var(--paper));
   }
 }
 
@@ -659,10 +661,10 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
 }
 .project-media figcaption {
   font-family: var(--font-text);
-  font-size: 0.75rem;
-  line-height: 1.3;
+  font-size: max(0.75rem, 13px);   /* readable floor under the desktop 80% base */
+  line-height: 1.35;
   color: var(--ink-50);
-  margin-top: 0.45rem;
+  margin-top: 0.5rem;
 }
 
 .project-copy {
@@ -670,8 +672,8 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
      text get breathing room before the images start */
   padding: 0.5rem clamp(1.5rem, 3.5vw, 3.5rem) var(--gutter) var(--gutter);
   font-family: var(--font-text);
-  font-size: 0.875rem;
-  line-height: 1.35;
+  font-size: max(0.875rem, 16px);  /* 16px reading size on every screen (was 11.2px on desktop) */
+  line-height: 1.45;
 }
 .project-copy h1 {
   font-family: var(--font-label);
@@ -682,7 +684,7 @@ body.has-cursor .footer-utility a { cursor: var(--dot-cursor, auto); }
   margin: 0 0 1.4rem;
 }
 .project-copy .lede {
-  font-size: 1.05rem;
+  font-size: max(1.05rem, 19px);
   line-height: 1.3;
   max-width: 34em;
   margin-bottom: 2.25rem;
